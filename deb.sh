@@ -64,11 +64,37 @@ deps-python27() {
   sudo apt-get build-dep python2.7
 }
 
+# This also runs a lot of tests!
+# Some tests seem to hose the machine a bit, perhaps multiprocessing.
 build-python27() {
   pushd $DEB_PY27
   # -b : only build binary package
   time debuild -us -uc || true
   popd
+}
+
+# I think I cancelled the tests and there were no packages generated in the 
+# debian/ dir.  But still some binaries.
+
+# build-static - 11M, not dynamically linked to much.
+# build-debug - 5.9M
+#
+# build-shared - 10K, linked to libpython2.7.so.1.0
+# build-shdbug - 9.7K, linked to libpython2.7_d.so.1.0
+
+bin-stats() {
+  local bin=$1
+  echo "--- $bin ---"
+  ls -l -h $bin
+  echo
+  ldd $bin
+  echo
+  nm $bin | wc -l
+  echo
+}
+
+py27-stats() {
+  find python2.7/ -name python | xargs -n 1 -- $0 bin-stats
 }
 
 "$@"
