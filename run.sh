@@ -18,20 +18,30 @@ build() {
 }
 
 copy-bin() {
+  local suffix=${1:-}
   mkdir -p _bin
-  cp $PY27/python _bin/python.unstripped
-  strip -o _bin/python.stripped _bin/python.unstripped
+  cp $PY27/python _bin/python${suffix}.unstripped
+  strip -o _bin/python${suffix}.stripped _bin/python${suffix}.unstripped
+}
+
+# It's indeed a little smaller without threads, and it doesn't dynamically link
+# against pthreads.  TODO: How to use Modules/Setup?
+build-small() {
+  cd $PY27
+  make clean
+  time ./configure --without-threads
+  time make -j 7 || true
 }
 
 # 2.0 MB stripped, 8.1 MB unstripped
 stats() {
   mkdir -p _tmp
 
-  ls -l -h _bin/python.*
+  ls -l -h _bin/python*
 
   # Not dynamically linked to much.  libutil, libm, libpthread.
   # I guess I want to get rid of the threads.
-  ldd _bin/python.*
+  ldd _bin/python*
 
   nm _bin/python.unstripped > _tmp/symbols.txt
   head _tmp/symbols.txt
