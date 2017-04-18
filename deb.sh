@@ -7,6 +7,8 @@ set -o nounset
 set -o pipefail
 set -o errexit
 
+source common.sh
+
 readonly DEB_PY_DEFAULTS=python-defaults/python-defaults-2.7.5
 readonly DEB_PY27=python2.7/python2.7-2.7.6
 
@@ -81,19 +83,6 @@ build-python27() {
 #
 # build-shared - 10K, linked to libpython2.7.so.1.0
 # build-shdbug - 9.7K, linked to libpython2.7_d.so.1.0
-
-bin-stats() {
-  local bin=$1
-  echo "--- $bin ---"
-  ls -l -h $bin
-  echo
-  file $bin
-  echo
-  ldd $bin
-  echo
-  nm $bin | wc -l
-  echo
-}
 
 py27-stats() {
   find python2.7/ -name python | xargs -n 1 -- $0 bin-stats

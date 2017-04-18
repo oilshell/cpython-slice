@@ -7,6 +7,8 @@ set -o nounset
 set -o pipefail
 set -o errexit
 
+source common.sh
+
 readonly PY27=Python-2.7.13
 
 build() {
@@ -15,7 +17,7 @@ build() {
   time make -j 7 || true
 }
 
-copy-strip() {
+copy-bin() {
   mkdir -p _bin
   cp $PY27/python _bin/python.unstripped
   strip -o _bin/python.stripped _bin/python.unstripped
@@ -46,5 +48,27 @@ stats() {
 
 # --without-PACKAGE=
 # --with-PACKAGE=
+
+readonly MOD=$PY27/build/lib.linux-x86_64-2.7
+
+copy-modules() {
+  mkdir -p _mod _mod-stripped
+
+  cp $MOD/*.so _mod
+
+  for m in _mod/*.so; do
+    strip -o _mod-stripped/$(basename $m) $m
+  done
+}
+
+mod-stats() {
+  du --si -s _mod
+  du --si -s _mod-stripped
+
+  # unicodedata is biggest, codecs, pyexpat.
+  # _io is pretty big too.
+  # _datetime.  wonder why that is big.
+  find _mod-stripped -name '*.so' -a -printf '%s %P\n' | sort -n
+}
 
 "$@"
