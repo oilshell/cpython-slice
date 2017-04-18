@@ -8,7 +8,7 @@ set -o pipefail
 set -o errexit
 
 readonly DEB_PY_DEFAULTS=python-defaults/python-defaults-2.7.5
-readonly DEB_PY=python/python-defaults-2.7.5
+readonly DEB_PY27=python2.7/python2.7-2.7.6
 
 # for debuild
 devscripts() {
@@ -41,7 +41,7 @@ deps-python-defaults() {
 build-python-defaults() {
   pushd $DEB_PY_DEFAULTS
   # -b : only build binary package
-  time debuild -us -uc
+  time debuild -us -uc || true
   popd
 }
 
@@ -50,5 +50,25 @@ minimal-docs() {
   less /usr/share/doc/python2.7-minimal/README.Debian 
 }
 
+#
+# Python 2.7
+#
+
+# See the python_defaults/control dir
+# Gah this installs a ton of build dependencies.  Even more than
+# python-defaults.
+deps-python27() {
+  mkdir -p python2.7
+  cd python2.7
+  apt-get source python2.7
+  sudo apt-get build-dep python2.7
+}
+
+build-python27() {
+  pushd $DEB_PY27
+  # -b : only build binary package
+  time debuild -us -uc || true
+  popd
+}
 
 "$@"
