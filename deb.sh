@@ -87,6 +87,8 @@ bin-stats() {
   echo "--- $bin ---"
   ls -l -h $bin
   echo
+  file $bin
+  echo
   ldd $bin
   echo
   nm $bin | wc -l
@@ -95,6 +97,30 @@ bin-stats() {
 
 py27-stats() {
   find python2.7/ -name python | xargs -n 1 -- $0 bin-stats
+}
+
+# This is a 1300 line makefile to do all the logic.  I think minimal is just
+# different packages -- NOT a smaller binary.
+minimal() {
+  wc -l $DEB_PY27/debian/rules
+  less $DEB_PY27/debian/rules
+}
+
+# How to check without building:
+
+# https://packages.debian.org/jessie/python2.7-minimal
+
+download-python2.7-minimal() {
+  mkdir -p _tmp/deb
+  wget --directory _tmp/deb http://ftp.us.debian.org/debian/pool/main/p/python2.7/python2.7-minimal_2.7.9-2+deb8u1_amd64.deb
+}
+
+# unpacked it manually
+# Hm actually it's 3.7 MB stripped.  But my own source build is 2.0 MB
+# stripped?
+# Links against pthread and so forth.  Not sure what the difference is.
+prebuilt-py27-stats() {
+  bin-stats _tmp/deb/usr/bin/python2.7
 }
 
 "$@"
