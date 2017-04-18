@@ -27,14 +27,29 @@ source common.sh
 
 download() {
   mkdir -p _static
-  wget --directory _static https://raw.githubusercontent.com/pts/staticpython/master/release/python2.7-static
+  wget --directory _static \
+    https://raw.githubusercontent.com/pts/staticpython/master/release/python2.7-static
 
-  chmod +x _static/python2.7-static
+  chmod +x $STATIC_PY
 }
+
+readonly STATIC_PY=_static/python2.7-static
 
 # 7.5 MB
 static-stats() {
-  bin-stats _static/python2.7-static
+  bin-stats $STATIC_PY
+}
+
+# Wow static Python actually starts slower!  Probably because the stuff that
+# would wait until dlopen() is done at initialization time?
+startup-speed() {
+  # 7 ms vs 23 ms
+  time python -c 'print "hi"'
+  time $STATIC_PY -c 'print "hi"'
+
+  # 20 ms vs 51 ms
+  #time python -c 'import os, sys, re; print "hi"'
+  #time $STATIC_PY -c 'import os, sys, re; print "hi"'
 }
 
 "$@"
