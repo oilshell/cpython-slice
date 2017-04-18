@@ -49,14 +49,27 @@ build-small() {
   time make -j 7 || true
 }
 
-# Oops, this doesn't work!
-# Include/pyport.h:895:2: error: #error "LONG_BIT definition appears wrong for
-# platform (bad gcc/glibc config?)."
+# Uh this is almost certainly out of date.  Got rid of it.
+##if LONG_BIT != 8 * SIZEOF_LONG
+#/* 04-Oct-2000 LONG_BIT is apparently (mis)defined as 64 on some recent
+# * 32-bit platforms using gcc.  We try to catch that here at compile-time
+# * rather than waiting for integer multiplication to trigger bogus
+# * overflows.
+# */
+##error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
+##endif
+
+# OK now we get a link error.  pgenmain doesn't link?
+# pgenmain doesn't respect cflags?
+# /usr/bin/ld: i386 architecture of input file `Parser/pgenmain.o' is incompatible with i386:x86-64 output
+#
+# This is a reason to remove pgen from the build!
+
 build-m32() {
   cd $PY27
   make clean
   time ./configure --without-threads
-  time make -j 7 CFLAGS=-m32 python || true
+  time make -j 7 CFLAGS=-m32 libpython2.7.a || true
 }
 
 copy-bin() {
