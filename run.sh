@@ -11,17 +11,26 @@ source common.sh
 
 readonly PY27=Python-2.7.13
 
-build() {
+
+# 'make libpython2.7.a' to avoid building external modules.  Assuming we don't
+# need these now.
+# This only takes 9 seconds, vs. 42 seconds for the full build.
+build-libpython() {
   cd $PY27
-  #time ./configure 
-  time make -j 7 || true
+  make clean
+  # This only takes 9 seconds.  Compiling modules takes longer.
+  time make -j 7 libpython2.7.a || true
+
+  # has:
+  # signalmodule, posixmodule,
+  # {errno,pwd,_sre,_codecs,_weakrefzipimport,symtable,xxsubtype}module
 }
 
-copy-bin() {
-  local suffix=${1:-}
-  mkdir -p _bin
-  cp $PY27/python _bin/python${suffix}.unstripped
-  strip -o _bin/python${suffix}.stripped _bin/python${suffix}.unstripped
+build() {
+  cd $PY27
+  make clean
+  #time ./configure 
+  time make -j 7 || true
 }
 
 # It's indeed a little smaller without threads, and it doesn't dynamically link
@@ -39,6 +48,33 @@ build-small() {
   time ./configure --without-threads
   time make -j 7 || true
 }
+
+# Oops, this doesn't work!
+# Include/pyport.h:895:2: error: #error "LONG_BIT definition appears wrong for
+# platform (bad gcc/glibc config?)."
+build-m32() {
+  cd $PY27
+  make clean
+  time ./configure --without-threads
+  time make -j 7 CFLAGS=-m32 python || true
+}
+
+copy-bin() {
+  local suffix=${1:-}
+  mkdir -p _bin
+  cp $PY27/python _bin/python${suffix}.unstripped
+  strip -o _bin/python${suffix}.stripped _bin/python${suffix}.unstripped
+}
+
+# lib is basically the same size as the Python executable.
+copy-lib() {
+  local label=${1:-}
+  mkdir -p _lib
+  local unstripped=_lib/libpython2.7.a.unstripped
+  cp $PY27/libpython2.7.a $unstripped
+  strip -o ${unstripped/unstripped/stripped} $unstripped 
+}
+
 
 # 2.0 MB stripped, 8.1 MB unstripped
 stats() {
