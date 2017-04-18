@@ -26,6 +26,13 @@ copy-bin() {
 
 # It's indeed a little smaller without threads, and it doesn't dynamically link
 # against pthreads.  TODO: How to use Modules/Setup?
+
+# ./configure generates and EXECUTABLE shell script config.status!
+
+# That changes Modules/Setup.config.in -> Modules/Setup.config.  Now the lin
+# Now it has this line COMMENTED OUT:
+#thread threadmodule.c
+
 build-small() {
   cd $PY27
   make clean
