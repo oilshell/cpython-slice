@@ -38,4 +38,13 @@ stats() {
 
 # TODO: How to list global variables?
 
+
+# configure --help
+# CC
+# --with-valgrind
+# --with-signal-module
+
+# --without-PACKAGE=
+# --with-PACKAGE=
+
 "$@"
