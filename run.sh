@@ -104,7 +104,12 @@ lcov-report() {
 
 run-cov() {
   #PYTHONHOME=$PY27 _bin/python-cov.stripped -S "$@"
-  PYTHONHOME=$PY27 _bin/python-cov.unstripped -S "$@"
+  #PYTHONHOME=$PY27 _bin/python-cov.unstripped -S "$@"
+
+  # Have to run this one to generate right thing
+  pushd $PY27
+  PYTHONHOME=$PY27 ./python -S "$@"
+  popd
 }
 
 # OH .gcno geneated at COMPILE TIME
