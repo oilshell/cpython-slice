@@ -167,6 +167,10 @@ run-cov() {
   popd
 }
 
+run-osh() {
+  run-cov ~/git/oil/bin/oil.py osh -c 'echo "hi"; ls /'
+}
+
 # OH .gcno geneated at COMPILE TIME
 find-cov() {
   find $PY27 '(' -name '*.gcda' -o -name '*.gcno' -o -name '*.gcov' ')' "$@"
