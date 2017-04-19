@@ -103,11 +103,13 @@ lcov-report() {
 # There is also the -fprofiledir option.
 
 run-cov() {
-  PYTHONHOME=$PY27 _bin/python-cov.stripped -S "$@"
+  #PYTHONHOME=$PY27 _bin/python-cov.stripped -S "$@"
+  PYTHONHOME=$PY27 _bin/python-cov.unstripped -S "$@"
 }
 
+# OH .gcno geneated at COMPILE TIME
 find-cov() {
-  find $PY27 '(' -name '*.gcda' -o -name '*.gcno' ')' "$@"
+  find $PY27 '(' -name '*.gcda' -o -name '*.gcno' -o -name '*.gcov' ')' "$@"
 }
 
 list-cov() {
@@ -118,8 +120,9 @@ list-cov() {
     #xargs --no-run-if-empty -- rm --verbose
 }
 
-rm-cov() {
-  find-cov | xargs --no-run-if-empty -- rm --verbose
+# These are generated at runtime
+rm-gcda() {
+  find $PY27 -name '*.gcda' | xargs --no-run-if-empty -- rm --verbose
 }
 
 # This gcc tool gives you text.
@@ -135,7 +138,14 @@ gcov-report() {
   #gcov --object-directory $PY27/Python $PY27/Python/*.c
   #mv --verbose *.gcov _gcov
 
-  gcov --object-directory $PY27/Python $PY27/Python/pythonrun.c
+  pushd $PY27
+  # creates Python#pythonrun.c.gcov.  Dumb!
+  gcov --preserve-paths Python/pythonrun.c
+  find . -name '*.gcov'
+  popd
+  #gcov \
+  #  --source-prefix $PY27/Python \
+  #  --object-directory $PY27/Python $PY27/Python/pythonrun.c
 }
 
 copy-bin() {
