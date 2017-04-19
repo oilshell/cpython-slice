@@ -191,6 +191,9 @@ class PyBuildExt(build_ext):
             extensions.append(ctypes)
         self.extensions = extensions
 
+        # QUICK BUILD HACK: Build the first five only
+        self.extensions = self.extensions[:5]
+
         # Fix up the autodetected modules, prefixing all the source files
         # with Modules/ and adding Python's include directory to the path.
         (srcdir,) = sysconfig.get_config_vars('srcdir')

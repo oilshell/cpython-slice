@@ -75,6 +75,14 @@ dl_funcptr _PyImport_GetDynLoadFunc(const char *fqname, const char *shortname,
     char pathbuf[260];
     int dlopenflags=0;
 
+    /* DISABLING FOR OIL */
+    /*
+    PyErr_SetString(PyExc_ImportError, "Oil doesn't allow dynamic modules");
+    return NULL;
+    */
+    printf("GetDynLoadFunc fq:%s short:%s path:%s\n",
+           fqname, shortname, pathname);
+
     if (strchr(pathname, '/') == NULL) {
         /* Prefix bare filename with "./" */
         PyOS_snprintf(pathbuf, sizeof(pathbuf), "./%-.255s", pathname);
