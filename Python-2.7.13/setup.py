@@ -192,7 +192,9 @@ class PyBuildExt(build_ext):
         self.extensions = extensions
 
         # QUICK BUILD HACK: Build the first five only
-        self.extensions = self.extensions[:5]
+        max_extensions = int(os.getenv('OIL_MAX_EXTENSIONS', '0'))
+        if max_extensions:
+          self.extensions = self.extensions[:max_extensions]
 
         # Fix up the autodetected modules, prefixing all the source files
         # with Modules/ and adding Python's include directory to the path.

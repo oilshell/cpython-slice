@@ -56,6 +56,7 @@ build-small() {
   cd $PY27
   make clean
   time ./configure --without-threads
+  export OIL_MAX_EXTENSIONS=5
   time make -j 7 || true
 }
 
@@ -100,6 +101,7 @@ build-clang-small() {
   cd $PY27
   make clean
   time ./configure --without-threads
+  export OIL_MAX_EXTENSIONS=5
   time make -j 7 CC=$CLANG || true
 }
 
