@@ -26,10 +26,10 @@ build-libpython() {
   # {errno,pwd,_sre,_codecs,_weakrefzipimport,symtable,xxsubtype}module
 }
 
-build() {
+build-default() {
   cd $PY27
   make clean
-  #time ./configure 
+  time ./configure
   time make -j 7 || true
 }
 
@@ -70,6 +70,72 @@ build-m32() {
   make clean
   time ./configure --without-threads
   time make -j 7 CFLAGS=-m32 libpython2.7.a || true
+}
+
+install-lcov() {
+  sudo apt-get install lcov
+}
+
+# I think this is the GCC one.  'make coverage' reinvokes make, so it builds
+# all modules too.
+# 3.1 M binary instead of 2.0.
+build-coverage() {
+  cd $PY27
+  make clean
+  time ./configure --without-threads
+  time make -j 7 coverage || true
+}
+
+lcov-report() {
+  cd $PY27
+  time make coverage-lcov
+}
+
+# lcov: this is a reporting tool!  Need to install it.
+
+# -S to ignore site.py.
+# sys is builtin
+
+# What are the .gcda and .gcno?
+# https://gcc.gnu.org/onlinedocs/gcc/Gcov-Data-Files.html
+# .gcda: -ftest-coverage
+# .gcno: -fpropfile-arcs
+# There is also the -fprofiledir option.
+
+run-cov() {
+  PYTHONHOME=$PY27 _bin/python-cov.stripped -S "$@"
+}
+
+find-cov() {
+  find $PY27 '(' -name '*.gcda' -o -name '*.gcno' ')' "$@"
+}
+
+list-cov() {
+  find-cov -a -printf '%s %P\n'
+
+  #find $PY27 '(' -name '*.gcov' ')' -a -printf '%s %P\n'
+    #xargs --no-run-if-empty -- ls -l
+    #xargs --no-run-if-empty -- rm --verbose
+}
+
+rm-cov() {
+  find-cov | xargs --no-run-if-empty -- rm --verbose
+}
+
+# This gcc tool gives you text.
+# NOTE: copied from 
+gcov-report() {
+  mkdir -p _gcov
+  rm --verbose -f _gcov/*
+
+  # After running tests with bwk-cov, .gcno and .gcda files are in
+  # obj/bwk-cov, next to the objects.
+
+  # This fails
+  #gcov --object-directory $PY27/Python $PY27/Python/*.c
+  #mv --verbose *.gcov _gcov
+
+  gcov --object-directory $PY27/Python $PY27/Python/pythonrun.c
 }
 
 copy-bin() {
