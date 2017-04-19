@@ -262,9 +262,11 @@ class PyBuildExt(build_ext):
         args = {}
         # unfortunately, distutils doesn't let us provide separate C and C++
         # compilers
+
+        oil_module_cflags = os.getenv('OIL_MODULE_CFLAGS', '')
         if compiler is not None:
             (ccshared,cflags) = sysconfig.get_config_vars('CCSHARED','CFLAGS')
-            args['compiler_so'] = compiler + ' ' + ccshared + ' ' + cflags
+            args['compiler_so'] = compiler + ' ' + ccshared + ' ' + cflags + ' ' + oil_module_cflags
         self.compiler.set_executables(**args)
 
         build_ext.build_extensions(self)

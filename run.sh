@@ -107,7 +107,7 @@ build-clang-small() {
 # coverage builds are unoptimized.
 # 5.3 MB instead of 1.6 MB.
 #
-# NOTE: need LDFLAGS to output .profraw?
+# NOTE: LDFLAGS must be set as well to output .profraw.
 
 build-clang-coverage() {
   cd $PY27
@@ -132,6 +132,9 @@ build-coverage() {
   cd $PY27
   make clean
   time ./configure --without-threads
+  # extra cflags for building .o files for Modules/
+  # CFLAGS only makes it through to the -shared invocation.
+  export OIL_MODULE_CFLAGS="$GCC_COV_FLAGS"
   time make -j 7 coverage || true
 }
 
