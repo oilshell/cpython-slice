@@ -121,6 +121,10 @@ install-lcov() {
   sudo apt-get install lcov
 }
 
+# Matches Makefile.
+# Need to get these into setup.py invocation.
+readonly GCC_COV_FLAGS='-O0 -pg -fprofile-arcs -ftest-coverage'
+
 # I think this is the GCC one.  'make coverage' reinvokes make, so it builds
 # all modules too.
 # 3.1 M binary instead of 2.0.
@@ -128,7 +132,6 @@ build-coverage() {
   cd $PY27
   make clean
   time ./configure --without-threads
-  # TODO: Add flags here
   time make -j 7 coverage || true
 }
 
