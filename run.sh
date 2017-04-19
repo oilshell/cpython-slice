@@ -33,6 +33,16 @@ build-default() {
   time make -j 7 || true
 }
 
+# After putting _json line in, you get init_json in the 'nm' output of
+# _bin/python-with-json.unstripped.
+build-with-modules() {
+  cd $PY27
+  make clean
+  time ./configure
+  cp -v ../ModulesSetup Modules/Setup
+  time make -j 7 || true
+}
+
 # It's indeed a little smaller without threads, and it doesn't dynamically link
 # against pthreads.  TODO: How to use Modules/Setup?
 

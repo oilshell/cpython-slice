@@ -124,6 +124,8 @@ _weakref _weakref.c             # weak references
 # builtin module avoids some bootstrapping problems and reduces overhead.
 zipimport zipimport.c
 
+_json _json.c
+
 # The rest of the modules listed in this file are all commented out by
 # default.  Usually they can be detected and built as dynamically
 # loaded modules by the new setup.py script added in Python 2.1.  If
