@@ -85,19 +85,32 @@ build-m32() {
 readonly CLANG_DIR=~/install/clang+llvm-4.0.0-x86_64-linux-gnu-ubuntu-14.04
 readonly CLANG=$CLANG_DIR/bin/clang
 
-readonly CLANG_FLAGS='-fprofile-instr-generate -fcoverage-mapping'
+readonly CLANG_COV_FLAGS='-fprofile-instr-generate -fcoverage-mapping'
 readonly CLANG_LINK_FLAGS=''
 
 # hm the Makefile defines CC and CXX as {gcc,g++} -pthread
 # 
 # Woah clang is faster and smaller.
-# I think it's 5.6 to 12.5 seconds to compile vs. gcc-small.
+# I think it's 6-8 seconds vs. 12.5 seconds to compile vs. gcc-small.
 # And binary is 1.6 MB vs 1.9 MB!  Wow.
+#
+# (Clang 4.0 seems to be slower than Clang 3.4 from Ubuntu.)
+
 build-clang-small() {
   cd $PY27
   make clean
   time ./configure --without-threads
-  time make -j 7 CC=clang || true
+  time make -j 7 CC=$CLANG || true
+}
+
+# Oh but with coverage it's faster.  Only 4 seconds!  I think this is because
+# coverage builds are unoptimized.
+# 5.3 MB instead of 1.6 MB.
+build-clang-coverage() {
+  cd $PY27
+  make clean
+  time ./configure --without-threads
+  time make -j 7 CC=$CLANG CFLAGS="$CLANG_COV_FLAGS" || true
 }
 
 # HTML reporter
