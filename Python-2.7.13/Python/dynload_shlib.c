@@ -75,13 +75,12 @@ dl_funcptr _PyImport_GetDynLoadFunc(const char *fqname, const char *shortname,
     char pathbuf[260];
     int dlopenflags=0;
 
+    printf("GetDynLoadFunc fq:%s short:%s path:%s -> DISABLED\n",
+           fqname, shortname, pathname);
+
     /* DISABLING FOR OIL */
-    /*
     PyErr_SetString(PyExc_ImportError, "Oil doesn't allow dynamic modules");
     return NULL;
-    */
-    printf("GetDynLoadFunc fq:%s short:%s path:%s\n",
-           fqname, shortname, pathname);
 
     if (strchr(pathname, '/') == NULL) {
         /* Prefix bare filename with "./" */
