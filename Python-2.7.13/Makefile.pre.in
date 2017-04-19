@@ -484,7 +484,6 @@ coverage-lcov:
 	    '*/Modules/_ctypes/libffi*/*' \
 	    '*/Modules/expat/*' \
 	    '*/Modules/zlib/*' \
-	    '*/Include/*' \
 	    '/usr/include/*' \
 	    '/usr/local/include/*' \
 	    --output-file $(COVERAGE_INFO)
