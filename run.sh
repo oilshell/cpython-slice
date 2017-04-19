@@ -106,11 +106,14 @@ build-clang-small() {
 # Oh but with coverage it's faster.  Only 4 seconds!  I think this is because
 # coverage builds are unoptimized.
 # 5.3 MB instead of 1.6 MB.
+#
+# NOTE: need LDFLAGS to output .profraw?
+
 build-clang-coverage() {
   cd $PY27
   make clean
   time ./configure --without-threads
-  time make -j 7 CC=$CLANG CFLAGS="$CLANG_COV_FLAGS" || true
+  time make -j 7 CC=$CLANG CFLAGS="$CLANG_COV_FLAGS" LDFLAGS="$CLANG_COV_FLAGS" || true
 }
 
 # HTML reporter
@@ -125,6 +128,7 @@ build-coverage() {
   cd $PY27
   make clean
   time ./configure --without-threads
+  # TODO: Add flags here
   time make -j 7 coverage || true
 }
 
