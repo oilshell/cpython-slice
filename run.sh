@@ -106,9 +106,10 @@ run-cov() {
   #PYTHONHOME=$PY27 _bin/python-cov.stripped -S "$@"
   #PYTHONHOME=$PY27 _bin/python-cov.unstripped -S "$@"
 
-  # Have to run this one to generate right thing
+  # Have to run this directly, in the right working directory, to generate the
+  # .gcda files.
   pushd $PY27
-  PYTHONHOME=$PY27 ./python -S "$@"
+  ./python -S "$@"
   popd
 }
 
