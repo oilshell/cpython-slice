@@ -373,9 +373,7 @@ PYTHON_OBJS=	\
 
 OVM_PYTHON_OBJS=	\
 		Python/_warnings.o \
-		Python/Python-ast.o \
 		Python/asdl.o \
-		Python/ast.o \
 		Python/bltinmodule.o \
 		Python/ceval.o \
 		Python/codecs.o \
@@ -404,7 +402,6 @@ OVM_PYTHON_OBJS=	\
 		Python/pythonrun.o \
                 Python/random.o \
 		Python/structmember.o \
-		Python/symtable.o \
 		Python/sysmodule.o \
 		Python/traceback.o \
 		Python/getopt.o \

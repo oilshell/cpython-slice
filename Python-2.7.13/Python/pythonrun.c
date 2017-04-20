@@ -1379,6 +1379,10 @@ static PyObject *
 run_mod(mod_ty mod, const char *filename, PyObject *globals, PyObject *locals,
          PyCompilerFlags *flags, PyArena *arena)
 {
+#ifdef OIL_MAIN
+    fprintf(stderr, "run_mod: no AST");
+    return NULL;
+#else
     PyCodeObject *co;
     PyObject *v;
     co = PyAST_Compile(mod, filename, flags, arena);
@@ -1387,6 +1391,7 @@ run_mod(mod_ty mod, const char *filename, PyObject *globals, PyObject *locals,
     v = PyEval_EvalCode(co, globals, locals);
     Py_DECREF(co);
     return v;
+#endif
 }
 
 static PyObject *
@@ -1425,6 +1430,10 @@ PyObject *
 Py_CompileStringFlags(const char *str, const char *filename, int start,
                       PyCompilerFlags *flags)
 {
+#ifdef OIL_MAIN
+    fprintf(stderr, "run_mod: no AST");
+    return NULL;
+#else
     PyCodeObject *co;
     mod_ty mod;
     PyArena *arena = PyArena_New();
@@ -1444,6 +1453,7 @@ Py_CompileStringFlags(const char *str, const char *filename, int start,
     co = PyAST_Compile(mod, filename, flags, arena);
     PyArena_Free(arena);
     return (PyObject *)co;
+#endif
 }
 
 struct symtable *
