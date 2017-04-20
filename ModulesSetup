@@ -144,7 +144,7 @@ fcntl fcntlmodule.c
 # ======================================================================
 
 # The Python symtable module depends on .h files that setup.py doesn't track
-_symtable symtablemodule.c
+#_symtable symtablemodule.c
 
 # The SGI specific GL module:
 

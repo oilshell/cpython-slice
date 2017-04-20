@@ -393,7 +393,6 @@ OVM_PYTHON_OBJS=	\
 		Python/modsupport.o \
 		Python/mystrtoul.o \
 		Python/mysnprintf.o \
-		Python/peephole.o \
 		Python/pyarena.o \
 		Python/pyctype.o \
 		Python/pyfpe.o \
