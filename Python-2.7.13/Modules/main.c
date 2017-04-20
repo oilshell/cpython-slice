@@ -262,14 +262,23 @@ Ovm_Main(int argc, char **argv)
         return 2;
     }
 
+    /* Always behave like -S */
+    Py_NoSiteFlag++;
+
     // NOTE: I think is so the startup files can change compiler flags.
     // We don't need it?
     PyCompilerFlags cf;
     cf.cf_flags = 0;
+
+    /* TODO: Copy more stuff from Py_Main */
+
+    Py_Initialize();
     sts = PyRun_AnyFileExFlags(
         fp,
         filename == NULL ? "<stdin>" : filename,
         filename != NULL, &cf) != 0;
+
+    Py_Finalize();
     return sts;
 }
 
@@ -481,14 +490,6 @@ Py_Main(int argc, char **argv)
 
         }
     }
-
-#ifdef OIL_MAIN
-    /* Always behave like -S */
-    if (!Py_NoSiteFlag) {
-      Py_NoSiteFlag++;
-    }
-#endif
-
 
     if (help)
         return usage(0, argv[0]);

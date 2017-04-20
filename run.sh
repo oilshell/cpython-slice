@@ -164,7 +164,8 @@ build-ovm() {
   # ./python -E -S -m sysconfig --generate-posix-vars 
 
   #cflags='-O0 -DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
-  cflags='-DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
+  # debug info
+  cflags='-g -DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
   time make -j 7 CC=$CLANG CFLAGS="$cflags" ovm
 }
 
@@ -174,6 +175,7 @@ test-hello() {
   python -c 'import hello'
   popd
 
+  #gdb --tui --args $PY27/ovm testdata/hello.pyc
   $PY27/ovm testdata/hello.pyc
 }
 
