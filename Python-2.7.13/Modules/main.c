@@ -256,6 +256,7 @@ Ovm_Main(int argc, char **argv)
 
             return 2;
         }
+        break;
     default:
         fprintf(stderr, "ovm: too many input files\n");
         return 2;
