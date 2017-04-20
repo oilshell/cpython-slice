@@ -876,6 +876,10 @@ load_compiled_module(char *name, char *cpathname, FILE *fp)
 static PyCodeObject *
 parse_source_module(const char *pathname, FILE *fp)
 {
+#ifdef OIL_MAIN
+    fprintf(stderr, "parse_source_module: no AST\n");
+    return NULL;
+#else
     PyCodeObject *co = NULL;
     mod_ty mod;
     PyCompilerFlags flags;
@@ -892,6 +896,7 @@ parse_source_module(const char *pathname, FILE *fp)
     }
     PyArena_Free(arena);
     return co;
+#endif
 }
 
 
