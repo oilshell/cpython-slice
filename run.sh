@@ -163,17 +163,23 @@ build-ovm() {
   # NOTE: The build process uses the -m path.  So we would have to change that.
   # ./python -E -S -m sysconfig --generate-posix-vars 
 
+  cflags='-DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
   #cflags='-O0 -DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
   # debug info
-  cflags='-g -DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
+  #cflags='-g -DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
   time make -j 7 CC=$CLANG CFLAGS="$cflags" ovm
+
+  ls -l ovm
 }
 
 test-hello() {
   pushd testdata
-  rm hello.pyc
-  python -c 'import hello'
+  rm -f hello.pyc lib.pyc
+  python -c 'import hello, lib'
   popd
+
+  # Hm OVM needs -c so you can print sys.path and stuff.  Oh but then it would
+  # need a parser!  Doh.
 
   #gdb --tui --args $PY27/ovm testdata/hello.pyc
   $PY27/ovm testdata/hello.pyc
