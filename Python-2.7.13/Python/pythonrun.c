@@ -1474,6 +1474,10 @@ PyParser_ASTFromString(const char *s, const char *filename, int start,
     perrdetail err;
     int iflags = PARSER_FLAGS(flags);
 
+#ifdef OIL_MAIN
+    fprintf(stderr, "PyParser_ASTFromString: OVM has no parser");
+    return NULL;
+#else
     node *n = PyParser_ParseStringFlagsFilenameEx(s, filename,
                                     &_PyParser_Grammar, start, &err,
                                     &iflags);
@@ -1491,6 +1495,7 @@ PyParser_ASTFromString(const char *s, const char *filename, int start,
         err_input(&err);
         return NULL;
     }
+#endif
 }
 
 mod_ty
@@ -1533,6 +1538,10 @@ PyParser_ASTFromFile(FILE *fp, const char *filename, int start, char *ps1,
 node *
 PyParser_SimpleParseFileFlags(FILE *fp, const char *filename, int start, int flags)
 {
+#ifdef OIL_MAIN
+    fprintf(stderr, "PyParser_SimpleParseFileFlags: OVM has no parser");
+    return NULL;
+#else
     perrdetail err;
     node *n = PyParser_ParseFileFlags(fp, filename, &_PyParser_Grammar,
                                       start, NULL, NULL, &err, flags);
@@ -1540,6 +1549,7 @@ PyParser_SimpleParseFileFlags(FILE *fp, const char *filename, int start, int fla
         err_input(&err);
 
     return n;
+#endif
 }
 
 /* Simplified interface to parsestring -- return node or set exception */
@@ -1547,24 +1557,34 @@ PyParser_SimpleParseFileFlags(FILE *fp, const char *filename, int start, int fla
 node *
 PyParser_SimpleParseStringFlags(const char *str, int start, int flags)
 {
+#ifdef OIL_MAIN
+    fprintf(stderr, "PyParser_SimpleParseStringFlags: OVM has no parser");
+    return NULL;
+#else
     perrdetail err;
     node *n = PyParser_ParseStringFlags(str, &_PyParser_Grammar,
                                         start, &err, flags);
     if (n == NULL)
         err_input(&err);
     return n;
+#endif
 }
 
 node *
 PyParser_SimpleParseStringFlagsFilename(const char *str, const char *filename,
                                         int start, int flags)
 {
+#ifdef OIL_MAIN
+    fprintf(stderr, "PyParser_SimpleParseStringFlagsFilename: OVM has no parser");
+    return NULL;
+#else
     perrdetail err;
     node *n = PyParser_ParseStringFlagsFilename(str, filename,
                             &_PyParser_Grammar, start, &err, flags);
     if (n == NULL)
         err_input(&err);
     return n;
+#endif
 }
 
 node *
