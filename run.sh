@@ -164,6 +164,8 @@ build-ovm() {
 }
 
 test-hello() {
+  local bin=${1:-ovm}
+
   pushd testdata
   rm -f hello.pyc lib.pyc
   python -c 'import hello, lib'

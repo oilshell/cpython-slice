@@ -143,6 +143,10 @@ mod-setup() {
 		Modules/Setup.config \
 		Modules/Setup.local \
 		Modules/Setup
+
+  # Is this for atomic mv?
+  mv config.c Modules
+
   popd
 }
 
@@ -167,6 +171,10 @@ build() {
     -ldl -lutil -lm \
     || true
   popd
+}
+
+test-hello() {
+  ./run.sh test-hello $PY27/ovm2
 }
 
 "$@"
