@@ -18,14 +18,5 @@ main(int argc, char **argv)
 	fedisableexcept(FE_OVERFLOW);
 #endif
 
-#ifdef OIL_MAIN
-  printf("Oil!\n");
-  // from Python/pythonrun.c
-  // This needs a module dict though
-  //run_pyc_file();
-
 	return Py_Main(argc, argv);
-#else
-	return Py_Main(argc, argv);
-#endif
 }

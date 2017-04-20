@@ -132,7 +132,7 @@ build-clang-small() {
 build-clang-fast() {
   cd $PY27
   make clean
-  export OIL_MAX_EXTENSIONS=0
+  export OIL_MAX_EXTENSIONS=5
   # NOTE: The build process uses the -m path.  So we would have to change that.
   # ./python -E -S -m sysconfig --generate-posix-vars 
 

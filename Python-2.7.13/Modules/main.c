@@ -235,6 +235,45 @@ static int RunMainFromImporter(char *filename)
 
 /* Main program */
 
+#ifdef OIL_MAIN
+int
+Ovm_Main(int argc, char **argv)
+{
+    int sts;
+    char *filename = NULL;
+    FILE *fp = stdin;
+
+    switch (argc) {
+    case 0:
+    case 1:
+        fprintf(stderr, "ovm: no input files\n");
+        return 2;
+    case 2:
+        filename = argv[1];
+        if ((fp = fopen(filename, "r")) == NULL) {
+            fprintf(stderr, "%s: can't open file '%s': [Errno %d] %s\n",
+                argv[0], filename, errno, strerror(errno));
+
+            return 2;
+        }
+    default:
+        fprintf(stderr, "ovm: too many input files\n");
+        return 2;
+    }
+
+    // NOTE: I think is so the startup files can change compiler flags.
+    // We don't need it?
+    PyCompilerFlags cf;
+    cf.cf_flags = 0;
+    sts = PyRun_AnyFileExFlags(
+        fp,
+        filename == NULL ? "<stdin>" : filename,
+        filename != NULL, &cf) != 0;
+    return sts;
+}
+
+#else
+
 int
 Py_Main(int argc, char **argv)
 {
@@ -696,6 +735,7 @@ Py_Main(int argc, char **argv)
 
     return sts;
 }
+#endif /* OIL_MAIN */
 
 /* this is gonna seem *real weird*, but if you put some other code between
    Py_Main() and Py_GetArgcArgv() you will need to adjust the test in the
