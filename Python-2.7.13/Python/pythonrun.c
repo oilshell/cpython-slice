@@ -1459,6 +1459,10 @@ Py_CompileStringFlags(const char *str, const char *filename, int start,
 struct symtable *
 Py_SymtableString(const char *str, const char *filename, int start)
 {
+#ifdef OIL_MAIN
+    fprintf(stderr, "Py_SymtableString: no AST");
+    return NULL;
+#else
     struct symtable *st;
     mod_ty mod;
     PyCompilerFlags flags;
@@ -1476,6 +1480,7 @@ Py_SymtableString(const char *str, const char *filename, int start)
     st = PySymtable_Build(mod, filename, 0);
     PyArena_Free(arena);
     return st;
+#endif
 }
 
 /* Preferred access to parser is through AST. */
