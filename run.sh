@@ -31,6 +31,9 @@ build-libpython() {
 config() {
   cd $PY27
   time ./configure --without-threads
+
+  # This isn't overwritten as far as I can tell
+  cp -v ../ModulesSetup Modules/Setup
 }
 
 build-default() {
@@ -50,7 +53,6 @@ build-default() {
 build-static-modules() {
   cd $PY27
   make clean
-  cp -v ../ModulesSetup Modules/Setup
   time make -j 7 || true
 }
 
@@ -114,6 +116,19 @@ build-clang-small() {
 }
 
 # 3.5 seconds for -O0.  ~8.5 seconds for default (I think -O2).
+
+# Makefile.pre.in does this.  If we have all modules static eventually, then we
+# don't need this part.  What is sys.path?  The only thing we care about is
+# stdlib modules?
+#
+# ovm has the standard library; oil is the oil repo?
+# OVMPATH=/usr/lib/ovm/:/usr/lib/oil/
+# /usr/bin/ovm -- with symlinks pointing to it.
+#
+# "Create build directory and generate the sysconfig build-time data there.
+# pybuilddir.txt contains the name of the build dir and is used for sys.path
+# fixup -- see Modules/getpath.c."
+
 build-clang-fast() {
   cd $PY27
   make clean
@@ -121,7 +136,7 @@ build-clang-fast() {
   # NOTE: The build process uses the -m path.  So we would have to change that.
   # ./python -E -S -m sysconfig --generate-posix-vars 
 
-  time make -j 7 CC=$CLANG CFLAGS='-O0 -DOIL_DISABLE_DLOPEN -DOIL_MAIN' || true
+  time make -j 7 CC=$CLANG CFLAGS='-O0 -DOIL_DISABLE_DLOPEN' || true
 }
 
 # Oh but with coverage it's faster.  Only 4 seconds!  I think this is because
@@ -133,6 +148,17 @@ build-clang-coverage() {
   cd $PY27
   make clean
   time make -j 7 CC=$CLANG CFLAGS="$CLANG_COV_FLAGS" LDFLAGS="$CLANG_COV_FLAGS" || true
+}
+
+# NOTE: 'import site' tries to find _sysconfigdata?  We behave like -S.
+build-ovm() {
+  cd $PY27
+  make clean
+  export OIL_MAX_EXTENSIONS=0
+  # NOTE: The build process uses the -m path.  So we would have to change that.
+  # ./python -E -S -m sysconfig --generate-posix-vars 
+
+  time make -j 7 CC=$CLANG CFLAGS='-O0 -DOIL_DISABLE_DLOPEN -DOIL_MAIN' ovm || true 
 }
 
 # HTML reporter

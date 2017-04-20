@@ -439,6 +439,14 @@ Py_Main(int argc, char **argv)
         }
     }
 
+#ifdef OIL_MAIN
+    /* Always behave like -S */
+    if (!Py_NoSiteFlag) {
+      Py_NoSiteFlag++;
+    }
+#endif
+
+
     if (help)
         return usage(0, argv[0]);
 
