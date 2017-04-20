@@ -117,8 +117,11 @@ build-clang-small() {
 build-clang-fast() {
   cd $PY27
   make clean
-  export OIL_MAX_EXTENSIONS=5
-  time make -j 7 CC=$CLANG CFLAGS='-O0 -DOIL_DISABLE_DLOPEN' || true
+  export OIL_MAX_EXTENSIONS=0
+  # NOTE: The build process uses the -m path.  So we would have to change that.
+  # ./python -E -S -m sysconfig --generate-posix-vars 
+
+  time make -j 7 CC=$CLANG CFLAGS='-O0 -DOIL_DISABLE_DLOPEN -DOIL_MAIN' || true
 }
 
 # Oh but with coverage it's faster.  Only 4 seconds!  I think this is because

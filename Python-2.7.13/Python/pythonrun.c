@@ -945,8 +945,13 @@ PyRun_SimpleFileExFlags(FILE *fp, const char *filename, int closeit,
             Py_OptimizeFlag = 1;
         v = run_pyc_file(fp, filename, d, d, flags);
     } else {
+#ifdef OIL_MAIN
+        fprintf(stderr, "Oil: expected .pyc file\n");
+        return -1;
+#else
         v = PyRun_FileExFlags(fp, filename, Py_file_input, d, d,
                               closeit, flags);
+#endif
     }
     if (v == NULL) {
         PyErr_Print();
