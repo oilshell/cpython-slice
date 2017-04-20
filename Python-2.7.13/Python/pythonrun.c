@@ -541,7 +541,9 @@ Py_Finalize(void)
        - whatever various modules and libraries allocate
     */
 
+#ifndef OIL_MAIN
     PyGrammar_RemoveAccelerators(&_PyParser_Grammar);
+#endif
 
 #ifdef Py_TRACE_REFS
     /* Display addresses (& refcnts) of all objects still alive.
