@@ -182,8 +182,10 @@ Py_InitializeEx(int install_sigs)
         Py_DebugFlag = add_flag(Py_DebugFlag, p);
     if ((p = Py_GETENV("PYTHONVERBOSE")) && *p != '\0')
         Py_VerboseFlag = add_flag(Py_VerboseFlag, p);
+#ifndef OIL_MAIN
     if ((p = Py_GETENV("PYTHONOPTIMIZE")) && *p != '\0')
         Py_OptimizeFlag = add_flag(Py_OptimizeFlag, p);
+#endif
     if ((p = Py_GETENV("PYTHONDONTWRITEBYTECODE")) && *p != '\0')
         Py_DontWriteBytecodeFlag = add_flag(Py_DontWriteBytecodeFlag, p);
     /* The variable is only tested for existence here; _PyRandom_Init will
@@ -942,9 +944,11 @@ PyRun_SimpleFileExFlags(FILE *fp, const char *filename, int closeit,
             fprintf(stderr, "python: Can't reopen .pyc file\n");
             goto done;
         }
+#ifndef OIL_MAIN
         /* Turn on optimization if a .pyo file is given */
         if (strcmp(ext, ".pyo") == 0)
             Py_OptimizeFlag = 1;
+#endif
         v = run_pyc_file(fp, filename, d, d, flags);
     } else {
 #ifdef OIL_MAIN

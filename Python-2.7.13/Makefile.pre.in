@@ -371,6 +371,53 @@ PYTHON_OBJS=	\
 		$(MACHDEP_OBJS) \
 		$(THREADOBJ)
 
+OVM_PYTHON_OBJS=	\
+		Python/_warnings.o \
+		Python/Python-ast.o \
+		Python/asdl.o \
+		Python/ast.o \
+		Python/bltinmodule.o \
+		Python/ceval.o \
+		Python/codecs.o \
+		Python/errors.o \
+		Python/frozen.o \
+		Python/frozenmain.o \
+		Python/future.o \
+		Python/getargs.o \
+		Python/getcompiler.o \
+		Python/getcopyright.o \
+		Python/getplatform.o \
+		Python/getversion.o \
+		Python/graminit.o \
+		Python/import.o \
+		Python/importdl.o \
+		Python/marshal.o \
+		Python/modsupport.o \
+		Python/mystrtoul.o \
+		Python/mysnprintf.o \
+		Python/peephole.o \
+		Python/pyarena.o \
+		Python/pyctype.o \
+		Python/pyfpe.o \
+		Python/pymath.o \
+		Python/pystate.o \
+		Python/pythonrun.o \
+                Python/random.o \
+		Python/structmember.o \
+		Python/symtable.o \
+		Python/sysmodule.o \
+		Python/traceback.o \
+		Python/getopt.o \
+		Python/pystrcmp.o \
+		Python/pystrtod.o \
+		Python/dtoa.o \
+		Python/formatter_unicode.o \
+		Python/formatter_string.o \
+		Python/$(DYNLOADFILE) \
+		$(LIBOBJS) \
+		$(MACHDEP_OBJS) \
+		$(THREADOBJ)
+
 
 ##########################################################################
 # Objects
@@ -581,7 +628,7 @@ OVM_LIBRARY_OBJS=	\
 		Modules/getbuildinfo.o \
 		$(OVM_PARSER_OBJS) \
 		$(OBJECT_OBJS) \
-		$(PYTHON_OBJS) \
+		$(OVM_PYTHON_OBJS) \
 		$(MODULE_OBJS) \
 		$(SIGNAL_OBJS) \
 		$(MODOBJS)
@@ -591,7 +638,7 @@ libovm27.a: $(OVM_LIBRARY_OBJS)
 	$(AR) $(ARFLAGS) $@ Modules/getbuildinfo.o
 	$(AR) $(ARFLAGS) $@ $(OVM_PARSER_OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJECT_OBJS)
-	$(AR) $(ARFLAGS) $@ $(PYTHON_OBJS)
+	$(AR) $(ARFLAGS) $@ $(OVM_PYTHON_OBJS)
 	$(AR) $(ARFLAGS) $@ $(MODULE_OBJS) $(SIGNAL_OBJS)
 	$(AR) $(ARFLAGS) $@ $(MODOBJS)
 	$(RANLIB) $@
