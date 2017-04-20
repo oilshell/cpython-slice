@@ -568,9 +568,24 @@ $(LIBRARY): $(LIBRARY_OBJS)
 	$(AR) $(ARFLAGS) $@ $(MODOBJS)
 	$(RANLIB) $@
 
-# Build static library
-# avoid long command lines, same as LIBRARY_OBJS
-libovm27.a: $(LIBRARY_OBJS)
+# PARSER,OBJECT,PYTHON: self-explanatory.  Those dirs.
+#   from the parser, I need readline for raw_input().  It can use GNU readline
+#   or a simple one.
+# MODULE_OBJS: Modules/{config,getpath,main,gcmodule}
+# MODOBJS: posixmodule.o, fcntlmodule.o, etc.
+#
+# SIGNAL: only used if signalmodule.c isn't there.  Somehow that gets included.
+
+OVM_LIBRARY_OBJS=	\
+		Modules/getbuildinfo.o \
+		$(PARSER_OBJS) \
+		$(OBJECT_OBJS) \
+		$(PYTHON_OBJS) \
+		$(MODULE_OBJS) \
+		$(SIGNAL_OBJS) \
+		$(MODOBJS)
+
+libovm27.a: $(OVM_LIBRARY_OBJS)
 	-rm -f $@
 	$(AR) $(ARFLAGS) $@ Modules/getbuildinfo.o
 	$(AR) $(ARFLAGS) $@ $(PARSER_OBJS)
