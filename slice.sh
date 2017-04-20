@@ -25,7 +25,6 @@ readonly OVM_PYTHON_OBJS='
 		Python/getcopyright.c
 		Python/getplatform.c
 		Python/getversion.c
-		Python/graminit.c
 		Python/import.c
 		Python/importdl.c
 		Python/marshal.c
@@ -183,6 +182,17 @@ build() {
   popd
 }
 
+# 123K lines.
+# Biggest: posixmodule,unicodeobject,typeobject,ceval.
+#
+# Big ones to rid of: unicodeobject.c, import.c
+# codecs and codecsmodule?  There is some non-unicode stuff tehre though.
+count-lines() {
+  pushd $PY27
+  wc -l $OVM_LIBRARY_OBJS | sort -n
+  popd
+}
+
 test-hello() {
   ./run.sh test-hello $PY27/ovm2
 }
@@ -201,6 +211,16 @@ compare-symbols() {
   symbols ovm2 ovm2-sym.txt
 
   wc -l *-sym.txt
+
+  diff -u python-sym.txt ovm2-sym.txt
+  popd
+}
+
+compare-size() {
+  pushd $PY27
+  strip -o python.stripped python
+  strip -o ovm2.stripped ovm2
+  ls -l python.stripped ovm2.stripped
   popd
 }
 
