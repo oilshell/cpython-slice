@@ -170,17 +170,18 @@ build() {
   # a few things because there are more warnings.
 
   time $CLANG -g \
-    -DOIL_DISABLE_DLOPEN -DOIL_MAIN \
-		-DPYTHONPATH="$PYTHONPATH" \
-		-DPREFIX="$prefix" \
-		-DEXEC_PREFIX="$exec_prefix" \
-		-DVERSION="$VERSION" \
-		-DVPATH="$VPATH" \
-    -I. -IInclude -DPy_BUILD_CORE \
+    -D OIL_DISABLE_DLOPEN -D OIL_MAIN \
+		-D PYTHONPATH="$PYTHONPATH" \
+		-D PREFIX="$prefix" \
+		-D EXEC_PREFIX="$exec_prefix" \
+		-D VERSION="$VERSION" \
+		-D VPATH="$VPATH" \
+    -D Py_BUILD_CORE \
+    -I . -I Include \
     -o ovm2 \
     $OVM_LIBRARY_OBJS \
     Modules/ovm.c \
-    -ldl -lutil -lm \
+    -l dl -l util -l m \
     || true
   popd
 }

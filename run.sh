@@ -181,7 +181,7 @@ test-hello() {
 
   # add current dir
   export PYTHONPATH=testdata
-  $bin testdata/hello.pyc
+  time $bin testdata/hello.pyc
   #gdb --tui --args $bin testdata/hello.pyc
 
 }
