@@ -2745,7 +2745,7 @@ _PyBuiltin_Init(void)
     SETBUILTIN("unicode",               &PyUnicode_Type);
 #endif
 #ifdef OIL_MAIN
-    debug = 0;
+    debug = PyBool_FromLong(0);
 #else
     debug = PyBool_FromLong(Py_OptimizeFlag == 0);
 #endif

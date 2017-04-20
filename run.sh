@@ -166,7 +166,7 @@ build-ovm() {
   cflags='-DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
   #cflags='-O0 -DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
   # debug info
-  #cflags='-g -DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
+  cflags='-g -DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
   time make -j 7 CC=$CLANG CFLAGS="$cflags" ovm
 
   ls -l ovm
@@ -184,11 +184,13 @@ test-hello() {
 
   # Some how it gets /usr/lib/python2.7.zip.
   # I think you should make and ovm27.zip ?
-
-  #gdb --tui --args $PY27/ovm testdata/hello.pyc
-  PYTHONPATH= ../$PY27/ovm hello.pyc
-
   popd
+
+  # add current dir
+  export PYTHONPATH=testdata
+  $PY27/ovm testdata/hello.pyc
+  #gdb --tui --args $PY27/ovm testdata/hello.pyc
+
 }
 
 # HTML reporter
