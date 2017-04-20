@@ -176,13 +176,19 @@ test-hello() {
   pushd testdata
   rm -f hello.pyc lib.pyc
   python -c 'import hello, lib'
-  popd
 
   # Hm OVM needs -c so you can print sys.path and stuff.  Oh but then it would
   # need a parser!  Doh.
 
+  # Under OVM, sys.path doesn't have '', which is the current directory.
+
+  # Some how it gets /usr/lib/python2.7.zip.
+  # I think you should make and ovm27.zip ?
+
   #gdb --tui --args $PY27/ovm testdata/hello.pyc
-  $PY27/ovm testdata/hello.pyc
+  PYTHONPATH= ../$PY27/ovm hello.pyc
+
+  popd
 }
 
 # HTML reporter

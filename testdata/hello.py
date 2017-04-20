@@ -3,7 +3,11 @@
 hello.py
 """
 
+print('Hello from hello.py')
+
+import sys
+print(sys.path)
+
 import lib
 
-print('Hello from hello.py')
 
