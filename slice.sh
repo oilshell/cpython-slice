@@ -166,6 +166,9 @@ build() {
 
   # PREFIX, EXEC_PREFIX, VERSION, VPATH, etc. are from Modules/getpath.o
 
+  # NOTE: -m32 is 1.62 MB instead of 1.90 MB.  But I probably have to redefine
+  # a few things because there are more warnings.
+
   time $CLANG -g \
     -DOIL_DISABLE_DLOPEN -DOIL_MAIN \
 		-DPYTHONPATH="$PYTHONPATH" \
@@ -185,11 +188,26 @@ build() {
 # 123K lines.
 # Biggest: posixmodule,unicodeobject,typeobject,ceval.
 #
+# Remove tmpnam from posixmodule, other cruft.
+#
 # Big ones to rid of: unicodeobject.c, import.c
-# codecs and codecsmodule?  There is some non-unicode stuff tehre though.
+# codecs and codecsmodule?  There is some non-unicode stuff there though.
+#
+# Probably need unicode for compatibility with modules and web frameworks
+# especially.
+
 count-lines() {
   pushd $PY27
   wc -l $OVM_LIBRARY_OBJS | sort -n
+
+  # 90 files.
+  # NOTE: This doesn't count headers.
+  echo
+  echo 'Files:'
+  for i in $OVM_LIBRARY_OBJS; do
+   echo $i
+  done | wc -l
+
   popd
 }
 

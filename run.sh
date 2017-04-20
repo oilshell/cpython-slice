@@ -181,8 +181,8 @@ test-hello() {
 
   # add current dir
   export PYTHONPATH=testdata
-  $PY27/ovm testdata/hello.pyc
-  #gdb --tui --args $PY27/ovm testdata/hello.pyc
+  $bin testdata/hello.pyc
+  #gdb --tui --args $bin testdata/hello.pyc
 
 }
 
