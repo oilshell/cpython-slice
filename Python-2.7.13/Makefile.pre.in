@@ -274,6 +274,7 @@ POBJS=		\
 		Parser/pgen.o
 
 PARSER_OBJS=	$(POBJS) Parser/myreadline.o Parser/tokenizer.o
+OVM_PARSER_OBJS=	Parser/myreadline.o
 
 PGSRCS=		\
 		Objects/obmalloc.c \
@@ -578,7 +579,7 @@ $(LIBRARY): $(LIBRARY_OBJS)
 
 OVM_LIBRARY_OBJS=	\
 		Modules/getbuildinfo.o \
-		$(PARSER_OBJS) \
+		$(OVM_PARSER_OBJS) \
 		$(OBJECT_OBJS) \
 		$(PYTHON_OBJS) \
 		$(MODULE_OBJS) \
@@ -588,7 +589,7 @@ OVM_LIBRARY_OBJS=	\
 libovm27.a: $(OVM_LIBRARY_OBJS)
 	-rm -f $@
 	$(AR) $(ARFLAGS) $@ Modules/getbuildinfo.o
-	$(AR) $(ARFLAGS) $@ $(PARSER_OBJS)
+	$(AR) $(ARFLAGS) $@ $(OVM_PARSER_OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJECT_OBJS)
 	$(AR) $(ARFLAGS) $@ $(PYTHON_OBJS)
 	$(AR) $(ARFLAGS) $@ $(MODULE_OBJS) $(SIGNAL_OBJS)

@@ -387,7 +387,10 @@ Py_Main(int argc, char **argv)
             break;
 
         case 't':
+#ifndef OIL_MAIN
+            /* defined in Parser/parsetok.c, odd */
             Py_TabcheckFlag++;
+#endif
             break;
 
         case 'u':
@@ -455,9 +458,11 @@ Py_Main(int argc, char **argv)
         return 0;
     }
 
+#ifndef OIL_MAIN
     if (Py_Py3kWarningFlag && !Py_TabcheckFlag)
         /* -3 implies -t (but not -tt) */
         Py_TabcheckFlag = 1;
+#endif
 
     if (!Py_InspectFlag &&
         (p = Py_GETENV("PYTHONINSPECT")) && *p != '\0')

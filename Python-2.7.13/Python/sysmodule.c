@@ -1265,7 +1265,9 @@ make_flags(void)
     SetFlag(Py_NoUserSiteDirectory);
     SetFlag(Py_NoSiteFlag);
     SetFlag(Py_IgnoreEnvironmentFlag);
+#ifndef OIL_MAIN
     SetFlag(Py_TabcheckFlag);
+#endif
     SetFlag(Py_VerboseFlag);
 #ifdef RISCOS
     SetFlag(Py_RISCOSWimpFlag);
