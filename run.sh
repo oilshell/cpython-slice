@@ -9,9 +9,6 @@ set -o errexit
 
 source common.sh
 
-readonly PY27=Python-2.7.13
-
-
 # 'make libpython2.7.a' to avoid building external modules.  Assuming we don't
 # need these now.
 # This only takes 9 seconds, vs. 42 seconds for the full build.
@@ -93,12 +90,6 @@ build-m32() {
   make clean
   time make -j 7 CFLAGS=-m32 libpython2.7.a || true
 }
-
-readonly CLANG_DIR=~/install/clang+llvm-4.0.0-x86_64-linux-gnu-ubuntu-14.04
-readonly CLANG=$CLANG_DIR/bin/clang
-
-readonly CLANG_COV_FLAGS='-fprofile-instr-generate -fcoverage-mapping'
-readonly CLANG_LINK_FLAGS=''
 
 # hm the Makefile defines CC and CXX as {gcc,g++} -pthread
 # 

@@ -505,4 +505,4 @@ GLHACK=-Dclear=__GLclear
 # xx xxmodule.c
 
 # Another example -- the 'xxsubtype' module shows C-level subtyping in action
-xxsubtype xxsubtype.c
+#xxsubtype xxsubtype.c

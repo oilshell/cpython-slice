@@ -481,7 +481,7 @@ builtin_compile(PyObject *self, PyObject *args, PyObject *kwds)
     int start[] = {Py_file_input, Py_eval_input, Py_single_input};
 
 #ifdef OIL_MAIN
-    fprintf("stderr", "builtin_compile: no AST");
+    fprintf(stderr, "builtin_compile: no AST");
     return NULL;
 #endif
 
