@@ -26,25 +26,36 @@ build-libpython() {
   # {errno,pwd,_sre,_codecs,_weakrefzipimport,symtable,xxsubtype}module
 }
 
+# We're always doing it without threads for now.  Not sure about signal module
+# just yet.  Have to implement "trap"?
+config() {
+  cd $PY27
+  time ./configure --without-threads
+}
+
 build-default() {
   cd $PY27
   make clean
-  time ./configure
   time make -j 7 || true
 }
 
-# After putting _json line in, you get init_json in the 'nm' output of
+# Build modules statically because we want to disable dlopen?  What about
+# libc.so?
+#
+# We want the fcntl module for sure.
+#
+# NOTE: after putting _json line in, you get init_json in the 'nm' output of
 # _bin/python-with-json.unstripped.
-build-with-modules() {
+#
+build-static-modules() {
   cd $PY27
   make clean
-  time ./configure
   cp -v ../ModulesSetup Modules/Setup
   time make -j 7 || true
 }
 
 # It's indeed a little smaller without threads, and it doesn't dynamically link
-# against pthreads.  TODO: How to use Modules/Setup?
+# against pthreads.
 
 # ./configure generates and EXECUTABLE shell script config.status!
 
@@ -55,7 +66,6 @@ build-with-modules() {
 build-small() {
   cd $PY27
   make clean
-  time ./configure --without-threads
   export OIL_MAX_EXTENSIONS=5
   time make -j 7 || true
 }
@@ -79,7 +89,6 @@ build-small() {
 build-m32() {
   cd $PY27
   make clean
-  time ./configure --without-threads
   time make -j 7 CFLAGS=-m32 libpython2.7.a || true
 }
 
@@ -100,9 +109,16 @@ readonly CLANG_LINK_FLAGS=''
 build-clang-small() {
   cd $PY27
   make clean
-  time ./configure --without-threads
   export OIL_MAX_EXTENSIONS=5
   time make -j 7 CC=$CLANG || true
+}
+
+# 3.5 seconds for -O0.  ~8.5 seconds for default (I think -O2).
+build-clang-fast() {
+  cd $PY27
+  make clean
+  export OIL_MAX_EXTENSIONS=5
+  time make -j 7 CC=$CLANG CFLAGS='-O0' || true
 }
 
 # Oh but with coverage it's faster.  Only 4 seconds!  I think this is because
@@ -110,11 +126,9 @@ build-clang-small() {
 # 5.3 MB instead of 1.6 MB.
 #
 # NOTE: LDFLAGS must be set as well to output .profraw.
-
 build-clang-coverage() {
   cd $PY27
   make clean
-  time ./configure --without-threads
   time make -j 7 CC=$CLANG CFLAGS="$CLANG_COV_FLAGS" LDFLAGS="$CLANG_COV_FLAGS" || true
 }
 
