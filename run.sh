@@ -112,7 +112,7 @@ build-clang-small() {
   cd $PY27
   make clean
   export OIL_MAX_EXTENSIONS=5
-  time make -j 7 CC=$CLANG || true
+  time make -j 7 CC=$CLANG
 }
 
 # 3.5 seconds for -O0.  ~8.5 seconds for default (I think -O2).
@@ -154,6 +154,8 @@ build-clang-coverage() {
 #
 # TODO: ovm should run .pyc files as embedded data?  Linker data or generate C
 # source code and compile it?
+
+# Why is this bigger?  It's somehow not stripping unused symbols?
 build-ovm() {
   cd $PY27
   make clean
@@ -161,9 +163,18 @@ build-ovm() {
   # NOTE: The build process uses the -m path.  So we would have to change that.
   # ./python -E -S -m sysconfig --generate-posix-vars 
 
-  cflags='-O0 -DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
-  #cflags='-DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
-  time make -j 7 CC=$CLANG CFLAGS="$cflags" ovm || true 
+  #cflags='-O0 -DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
+  cflags='-DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
+  time make -j 7 CC=$CLANG CFLAGS="$cflags" ovm
+}
+
+test-hello() {
+  pushd testdata
+  rm hello.pyc
+  python -c 'import hello'
+  popd
+
+  $PY27/ovm testdata/hello.pyc
 }
 
 # HTML reporter
