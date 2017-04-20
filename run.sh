@@ -118,7 +118,7 @@ build-clang-fast() {
   cd $PY27
   make clean
   export OIL_MAX_EXTENSIONS=5
-  time make -j 7 CC=$CLANG CFLAGS='-O0' || true
+  time make -j 7 CC=$CLANG CFLAGS='-O0 -DOIL_DISABLE_DLOPEN' || true
 }
 
 # Oh but with coverage it's faster.  Only 4 seconds!  I think this is because

@@ -76,7 +76,7 @@ dl_funcptr _PyImport_GetDynLoadFunc(const char *fqname, const char *shortname,
     int dlopenflags=0;
 
     /* DISABLING FOR OIL */
-#ifdef DISABLE_DLOPEN_FOR_OIL
+#ifdef OIL_DISABLE_DLOPEN
     printf("GetDynLoadFunc fq:%s short:%s path:%s -> DISABLED\n",
            fqname, shortname, pathname);
     PyErr_SetString(PyExc_ImportError, "Oil doesn't allow dynamic modules");
