@@ -373,7 +373,6 @@ PYTHON_OBJS=	\
 
 OVM_PYTHON_OBJS=	\
 		Python/_warnings.o \
-		Python/asdl.o \
 		Python/bltinmodule.o \
 		Python/ceval.o \
 		Python/codecs.o \
