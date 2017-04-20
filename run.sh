@@ -161,7 +161,9 @@ build-ovm() {
   # NOTE: The build process uses the -m path.  So we would have to change that.
   # ./python -E -S -m sysconfig --generate-posix-vars 
 
-  time make -j 7 CC=$CLANG CFLAGS='-O0 -DOIL_DISABLE_DLOPEN -DOIL_MAIN' ovm || true 
+  cflags='-O0 -DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
+  #cflags='-DOIL_DISABLE_DLOPEN -DOIL_MAIN' 
+  time make -j 7 CC=$CLANG CFLAGS="$cflags" ovm || true 
 }
 
 # HTML reporter
