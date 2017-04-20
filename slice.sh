@@ -135,6 +135,17 @@ readonly VERSION='"2.7"'
 readonly VPATH='""'
 readonly PYTHONPATH='""'
 
+mod-setup() {
+  pushd $PY27
+	Modules/makesetup \
+    -c Modules/config.c.in \
+		-s Modules \
+		Modules/Setup.config \
+		Modules/Setup.local \
+		Modules/Setup
+  popd
+}
+
 build() {
   echo $OVM_LIBRARY_OBJS
   pushd $PY27
