@@ -181,6 +181,7 @@ BLDLIBRARY=     @BLDLIBRARY@
 DLLLIBRARY=	@DLLLIBRARY@
 LDLIBRARYDIR=   @LDLIBRARYDIR@
 INSTSONAME=	@INSTSONAME@
+OVM_LDLIBRARY=      @OVM_LDLIBRARY@
 
 
 LIBS=		@LIBS@
@@ -510,11 +511,14 @@ $(BUILDPYTHON):	Modules/python.o $(LIBRARY) $(LDLIBRARY)
 			Modules/python.o \
 			$(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
 
-# Build the interpreter
-ovm:	Modules/ovm.o $(LIBRARY) $(LDLIBRARY)
+# Build the OVM executable.  It runs .pyc files.
+# modlibs are builtins like posixmodule.c, fcntlmodule.c
+# LIBRARY/LDLIBRARY/BLDLIBRARY: libpython.a
+# I don't get why there is {BLD,LD}LIBRARY.  Just depend on your own.
+ovm:	Modules/ovm.o libovm27.a
 		$(LINKCC) $(LDFLAGS) $(LINKFORSHARED) -o $@ \
 			Modules/ovm.o \
-			$(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
+			libovm27.a $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
 
 platform: $(BUILDPYTHON) pybuilddir.txt
 	$(RUNSHARED) $(PYTHON_FOR_BUILD) -c 'import sys ; from sysconfig import get_platform ; print get_platform()+"-"+sys.version[0:3]' >platform
@@ -555,6 +559,18 @@ sharedmods: $(BUILDPYTHON) pybuilddir.txt Modules/_math.o
 # Build static library
 # avoid long command lines, same as LIBRARY_OBJS
 $(LIBRARY): $(LIBRARY_OBJS)
+	-rm -f $@
+	$(AR) $(ARFLAGS) $@ Modules/getbuildinfo.o
+	$(AR) $(ARFLAGS) $@ $(PARSER_OBJS)
+	$(AR) $(ARFLAGS) $@ $(OBJECT_OBJS)
+	$(AR) $(ARFLAGS) $@ $(PYTHON_OBJS)
+	$(AR) $(ARFLAGS) $@ $(MODULE_OBJS) $(SIGNAL_OBJS)
+	$(AR) $(ARFLAGS) $@ $(MODOBJS)
+	$(RANLIB) $@
+
+# Build static library
+# avoid long command lines, same as LIBRARY_OBJS
+libovm27.a: $(LIBRARY_OBJS)
 	-rm -f $@
 	$(AR) $(ARFLAGS) $@ Modules/getbuildinfo.o
 	$(AR) $(ARFLAGS) $@ $(PARSER_OBJS)

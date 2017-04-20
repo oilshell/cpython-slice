@@ -151,6 +151,9 @@ build-clang-coverage() {
 }
 
 # NOTE: 'import site' tries to find _sysconfigdata?  We behave like -S.
+#
+# TODO: ovm should run .pyc files as embedded data?  Linker data or generate C
+# source code and compile it?
 build-ovm() {
   cd $PY27
   make clean
