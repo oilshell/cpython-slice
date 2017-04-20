@@ -1503,6 +1503,10 @@ PyParser_ASTFromFile(FILE *fp, const char *filename, int start, char *ps1,
     perrdetail err;
     int iflags = PARSER_FLAGS(flags);
 
+#ifdef OIL_MAIN
+    fprintf(stderr, "PyParser_ASTFromFile: OVM has no parser");
+    return NULL;
+#else
     node *n = PyParser_ParseFileFlagsEx(fp, filename, &_PyParser_Grammar,
                             start, ps1, ps2, &err, &iflags);
     if (flags == NULL) {
@@ -1521,6 +1525,7 @@ PyParser_ASTFromFile(FILE *fp, const char *filename, int start, char *ps1,
             *errcode = err.error;
         return NULL;
     }
+#endif
 }
 
 /* Simplified interface to parsefile -- return node or set exception */
