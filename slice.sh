@@ -166,11 +166,28 @@ build() {
 
   # PREFIX, EXEC_PREFIX, VERSION, VPATH, etc. are from Modules/getpath.o
 
-  # NOTE: -m32 is 1.62 MB instead of 1.90 MB.  But I probably have to redefine
-  # a few things because there are more warnings.
+  # Not using this for now because of libc.so
+    #-D OIL_DISABLE_DLOPEN \
 
-  time $CLANG -g \
-    -D OIL_DISABLE_DLOPEN -D OIL_MAIN \
+  # Clang -O2 is 1.37 MB.  18 seconds to compile.
+  #   -m32 is 1.12 MB.  But I probably have to redefine a few things because
+  #   there are more warnings.
+
+  # GCC -O2 is 1.35 MB.  21 seconds to compile.
+
+  # So the OVM is ~600K smaller now.  1.97 MB for ./run.sh build-default.  1.65
+  # MB for ./run.sh build-clang-small.
+
+  CC=$CLANG
+  #CC=gcc
+
+  CFLAGS=
+  #CFLAGS=-m32
+
+  time $CC \
+    -O2 -g \
+    $CFLAGS \
+    -D OIL_MAIN \
 		-D PYTHONPATH="$PYTHONPATH" \
 		-D PREFIX="$prefix" \
 		-D EXEC_PREFIX="$exec_prefix" \
@@ -247,14 +264,27 @@ compare-size() {
   pushd $PY27
   strip -o python.stripped python
   strip -o ovm2.stripped ovm2
-  ls -l python.stripped ovm2.stripped
 
-  echo
   echo python.stripped
   bloaty python.stripped 
   echo
   echo ovm2.stripped
   bloaty ovm2.stripped
+
+  # Supports diffs.  The one after -- is the base.
+  echo
+  echo SECTIONS diff
+  bloaty ovm2.stripped -- python.stripped
+
+  # _PyUnicodeUCS2_ToNumeric is 17.7 Ki bigger.  And then there are 560K of
+  # [Other]?  Is that due to the compiler or what?
+  echo
+  echo SYMBOLS diff
+  bloaty -d symbols ovm2 -- python
+  echo
+
+  ls -l python.stripped ovm2.stripped
+
   popd
 }
 
