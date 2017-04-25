@@ -187,6 +187,8 @@ build() {
 }
 
 # 123K lines.
+# Excluding MODOBJS, it's 104K lines.
+#
 # Biggest: posixmodule,unicodeobject,typeobject,ceval.
 #
 # Remove tmpnam from posixmodule, other cruft.
@@ -235,11 +237,24 @@ compare-symbols() {
   popd
 }
 
+bloaty() {
+  local bin=~/git/other/bloaty/bloaty
+  
+  test -f $bin && $bin "$@"
+}
+
 compare-size() {
   pushd $PY27
   strip -o python.stripped python
   strip -o ovm2.stripped ovm2
   ls -l python.stripped ovm2.stripped
+
+  echo
+  echo python.stripped
+  bloaty python.stripped 
+  echo
+  echo ovm2.stripped
+  bloaty ovm2.stripped
   popd
 }
 
