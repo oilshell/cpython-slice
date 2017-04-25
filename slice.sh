@@ -288,4 +288,22 @@ compare-size() {
   popd
 }
 
+# 604 Ki of .text and 122 Ki of .rodata.
+
+# ovm2 is 786 Ki of .text, 223 Ki o .rotdata, and 197 Ki of .data.
+# We're in spitting distance.  Is it unicode data?
+
+bash-size() {
+  bloaty /bin/bash
+  echo
+  ls -l /bin/bash
+}
+
+# ZSH is smaller, only 495 KiB .textand 41 KiB .rodata.  692 KB data size.
+zsh-size() {
+  bloaty /usr/bin/zsh
+  echo
+  ls -l $(readlink -f /usr/bin/zsh)
+}
+
 "$@"
