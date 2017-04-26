@@ -137,6 +137,7 @@ readonly VERSION='"2.7"'
 readonly VPATH='""'
 readonly PYTHONPATH='""'
 
+# Generate config.c.  TODO: Replace this with Python?
 mod-setup() {
   pushd $PY27
 	Modules/makesetup \
@@ -184,8 +185,11 @@ build() {
   CFLAGS=
   #CFLAGS=-m32
 
+  #local opt=-O2 
+  local opt=-O0
+
   time $CC \
-    -O2 -g \
+    $opt -g \
     $CFLAGS \
     -D OIL_MAIN \
 		-D PYTHONPATH="$PYTHONPATH" \
@@ -199,8 +203,31 @@ build() {
     $OVM_LIBRARY_OBJS \
     Modules/ovm.c \
     -l dl -l util -l m \
+    "$@" \
     || true
   popd
+}
+
+readonly GPERF_LIBS=$PWD/_tmp/gperftools-2.5/.libs 
+
+# Build with the profiling library
+build-gperf() {
+  build -L $GPERF_LIBS -l profiler
+}
+
+run-gperf() {
+  mkdir -p _gperf
+
+  local out=_gperf/hello.prof
+  LD_LIBRARY_PATH=$GPERF_LIBS \
+  CPUPROFILE=$out \
+    ./run.sh test-hello $PY27/ovm2
+
+  ls -l $out
+}
+
+gperf-report() {
+  ./profile.sh pprof --text $PY27/ovm2 _gperf/hello.prof
 }
 
 # 123K lines.
@@ -218,15 +245,16 @@ build() {
 
 count-lines() {
   pushd $PY27
-  wc -l $OVM_LIBRARY_OBJS | sort -n
+  wc -l $OVM_LIBRARY_OBJS Include/*.h | sort -n
 
   # 90 files.
   # NOTE: This doesn't count headers.
   echo
   echo 'Files:'
-  for i in $OVM_LIBRARY_OBJS; do
-   echo $i
-  done | wc -l
+  { for i in $OVM_LIBRARY_OBJS Include/*.h; do
+     echo $i
+    done 
+  } | wc -l
 
   popd
 }
