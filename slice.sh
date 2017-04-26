@@ -227,7 +227,37 @@ run-gperf() {
 }
 
 gperf-report() {
-  ./profile.sh pprof --text $PY27/ovm2 _gperf/hello.prof
+  ./gperftools.sh pprof --text $PY27/ovm2 _gperf/hello.prof
+}
+
+#
+# Heap
+#
+
+# Build with the profiling library
+build-hprof() {
+  build -L $GPERF_LIBS -l tcmalloc
+}
+
+run-hprof() {
+  mkdir -p _gperf
+
+  local out=_gperf/hello.hprof
+  LD_LIBRARY_PATH=$GPERF_LIBS \
+  HEAPPROFILE=$out \
+    ./run.sh test-hello $PY27/ovm2
+
+  # Suffix
+  ls -l $out*
+}
+
+# pprof bug: if you specify a file that doesn't exist, it tries to download
+# stuff from the web!
+#
+# Interesting, on hello.py: dictresize, Py_SetItem, etc.
+hprof-report() {
+  set -x
+  ./gperftools.sh pprof --text $PY27/ovm2 $PWD/_gperf/hello.hprof*
 }
 
 # 123K lines.

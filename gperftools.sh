@@ -16,6 +16,21 @@ download() {
 # libtcmalloc-minimal4, google-perftools.
 # I think it's more portable across distros so just use the source tarball?
 
+# Woah this Perl script is 5600 lines!  It has a bunch of unit tests at the
+# end.
+#
+# uses: warnings, Getopt::Long, Cwd, POSIX
+# tools: objdump, nm, addr2line, c++filt
+# also: dot, gv, evince, kcachegrind, etc.
+
+count() {
+  wc -l $PERFTOOLS/src/pprof 
+  less $PERFTOOLS/src/pprof 
+}
+
+
+# See slice.sh for the build variants
+
 
 # https://gperftools.github.io/gperftools/cpuprofile.html
 
