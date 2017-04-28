@@ -164,7 +164,7 @@ build-ovm() {
 }
 
 test-hello() {
-  local bin=${1:-ovm}
+  local bin=${1:-$PY27/ovm}
 
   pushd testdata
   rm -f hello.pyc lib.pyc
@@ -182,8 +182,10 @@ test-hello() {
   # add current dir
   export PYTHONPATH=testdata
   time $bin testdata/hello.pyc
-  #gdb --tui --args $bin testdata/hello.pyc
 
+  #time strace $bin testdata/hello.pyc
+
+  #gdb --tui --args $bin testdata/hello.pyc
 }
 
 # HTML reporter

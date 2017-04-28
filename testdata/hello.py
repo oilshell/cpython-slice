@@ -11,11 +11,19 @@ print(sys.path)
 import lib
 
 
-def Busy():
+def Busy(n):
   s = 0
-  for i in xrange(10000000):
+  for i in xrange(n):
     s += i
   print(s)
 
-Busy()
-  
+
+def main(argv):
+  if argv:
+    n = int(argv[0])
+  else:
+    n = 10000000
+  Busy(n)
+
+# Hm ovm2 doesn't have argv.  Not initialized correctly.
+main(sys.argv[1:])
