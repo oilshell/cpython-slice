@@ -267,7 +267,7 @@ Ovm_Main(int argc, char **argv)
 
     /* TODO: Copy more stuff from Py_Main */
 
-    Py_InitializeEx(0 /*install_sigs*/);
+    Py_InitializeEx(0 /*install_sigs*/, NULL /*sys_path*/);
     // Provide an alternative to this
     //sysmod = _PySys_Init();
     //PySys_SetPath(Py_GetPath());  this is from Modules/getpath.c

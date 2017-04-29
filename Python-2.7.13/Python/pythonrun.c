@@ -152,7 +152,7 @@ isatty_no_error(PyObject *sys_stream)
 }
 
 void
-Py_InitializeEx(int install_sigs)
+Py_InitializeEx(int install_sigs, char* sys_path)
 {
     PyInterpreterState *interp;
     PyThreadState *tstate;
@@ -248,7 +248,10 @@ Py_InitializeEx(int install_sigs)
         Py_FatalError("Py_Initialize: can't initialize sys dict");
     Py_INCREF(interp->sysdict);
     _PyImport_FixupExtension("sys", "sys");
-    PySys_SetPath(Py_GetPath());
+    if (sys_path == NULL)
+        sys_path = Py_GetPath();
+    PySys_SetPath(sys_path);
+
     PyDict_SetItemString(interp->sysdict, "modules",
                          interp->modules);
 
@@ -380,7 +383,7 @@ Py_InitializeEx(int install_sigs)
 void
 Py_Initialize(void)
 {
-    Py_InitializeEx(1);
+    Py_InitializeEx(1, NULL);
 }
 
 
