@@ -244,13 +244,17 @@ Ovm_Main(int argc, char **argv)
     FILE *fp = stdin;
     int run_self = 0;
 
-    char* action = Py_GETENV("_OVM_ACTION");
+    // This var has a leading _ because it's not meant for end users.
+    char* action = Py_GETENV("_OVM_BUNDLE");
     if (action) {
         if (argc <= 1) {
           fprintf(stderr, "Expected argument with _OVM_ACTION");
           return 2;
         }
         filename = argv[1];
+
+        // TODO: Try running it as a zip file or directory
+        //sts = RunMainFromImporter(filename);
 
         if ((fp = fopen(filename, "r")) == NULL) {
             fprintf(stderr, "%s: can't open file '%s': [Errno %d] %s\n",

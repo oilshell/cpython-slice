@@ -52,11 +52,7 @@ run-separate() {
 # Run the ovm app bundle
 # TODO:
 # - figure out sys.path
-# - figure out sys.argv
-#   - maybe respect _OVM_BUNDLE=0.  By default it assumes it's in a .zip.
-#
-# or maybe _OVM_ACTION=pyc
-# or maybe _OVM_ACTION=__main__  # like python foo.zip
+# - DONE figure out sys.argv
 
 run-ovm2() {
   time $PY27/ovm2.bundle 25

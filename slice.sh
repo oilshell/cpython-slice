@@ -219,9 +219,9 @@ debug-ovm2() {
   gdb --tui --args $PY27/ovm2 "$@"
 }
 
-ovm2-test() {
+test-ovm2() {
   # Test running a plain .pyc file
-  _OVM_ACTION=1 $PY27/ovm2 testdata/lib.pyc
+  _OVM_BUNDLE=0 $PY27/ovm2 testdata/lib.pyc
 }
 
 readonly GPERF_LIBS=$PWD/_tmp/gperftools-2.5/.libs 
