@@ -18,13 +18,15 @@ source common.sh
 #
 # Then you can just pass $0
 
+readonly APP_ZIP=~/git/oil/benchmarks/_tmp/app.zip 
+
 build() {
-  local bin=${1:-$PY27/python.stripped}
+  local bin=${1:-$PY27/python}
   local out=${2:-$PY27/app.bundle}
 
   mkdir -p _bin
   #local out=_bin/app.bundle
-  cat $bin ~/git/oil/benchmarks/_tmp/app.zip > $out
+  cat $bin $APP_ZIP > $out
   chmod +x $out
 
   ls -l $out
@@ -51,5 +53,11 @@ run-separate() {
 run-ovm() {
   time $PY27/ovm2.bundle $PY27/ovm2.bundle
 }
+
+run-fast() {
+  $PY27/python -S $APP_ZIP
+}
+
+
 
 "$@"

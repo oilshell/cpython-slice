@@ -91,6 +91,13 @@ build-m32() {
   time make -j 7 CFLAGS=-m32 libpython2.7.a || true
 }
 
+# This one can run an app bundle.  It needs the zlib module.
+build-clang-default() {
+  cd $PY27
+  make clean
+  time make -j 7 CC=$CLANG CFLAGS='-O0'
+}
+
 # hm the Makefile defines CC and CXX as {gcc,g++} -pthread
 # 
 # Woah clang is faster and smaller.
