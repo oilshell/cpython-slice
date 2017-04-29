@@ -274,7 +274,7 @@ Ovm_Main(int argc, char **argv)
 
     /* TODO: Copy more stuff from Py_Main */
 
-    Py_Initialize();
+    Py_InitializeEx(0 /*initsigs*/);
 
     if (run_self) {
         // Hm there is weird logic in sysmodule.c makeargvobject to make it
