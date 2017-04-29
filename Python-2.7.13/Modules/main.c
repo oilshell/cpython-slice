@@ -265,23 +265,18 @@ Ovm_Main(int argc, char **argv)
     PyCompilerFlags cf;
     cf.cf_flags = 0;
 
-    /* TODO: Copy more stuff from Py_Main */
-
-    Py_InitializeEx(0 /*install_sigs*/, NULL /*sys_path*/);
-    // Provide an alternative to this
-    //sysmod = _PySys_Init();
-    //PySys_SetPath(Py_GetPath());  this is from Modules/getpath.c
-    // Man this is a global var.
-    // static char *module_search_path = NULL;
-
+    // NOTE: I think we need sys.path to find runpy in the first place.  But
+    // then runpy mutates sys.path again.
     if (run_self) {
         // Hm there is weird logic in sysmodule.c makeargvobject to make it
         // [""] instead of [].
+        Py_InitializeEx(0 /*install_sigs*/, argv[0] /*sys_path*/);
         PySys_SetArgv(argc, argv);
         sts = RunMainFromImporter(argv[0]);
         fprintf(stderr, "sts: %d\n", sts);
     } else {
-        // Try running __main__
+        // Try detecting and running a directory or .zip file first.
+        Py_InitializeEx(0 /*install_sigs*/, filename /*sys_path*/);
         PySys_SetArgv(argc-1, argv+1);
         sts = RunMainFromImporter(filename);
 

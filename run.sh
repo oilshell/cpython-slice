@@ -193,6 +193,17 @@ build-hello-zip() {
   mkdir -p _tmp/app
   cp testdata/hello.pyc _tmp/app/__main__.pyc
   cp testdata/lib.pyc _tmp/app/
+
+  # there are a bunch of startup dependencies!  Mainly because of using the
+  # runpy module and the whole importer / get_loader() mechanism.  Maybe I
+  # should replace runpy?
+
+  # Wow this is a lot.  Why UserDict?
+  # This is just for runpy?
+  cp -v \
+    $PY27/Lib/{runpy,pkgutil,os,posixpath,stat,genericpath,warnings,linecache,types,UserDict,_abcoll,abc,_weakrefset,copy_reg}.pyc \
+    _tmp/app/
+
   pushd _tmp/app
   zip -r ../hello.zip .
   popd

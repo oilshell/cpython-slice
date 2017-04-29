@@ -6,8 +6,8 @@ hello.py
 print('Hello from hello.py')
 
 import sys
-print(sys.path)
-print(sys.argv)
+print 'sys.path:', sys.path
+print 'sys.argv:', sys.argv
 
 import lib
 
