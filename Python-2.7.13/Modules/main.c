@@ -242,12 +242,15 @@ Ovm_Main(int argc, char **argv)
     int sts;
     char *filename = NULL;
     FILE *fp = stdin;
+    int run_self = 0;
 
     switch (argc) {
     case 0:
     case 1:
         fprintf(stderr, "ovm: no input files\n");
-        return 2;
+        fprintf(stderr, "argv[0]: %s\n", argv[0]);
+        run_self = 1;
+        break;
     case 2:
         filename = argv[1];
         if ((fp = fopen(filename, "r")) == NULL) {
@@ -274,10 +277,19 @@ Ovm_Main(int argc, char **argv)
     /* TODO: Copy more stuff from Py_Main */
 
     Py_Initialize();
-    sts = PyRun_AnyFileExFlags(
-        fp,
-        filename == NULL ? "<stdin>" : filename,
-        filename != NULL, &cf) != 0;
+
+    if (run_self) {
+        // Hm there is weird logic in sysmodule.c makeargvobject to make it
+        // [""] instead of [].
+        PySys_SetArgv(argc, argv);
+        sts = RunMainFromImporter(argv[0]);
+        fprintf(stderr, "sts: %d\n", sts);
+    } else {
+        sts = PyRun_AnyFileExFlags(
+            fp,
+            filename == NULL ? "<stdin>" : filename,
+            filename != NULL, &cf) != 0;
+    }
 
     Py_Finalize();
     return sts;

@@ -215,6 +215,10 @@ build-opt() {
   build -O3
 }
 
+debug-ovm2() {
+  gdb --tui --args $PY27/ovm2 "$@"
+}
+
 readonly GPERF_LIBS=$PWD/_tmp/gperftools-2.5/.libs 
 
 # Build with the profiling library
