@@ -259,8 +259,7 @@ run-hprof() {
 
 # pprof bug: if you specify a file that doesn't exist, it tries to download
 # stuff from the web!
-#
-# Interesting, on hello.py: dictresize, Py_SetItem, etc.
+# # Interesting, on hello.py: dictresize, Py_SetItem, etc.
 hprof-report() {
   set -x
   ./gperftools.sh pprof --text $PY27/ovm2 $PWD/_gperf/hello.hprof*
