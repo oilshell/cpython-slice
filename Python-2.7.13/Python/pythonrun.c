@@ -1380,7 +1380,7 @@ run_mod(mod_ty mod, const char *filename, PyObject *globals, PyObject *locals,
          PyCompilerFlags *flags, PyArena *arena)
 {
 #ifdef OIL_MAIN
-    fprintf(stderr, "run_mod: no AST");
+    fprintf(stderr, "run_mod: Oil has no AST\n");
     return NULL;
 #else
     PyCodeObject *co;

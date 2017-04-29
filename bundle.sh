@@ -50,8 +50,8 @@ run-separate() {
 
 # Oops, this expects a .pyc file!  Yeah I need to restore the app bundle
 # behavior.
-run-ovm() {
-  time $PY27/ovm2.bundle $PY27/ovm2.bundle
+run-ovm2() {
+  time $PY27/ovm2.bundle
 }
 
 run-fast() {
