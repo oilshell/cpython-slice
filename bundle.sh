@@ -18,7 +18,8 @@ source common.sh
 #
 # Then you can just pass $0
 
-readonly APP_ZIP=~/git/oil/benchmarks/_tmp/app.zip 
+#readonly APP_ZIP=~/git/oil/benchmarks/_tmp/app.zip 
+readonly APP_ZIP=_tmp/hello.zip
 
 build() {
   local bin=${1:-$PY27/python}
