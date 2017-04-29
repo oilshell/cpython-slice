@@ -220,8 +220,17 @@ debug-ovm2() {
 }
 
 test-ovm2() {
-  # Test running a plain .pyc file
+  echo ---
+  echo 'Running lib.pyc'
+  echo ---
+
   _OVM_BUNDLE=0 $PY27/ovm2 testdata/lib.pyc
+
+  echo ---
+  echo 'Running hello.zip'
+  echo ---
+
+  _OVM_BUNDLE=0 $PY27/ovm2 _tmp/hello.zip
 }
 
 readonly GPERF_LIBS=$PWD/_tmp/gperftools-2.5/.libs 

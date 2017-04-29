@@ -252,14 +252,6 @@ Ovm_Main(int argc, char **argv)
           return 2;
         }
         filename = argv[1];
-
-        // TODO: Try running it as a zip file or directory
-        //sts = RunMainFromImporter(filename);
-
-        if ((fp = fopen(filename, "r")) == NULL) {
-            fprintf(stderr, "%s: can't open file '%s': [Errno %d] %s\n",
-                argv[0], filename, errno, strerror(errno));
-        }
     } else {
         run_self = 1;
     }
@@ -274,7 +266,12 @@ Ovm_Main(int argc, char **argv)
 
     /* TODO: Copy more stuff from Py_Main */
 
-    Py_InitializeEx(0 /*initsigs*/);
+    Py_InitializeEx(0 /*install_sigs*/);
+    // Provide an alternative to this
+    //sysmod = _PySys_Init();
+    //PySys_SetPath(Py_GetPath());  this is from Modules/getpath.c
+    // Man this is a global var.
+    // static char *module_search_path = NULL;
 
     if (run_self) {
         // Hm there is weird logic in sysmodule.c makeargvobject to make it
@@ -283,8 +280,18 @@ Ovm_Main(int argc, char **argv)
         sts = RunMainFromImporter(argv[0]);
         fprintf(stderr, "sts: %d\n", sts);
     } else {
+        // Try running __main__
         PySys_SetArgv(argc-1, argv+1);
-        sts = PyRun_AnyFileExFlags(fp, filename, 1 /*closeit*/, &cf) != 0;
+        sts = RunMainFromImporter(filename);
+
+        fprintf(stderr, "sts after RunMainFromImporter: %d\n", sts);
+        if (sts == -1) {
+            if ((fp = fopen(filename, "r")) == NULL) {
+                fprintf(stderr, "%s: can't open file '%s': [Errno %d] %s\n",
+                    argv[0], filename, errno, strerror(errno));
+            }
+            sts = PyRun_AnyFileExFlags(fp, filename, 1 /*closeit*/, &cf) != 0;
+        }
     }
 
     Py_Finalize();
