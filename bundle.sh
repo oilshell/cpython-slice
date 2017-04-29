@@ -58,6 +58,14 @@ run-ovm2() {
   time $PY27/ovm2.bundle 25
 }
 
+# 291 lines
+strace-ovm2() {
+  local out=_tmp/ovm2-strace.log
+  strace $PY27/ovm2.bundle 25 2>$out
+  echo
+  wc -l $out
+}
+
 run-fast() {
   $PY27/python -S $APP_ZIP
 }
