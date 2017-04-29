@@ -244,27 +244,21 @@ Ovm_Main(int argc, char **argv)
     FILE *fp = stdin;
     int run_self = 0;
 
-    switch (argc) {
-    case 0:
-    case 1:
-        fprintf(stderr, "ovm: no input files\n");
-        fprintf(stderr, "argv[0]: %s\n", argv[0]);
-        run_self = 1;
-        break;
-    case 2:
+    char* action = Py_GETENV("_OVM_ACTION");
+    if (action) {
+        if (argc <= 1) {
+          fprintf(stderr, "Expected argument with _OVM_ACTION");
+          return 2;
+        }
         filename = argv[1];
+
         if ((fp = fopen(filename, "r")) == NULL) {
             fprintf(stderr, "%s: can't open file '%s': [Errno %d] %s\n",
                 argv[0], filename, errno, strerror(errno));
-
-            return 2;
         }
-        break;
-    default:
-        fprintf(stderr, "ovm: too many input files\n");
-        return 2;
+    } else {
+        run_self = 1;
     }
-    //PySys_SetArgv(argc-_PyOS_optind, argv+_PyOS_optind);
 
     /* Always behave like -S */
     Py_NoSiteFlag++;
@@ -285,10 +279,8 @@ Ovm_Main(int argc, char **argv)
         sts = RunMainFromImporter(argv[0]);
         fprintf(stderr, "sts: %d\n", sts);
     } else {
-        sts = PyRun_AnyFileExFlags(
-            fp,
-            filename == NULL ? "<stdin>" : filename,
-            filename != NULL, &cf) != 0;
+        PySys_SetArgv(argc-1, argv+1);
+        sts = PyRun_AnyFileExFlags(fp, filename, 1 /*closeit*/, &cf) != 0;
     }
 
     Py_Finalize();

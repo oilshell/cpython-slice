@@ -188,6 +188,8 @@ build-hello() {
 }
 
 build-hello-zip() {
+  build-hello
+
   mkdir -p _tmp/app
   cp testdata/hello.pyc _tmp/app/__main__.pyc
   cp testdata/lib.pyc _tmp/app/

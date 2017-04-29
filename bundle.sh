@@ -49,10 +49,17 @@ run-separate() {
   time _bin/app.bundle -S _bin/app.bundle
 }
 
-# Oops, this expects a .pyc file!  Yeah I need to restore the app bundle
-# behavior.
+# Run the ovm app bundle
+# TODO:
+# - figure out sys.path
+# - figure out sys.argv
+#   - maybe respect _OVM_BUNDLE=0.  By default it assumes it's in a .zip.
+#
+# or maybe _OVM_ACTION=pyc
+# or maybe _OVM_ACTION=__main__  # like python foo.zip
+
 run-ovm2() {
-  time $PY27/ovm2.bundle
+  time $PY27/ovm2.bundle 25
 }
 
 run-fast() {
