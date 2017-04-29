@@ -170,12 +170,6 @@ build() {
   # Not using this for now because of libc.so
     #-D OIL_DISABLE_DLOPEN \
 
-  # Clang -O2 is 1.37 MB.  18 seconds to compile.
-  #   -m32 is 1.12 MB.  But I probably have to redefine a few things because
-  #   there are more warnings.
-
-  # GCC -O2 is 1.35 MB.  21 seconds to compile.
-
   # So the OVM is ~600K smaller now.  1.97 MB for ./run.sh build-default.  1.65
   # MB for ./run.sh build-clang-small.
 
@@ -185,8 +179,7 @@ build() {
   CFLAGS=
   #CFLAGS=-m32
 
-  #local opt=-O2 
-  local opt=-O0
+  local opt=${1:-'-O0'}
 
   time $CC \
     $opt -g \
@@ -206,6 +199,19 @@ build() {
     "$@" \
     || true
   popd
+}
+
+# build the optimized one.  Makefile uses -O3.
+
+# Clang -O2 is 1.37 MB.  18 seconds to compile.
+#   -m32 is 1.12 MB.  But I probably have to redefine a few things because
+#   there are more warnings.
+# -O3 is 1.40 MB.
+
+# GCC -O2 is 1.35 MB.  21 seconds to compile.
+
+build-opt() {
+  build -O3
 }
 
 readonly GPERF_LIBS=$PWD/_tmp/gperftools-2.5/.libs 
