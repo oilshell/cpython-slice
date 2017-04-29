@@ -170,12 +170,12 @@ build-ovm() {
   ls -l ovm
 }
 
-test-hello() {
-  local bin=${1:-$PY27/ovm}
-
+build-hello() {
   pushd testdata
-  rm -f hello.pyc lib.pyc
+  rm -v -f hello.pyc lib.pyc
   python -c 'import hello, lib'
+
+  find . -name '*.pyc'
 
   # Hm OVM needs -c so you can print sys.path and stuff.  Oh but then it would
   # need a parser!  Doh.
@@ -185,6 +185,24 @@ test-hello() {
   # Some how it gets /usr/lib/python2.7.zip.
   # I think you should make and ovm27.zip ?
   popd
+}
+
+build-hello-zip() {
+  mkdir -p _tmp/app
+  cp testdata/hello.pyc _tmp/app/__main__.pyc
+  cp testdata/lib.pyc _tmp/app/
+  pushd _tmp/app
+  zip -r ../hello.zip .
+  popd
+
+  ls -l _tmp/hello.zip
+  unzip -l _tmp/hello.zip
+}
+
+test-hello() {
+  local bin=${1:-$PY27/ovm}
+
+  build-hello
 
   # add current dir
   export PYTHONPATH=testdata

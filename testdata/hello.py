@@ -7,6 +7,7 @@ print('Hello from hello.py')
 
 import sys
 print(sys.path)
+#print(sys.argv)
 
 import lib
 
@@ -22,7 +23,7 @@ def main(argv):
   if argv:
     n = int(argv[0])
   else:
-    n = 10000000
+    n = 100
   Busy(n)
 
 # Hm ovm2 doesn't have argv.  Not initialized correctly.
