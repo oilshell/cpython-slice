@@ -19,19 +19,37 @@ source common.sh
 # Then you can just pass $0
 
 build() {
+  local bin=${1:-$PY27/python.stripped}
+  local out=${2:-$PY27/app.bundle}
+
   mkdir -p _bin
   #local out=_bin/app.bundle
-  local out=$PY27/app.bundle
-  cat $PY27/python.stripped ~/git/oil/benchmarks/_tmp/app.zip > $out
+  cat $bin ~/git/oil/benchmarks/_tmp/app.zip > $out
   chmod +x $out
 
   ls -l $out
 }
 
+build-ovm() {
+  build $PY27/ovm2 $PY27/ovm2.bundle
+}
+
 # Use it as an executable and as a zip file.
 run() {
-  #_bin/app.bundle -S _bin/app.bundle
   time $PY27/app.bundle -S $PY27/app.bundle
+}
+
+# This is what I want to work.  It can't find 'runpy', which is in the Lib
+# folder.  That is for the '-m' flag.  I have to bundle that in to the app.
+# OK I have to set the path for sys.path.
+run-separate() {
+  time _bin/app.bundle -S _bin/app.bundle
+}
+
+# Oops, this expects a .pyc file!  Yeah I need to restore the app bundle
+# behavior.
+run-ovm() {
+  time $PY27/ovm2.bundle $PY27/ovm2.bundle
 }
 
 "$@"
