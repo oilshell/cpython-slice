@@ -261,6 +261,7 @@ Ovm_Main(int argc, char **argv)
         fprintf(stderr, "ovm: too many input files\n");
         return 2;
     }
+    //PySys_SetArgv(argc-_PyOS_optind, argv+_PyOS_optind);
 
     /* Always behave like -S */
     Py_NoSiteFlag++;

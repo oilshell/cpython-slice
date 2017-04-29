@@ -117,6 +117,7 @@ Modules/_codecsmodule.c
 Modules/_weakref.c
 Modules/zipimport.c  
 Modules/fcntlmodule.c 
+Modules/zlibmodule.c
 '
 
 OVM_LIBRARY_OBJS="
@@ -195,7 +196,7 @@ build() {
     -o ovm2 \
     $OVM_LIBRARY_OBJS \
     Modules/ovm.c \
-    -l dl -l util -l m \
+    -l dl -l util -l m -l z \
     "$@" \
     || true
   popd
