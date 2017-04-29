@@ -245,10 +245,11 @@ Ovm_Main(int argc, char **argv)
     int run_self = 0;
 
     // This var has a leading _ because it's not meant for end users.
-    char* action = Py_GETENV("_OVM_BUNDLE");
-    if (action) {
+    // _OVM_BUNDLE=0 is how you disable it.
+    char* not_bundle = Py_GETENV("_OVM_IS_BUNDLE");
+    if (not_bundle) {
         if (argc <= 1) {
-          fprintf(stderr, "Expected argument with _OVM_ACTION");
+          fprintf(stderr, "Expected argument with _OVM_IS_BUNDLE\n");
           return 2;
         }
         filename = argv[1];

@@ -221,16 +221,23 @@ debug-ovm2() {
 
 test-ovm2() {
   echo ---
+  echo 'Running nothing'
+  echo ---
+
+  _OVM_IS_BUNDLE=0 $PY27/ovm2 || true
+
+  echo ---
   echo 'Running lib.pyc'
   echo ---
 
-  _OVM_BUNDLE=0 $PY27/ovm2 testdata/lib.pyc
+  _OVM_IS_BUNDLE=0 $PY27/ovm2 testdata/lib.pyc
 
   echo ---
   echo 'Running hello.zip'
   echo ---
 
-  _OVM_BUNDLE=0 $PY27/ovm2 _tmp/hello.zip
+  _OVM_IS_BUNDLE=0 $PY27/ovm2 _tmp/hello.zip
+
 }
 
 readonly GPERF_LIBS=$PWD/_tmp/gperftools-2.5/.libs 
