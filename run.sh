@@ -414,4 +414,30 @@ mod-stats() {
   find _mod-stripped -name '*.so' -a -printf '%s %P\n' | sort -n
 }
 
+# 
+count-build() {
+  pushd $PY27
+
+  # 1849 lines of input
+  echo DATA
+  wc -l Modules/Setup.dist Modules/config.c.in pyconfig.h.in
+  echo
+
+  # 9K lines of code!
+  echo DATA
+  echo SOURCE CODE
+  wc -l setup.py Makefile.pre.in configure.ac Modules/makesetup
+  echo
+
+  # 19K lines of output!
+  echo GENERATED
+  wc -l Makefile configure Modules/config.c pyconfig.h
+  echo
+
+  echo WINDOWS
+  wc -l PCbuild/*.bat PCbuild/*.vcxproj*
+
+  popd
+}
+
 "$@"
