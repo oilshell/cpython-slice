@@ -137,14 +137,14 @@ zlib zlibmodule.c -I$(prefix)/include -L$(exec_prefix)/lib -lz
 fcntl fcntlmodule.c
 
 # For zipfile
-_struct _struct.c
+#_struct _struct.c
 # Complementary to struct.
-array arraymodule.c	# array objects
+#array arraymodule.c	# array objects
 # Also for zipfile
-time timemodule.c # -lm 
+#time timemodule.c # -lm 
 # shutil uses this
-_collections _collectionsmodule.c # Container types
-operator operator.c	# operator.add() and similar goodies
+#_collections _collectionsmodule.c # Container types
+#operator operator.c	# operator.add() and similar goodies
 
 # We definitely use this.  Or should be use BytesIO?  Hm maybe.
 #cStringIO cStringIO.c

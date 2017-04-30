@@ -205,12 +205,12 @@ build-hello-zip() {
     _tmp/app/
 
   # Compile it
-  $PY27/python -S -c 'import zipfile, collections'
+  #$PY27/python -S -c 'import zipfile, collections'
 
   # For zipfile access
-  cp -v \
-    $PY27/Lib/{zipfile,collections,struct}.pyc \
-    _tmp/app/
+  #cp -v \
+  #  $PY27/Lib/{zipfile,collections,struct}.pyc \
+  #  _tmp/app/
 
   rm _tmp/hello.zip
 

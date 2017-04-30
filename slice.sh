@@ -118,12 +118,17 @@ Modules/_weakref.c
 Modules/zipimport.c  
 Modules/fcntlmodule.c 
 Modules/zlibmodule.c
+'
+
+# For 'import zipfile', not complete.
+ZIPFILE_OBJS='
 Modules/_struct.c
 Modules/arraymodule.c
 Modules/timemodule.c
 Modules/_collectionsmodule.c
 Modules/operator.c
 '
+
 
 OVM_LIBRARY_OBJS="
 		Modules/getbuildinfo.c

@@ -14,11 +14,12 @@ print 'hello _OVM_IS_BUNDLE', os.getenv('_OVM_IS_BUNDLE')
 
 import lib
 
+#import zipfile 
 if os.getenv('_OVM_IS_BUNDLE') == '1':
-  print('ZIP')
-  import zipfile 
-  z = zipfile.ZipFile(sys.argv[0])
-  print z.infolist()
+  if 0:
+    print('ZIP')
+    z = zipfile.ZipFile(sys.argv[0])
+    print z.infolist()
 
 
 def Busy(n):
