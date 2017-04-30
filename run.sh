@@ -226,6 +226,15 @@ update-oil-zip() {
   local tmp=_tmp/update-oil-zip
   mkdir -p $tmp
   cp -v "${RUNPY_DEPS[@]}" $tmp
+
+  # Missing C modules: operator.  From cgi.
+
+  $PY27/python -c 'import cgi'
+
+  # NOTE: cgi is in asdl, not really needed?  Well it's only needed for tools.
+  cp -v $PY27/Lib/{__future__,optparse,textwrap,string,re,sre_compile,sre_parse,sre_constants,traceback,cgi}.pyc \
+    $tmp
+
   pushd $tmp
   set -x
   zip ~/git/oil/opy/_tmp/oil.zip *.pyc
