@@ -2,15 +2,16 @@
 """
 hello.py
 """
+from __future__ import print_function
 
 print('Hello from hello.py')
 
 import os
 import sys
 
-print 'sys.path:', sys.path
-print 'sys.argv:', sys.argv
-print 'hello _OVM_IS_BUNDLE', os.getenv('_OVM_IS_BUNDLE')
+print('sys.path:', sys.path)
+print('sys.argv:', sys.argv)
+print('hello _OVM_IS_BUNDLE', os.getenv('_OVM_IS_BUNDLE'))
 
 import lib
 
@@ -20,7 +21,7 @@ if os.getenv('_OVM_IS_BUNDLE') == '1':
   if 0:
     print('ZIP')
     z = zipfile.ZipFile(sys.argv[0])
-    print z.infolist()
+    print(z.infolist())
   else:
     z = zipimport.zipimporter(sys.argv[0])
     print(z)
