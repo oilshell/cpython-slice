@@ -424,9 +424,14 @@ count-build() {
   echo
 
   # 9K lines of code!
-  echo DATA
   echo SOURCE CODE
-  wc -l setup.py Makefile.pre.in configure.ac Modules/makesetup
+  wc -l setup.py Makefile.pre.in configure.ac Modules/makesetup Doc/Makefile
+  echo
+
+  echo MODULES
+  { echo Modules/zlib/Makefile.in
+    find Modules/_ctypes -name 'Makefile.am'
+  } | xargs wc -l
   echo
 
   # 19K lines of output!
@@ -435,7 +440,12 @@ count-build() {
   echo
 
   echo WINDOWS
-  wc -l PCbuild/*.bat PCbuild/*.vcxproj*
+  wc -l PCbuild/*.bat #PCbuild/*.vcxproj*
+  echo
+
+  echo MAC
+  find Mac/ -name '*Makefile*' | xargs wc -l
+  echo
 
   popd
 }
