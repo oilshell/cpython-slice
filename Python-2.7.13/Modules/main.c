@@ -246,10 +246,10 @@ Ovm_Main(int argc, char **argv)
 
     // This var has a leading _ because it's not meant for end users.
     // _OVM_BUNDLE=0 is how you disable it.
-    char* not_bundle = Py_GETENV("_OVM_IS_BUNDLE");
+    char* not_bundle = Py_GETENV("_OVM_RUN_SELF");
     if (not_bundle) {
         if (argc <= 1) {
-          fprintf(stderr, "Expected argument with _OVM_IS_BUNDLE\n");
+          fprintf(stderr, "Expected argument with _OVM_RUN_SELF\n");
           return 2;
         }
         filename = argv[1];
@@ -272,16 +272,19 @@ Ovm_Main(int argc, char **argv)
         // [""] instead of [].
         Py_InitializeEx(0 /*install_sigs*/, argv[0] /*sys_path*/);
         PySys_SetArgv(argc, argv);
+        setenv("_OVM_IS_BUNDLE", "1", 1);  // for .zip resources
         sts = RunMainFromImporter(argv[0]);
         fprintf(stderr, "sts: %d\n", sts);
     } else {
         // Try detecting and running a directory or .zip file first.
         Py_InitializeEx(0 /*install_sigs*/, filename /*sys_path*/);
         PySys_SetArgv(argc-1, argv+1);
+        setenv("_OVM_IS_BUNDLE", "1", 1);  // for .zip resources
         sts = RunMainFromImporter(filename);
 
         fprintf(stderr, "sts after RunMainFromImporter: %d\n", sts);
         if (sts == -1) {
+            setenv("_OVM_IS_BUNDLE", "", 1);  // rest it
             if ((fp = fopen(filename, "r")) == NULL) {
                 fprintf(stderr, "%s: can't open file '%s': [Errno %d] %s\n",
                     argv[0], filename, errno, strerror(errno));

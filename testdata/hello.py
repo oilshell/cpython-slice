@@ -5,9 +5,12 @@ hello.py
 
 print('Hello from hello.py')
 
+import os
 import sys
+
 print 'sys.path:', sys.path
 print 'sys.argv:', sys.argv
+print 'hello _OVM_IS_BUNDLE', os.getenv('_OVM_IS_BUNDLE')
 
 import lib
 

@@ -136,7 +136,7 @@ readonly prefix='"/usr/local"'  # must be quoted string
 readonly exec_prefix="$prefix"
 readonly VERSION='"2.7"'
 readonly VPATH='""'
-readonly PYTHONPATH='""'
+readonly pythonpath='""'
 
 # Generate config.c.  TODO: Replace this with Python?
 mod-setup() {
@@ -186,7 +186,7 @@ build() {
     $opt -g \
     $CFLAGS \
     -D OIL_MAIN \
-		-D PYTHONPATH="$PYTHONPATH" \
+		-D PYTHONPATH="$pythonpath" \
 		-D PREFIX="$prefix" \
 		-D EXEC_PREFIX="$exec_prefix" \
 		-D VERSION="$VERSION" \
@@ -224,19 +224,19 @@ test-ovm2() {
   echo 'Running nothing'
   echo ---
 
-  _OVM_IS_BUNDLE=0 $PY27/ovm2 || true
+  _OVM_RUN_SELF=0 $PY27/ovm2 || true
 
   echo ---
   echo 'Running lib.pyc'
   echo ---
 
-  _OVM_IS_BUNDLE=0 $PY27/ovm2 testdata/lib.pyc
+  _OVM_RUN_SELF=0 $PY27/ovm2 testdata/lib.pyc
 
   echo ---
   echo 'Running hello.zip'
   echo ---
 
-  _OVM_IS_BUNDLE=0 $PY27/ovm2 _tmp/hello.zip
+  _OVM_RUN_SELF=0 $PY27/ovm2 _tmp/hello.zip
 
 }
 
