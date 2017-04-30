@@ -450,4 +450,15 @@ count-build() {
   popd
 }
 
+# NOTE: Almost all of this is Modules/ and Lib/.  Batteries included.
+count-python() {
+  echo 'Number of Python source files'
+  git ls-files $PY27 | wc -l
+  echo
+
+  echo 'Number of core Python source files'
+  git ls-files $PY27/{Python,Include,Objects,Parser,Grammar} | wc -l
+  echo
+}
+
 "$@"
