@@ -47,5 +47,6 @@ def main(argv):
     n = 100
   Busy(n)
 
-# Hm ovm2 doesn't have argv.  Not initialized correctly.
-main(sys.argv[1:])
+
+if __name__ == '__main__':
+  main(sys.argv[1:])
