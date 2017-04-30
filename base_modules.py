@@ -9,7 +9,8 @@ import sys  # 15 modules
 import os  #  31 modules
 import runpy  # 34 modules
 # Hm this brings in the thread module, geez.
-import zipfile  # 62 modules
+#import zipfile  # 62 modules
+import zipimport  # still only 34
 
 
 def main(argv):
