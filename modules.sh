@@ -44,14 +44,44 @@ source common.sh
 # Cases:
 # json module: Lib/json/*.py
 
-list() {
-  pushd $PY27
-  echo Lib/*.py
-  echo Modules/*.c
-  popd
-}
+# Should you write your own Makefile for this?  Sounds like it.  Would be
+# another good use case.
+#
+# I guess it should be ~/git/oil/Makefile
+#
+# ~/git/oil/
+#    Makefile
+#    ovm/
+#      ovm.mk  # Makefile fragment
+#      common.sh
+#      bundle.sh
+#      coverage.sh
+#      modules.sh
+#      perftools.sh
+#      slice.sh
+#      testdata/
+#        hello_minimal.py
+#        hello.py  - optparse, json, fcntl, etc.
+#    Python-2.7.13/
+#
+# All OVM bundles:
+#
+# make _bin/hello
+# make _bin/oil
+# make _bin/opy
 
-list2() {
+# make _bin/ovm  -- this is the standalone guy I guess.
+#
+# Problems: CFLAGS for variants and so forth.
+# You would need eval, like in bwk.
+#
+# make _bin/hello_dbg
+# make _bin/oil_dbg
+# make _bin/ovm_dbg
+# make _bin/ovm_cov
+# make _bin/ovm_asan
+
+list() {
   pushd $PY27
   ../module_manifest.py
   popd
