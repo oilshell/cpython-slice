@@ -149,6 +149,37 @@ readonly VPATH='""'
 readonly pythonpath='""'
 
 # Generate config.c.  TODO: Replace this with Python?
+#
+# -c : means generate config.
+#
+# algorithm:
+# while read line
+# MODS="$MODS $mods"
+
+#MODS
+# Modules/config.c.in
+# /MARKER 1/i$NL$EXTDECLS
+# /MARKER 2/i$NL$INITBITS
+#
+# single module list with declarations and initialization
+#
+# I think what you want to do is:
+# - generate a module names list from running OSH
+# - generate module names -> filenames, foo.py, foomodule.c, _foo.c
+#   - this goes into module-sources.txt
+# - generate config.c.  I guess we can reuse makesetup.c, unless we can get
+#   rid of the other parts.  I honestly
+#   - this only depends on the names of the modules
+#
+# "Convert templates into Makefile and config.c, based on the module
+# definitions found in the file Setup."
+# OK I am actually subsuming this.  hm.
+
+# init_builtin(name) goes through PyImport_Inittab().  It does a LINEAR
+# SEARCH with strcmp().  Gets called on FIRST IMPORT I believe.
+#
+# This is imp.init_builtin -- when does it get called?
+
 mod-setup() {
   pushd $PY27
 	Modules/makesetup \
