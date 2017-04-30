@@ -187,6 +187,8 @@ build-hello() {
   popd
 }
 
+readonly RUNPY_DEPS=($PY27/Lib/{runpy,pkgutil,os,posixpath,stat,genericpath,warnings,linecache,types,UserDict,_abcoll,abc,_weakrefset,copy_reg}.pyc)
+
 build-hello-zip() {
   build-hello
 
@@ -200,9 +202,7 @@ build-hello-zip() {
 
   # Wow this is a lot.  Why UserDict?
   # This is just for runpy?
-  cp -v \
-    $PY27/Lib/{runpy,pkgutil,os,posixpath,stat,genericpath,warnings,linecache,types,UserDict,_abcoll,abc,_weakrefset,copy_reg}.pyc \
-    _tmp/app/
+  cp -v "${RUNPY_DEPS[@]}" _tmp/app/
 
   # Compile it
   #$PY27/python -S -c 'import zipfile, collections'
@@ -220,6 +220,16 @@ build-hello-zip() {
 
   ls -l _tmp/hello.zip
   unzip -l _tmp/hello.zip
+}
+
+update-oil-zip() {
+  local tmp=_tmp/update-oil-zip
+  mkdir -p $tmp
+  cp -v "${RUNPY_DEPS[@]}" $tmp
+  pushd $tmp
+  set -x
+  zip ~/git/oil/opy/_tmp/oil.zip *.pyc
+  popd
 }
 
 test-hello() {

@@ -250,6 +250,10 @@ test-ovm2() {
 
 }
 
+test-oil() {
+  _OVM_RUN_SELF=0 $PY27/ovm2 ~/git/oil/opy/_tmp/oil.zip
+}
+
 readonly GPERF_LIBS=$PWD/_tmp/gperftools-2.5/.libs 
 
 # Build with the profiling library
