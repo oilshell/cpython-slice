@@ -81,6 +81,9 @@ source common.sh
 # make _bin/ovm_cov
 # make _bin/ovm_asan
 
+# TODO: Also need to run the Python stdlib tests for the subset of Python I
+# use?
+
 list() {
   pushd $PY27
   ../module_manifest.py
