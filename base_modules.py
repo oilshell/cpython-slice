@@ -6,16 +6,21 @@ NOTE -S above
 """
 
 import sys  # 15 modules
-import os  #  31 modules
+#import os  #  31 modules
 import runpy  # 34 modules
-# Hm this brings in the thread module, geez.
-#import zipfile  # 62 modules
-import zipimport  # still only 34
+#import zipimport  # still only 34
 
 
+# Python modules get names here.
 def main(argv):
-  for k, v in sys.modules.iteritems():
-    print k, v
+  for name in sorted(sys.modules):
+    mod = sys.modules[name]
+    if name in ('__builtin__', '__main__'):
+      continue
+
+    #if '(built-in)' in str(mod):
+    #  continue
+    print name, mod
 
 
 if __name__ == '__main__':

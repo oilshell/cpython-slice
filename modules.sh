@@ -22,5 +22,10 @@ list2() {
   popd
 }
 
+# This has Python paths, but no C paths!
+base-modules() {
+  ./base_modules.py 
+}
+
 
 "$@"
