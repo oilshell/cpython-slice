@@ -81,6 +81,15 @@ source common.sh
 # make _bin/ovm_cov
 # make _bin/ovm_asan
 
+# Modules and so forth.
+# make _bin/hello.linecount.txt
+# make _bin/ovm.linecount.txt
+# make _bin/ovm.bloaty.txt
+
+# This will be a Makefile, Python source, but no configure?  We definitely
+# need to get rid of all the modules we're not using.
+# make _bin/oil-0.1.tar.gz
+
 # TODO: Also need to run the Python stdlib tests for the subset of Python I
 # use?
 
