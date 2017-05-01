@@ -8,11 +8,12 @@ PY27 = Python-2.7.13
 _tmp/c-module-manifest.txt: TODO
 	./module_manifest.py
 
+# This comes from importing runpy, and also the list in Modules/Setup.dist.
+# Some C modules should be statically linked.
 _tmp/default-py-modules.txt _tmp/default-c-modules.txt: default_modules.py
 	./default_modules.py TODO
 
 # pyconfig.in.h: freeze it
-
 
 #
 # Hello App.  Everything below here is app-specific.
@@ -24,9 +25,10 @@ HELLO_SRCS := testdata/hello.py testdata/lib.py
 # Substitute?
 HELLO_PYC := TODO
 
+PY_SRCS := $(shell find $(PY27) -name '*.[ch]')
 
 # Compile app dependencies
-_tmp/hello/deps/runpy.pyc:
+_tmp/hello/Lib/runpy.pyc:
 	$(PY27)/python -S -c 'import runpy'
 	cp -v $(PY27)/Lib/runpy.pyc _tmp/app
 
@@ -36,6 +38,8 @@ _tmp/hello/app/%.pyc: testdata/%.pyc
 	cp -v $(PY27)/Lib/runpy.pyc _tmp/app
 
 # NOTE: We could use src/dest paths pattern instead of _tmp/app?
+# TODO: Do we need a tool to merge Lib/ and app/?  I guess there will be no
+# conflicts because of the sys.modules cache.
 _tmp/hello/py.zip: $(HELLO_SRCS) _tmp/app/runpy.pyc
 	./run.sh build-hello-zip
 
@@ -85,11 +89,15 @@ _bin/hello.bundle: _tmp/hello/ovm _tmp/hello/py.zip
 #   Python-2.7.13
 #     Lib/
 #     Modules/
-#     Objects/
 #     Python/
-#     Include/  # Which ones?
+#     Objects/  # Which ones?  Use coverage I guess?
+#     Include/  # Which ones? strace?
 _bin/hello.tar.xz: _tmp/hello/py.zip
 	echo TODO
 
 clean:
 	rm -r -f _bin _tmp/hello
+
+# For debugging
+print-%:
+	@echo $*=$($*)
