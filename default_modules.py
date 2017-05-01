@@ -10,8 +10,8 @@ import sys  # 15 modules
 import runpy  # 34 modules
 #import zipimport  # still only 34
 
-import json
-import fcntl
+#import json
+#import fcntl
 
 
 # Python modules get names here.

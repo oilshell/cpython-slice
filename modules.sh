@@ -100,8 +100,8 @@ list() {
 }
 
 # This has Python paths, but no C paths!
-base-modules() {
-  $PY27/python -S ./base_modules.py 
+default-modules() {
+  $PY27/python -S ./default_modules.py 
 }
 
 "$@"
