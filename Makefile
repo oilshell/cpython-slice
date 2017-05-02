@@ -11,8 +11,8 @@ _tmp/c-module-manifest.txt:
 
 # This comes from importing runpy, and also the list in Modules/Setup.dist.
 # Some C modules should be statically linked.
-_tmp/default-py-modules.txt _tmp/default-c-modules.txt: default_modules.py
-	./default_modules.py TODO
+_tmp/%.default-modules.txt: default_modules.py
+	./default_modules.py _tmp
 
 # pyconfig.in.h: freeze it
 
