@@ -17,5 +17,9 @@ module-manifest() {
   popd
 }
 
+# To test building stdlib.
+clean-pyc() {
+  find $PY27/Lib -name '*.pyc' | xargs --no-run-if-empty -- rm --verbose
+}
 
 "$@"

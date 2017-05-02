@@ -33,10 +33,15 @@ HELLO_PYC := TODO
 
 PY_SRCS := $(shell find $(PY27) -name '*.[ch]')
 
+prepare-hello:
+	mkdir -p _tmp/hello/Lib _tmp/hello/app
+
+.PHONY: prepare-hello
+
 # Compile app dependencies
-_tmp/hello/Lib/runpy.pyc:
-	$(PY27)/python -S -c 'import runpy'
-	cp -v $(PY27)/Lib/runpy.pyc _tmp/app
+_tmp/hello/Lib/%.pyc:
+	$(PY27)/python -S -c 'import $*'
+	cp -v $(PY27)/Lib/$*.pyc _tmp/hello/Lib
 
 # Compile app files
 _tmp/hello/app/%.pyc: testdata/%.pyc
