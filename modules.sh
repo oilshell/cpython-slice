@@ -93,12 +93,6 @@ source common.sh
 # TODO: Also need to run the Python stdlib tests for the subset of Python I
 # use?
 
-list() {
-  pushd $PY27
-  ../module_manifest.py
-  popd
-}
-
 # This has Python paths, but no C paths!
 default-modules() {
   $PY27/python -S ./default_modules.py 

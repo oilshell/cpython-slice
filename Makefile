@@ -3,10 +3,11 @@ all: _bin/hello.bundle _bin/hello.tar.xz
 
 PY27 = Python-2.7.13
 
-# Where to find everything
-# How to express dependency on the file system or on a directory?
-_tmp/c-module-manifest.txt: TODO
-	./module_manifest.py
+# What files correspond to each C module.
+# TODO: How to express dependency on the file system or on a directory?
+#       This might not belong here at all?
+_tmp/c-module-manifest.txt:
+	./actions.sh  module-manifest > $@
 
 # This comes from importing runpy, and also the list in Modules/Setup.dist.
 # Some C modules should be statically linked.
