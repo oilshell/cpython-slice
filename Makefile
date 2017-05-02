@@ -9,8 +9,13 @@ PY27 = Python-2.7.13
 _tmp/c-module-manifest.txt:
 	./actions.sh  module-manifest > $@
 
-# This comes from importing runpy, and also the list in Modules/Setup.dist.
-# Some C modules should be statically linked.
+# C modules that should be statically linked in any binary.  This comes from
+# importing runpy.  NOTE: This is done with a pattern rule because of the
+# "multiple outputs" problem in Make.
+#
+# TODO:
+# - add the list in Modules/Setup.dist (pwd, _sre)
+# 
 _tmp/%.default-modules.txt: default_modules.py
 	./default_modules.py _tmp
 
