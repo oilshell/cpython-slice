@@ -1,0 +1,12 @@
+# Wow I didn't realize this was a bad idea.
+# http://stackoverflow.com/questions/5873025/heredoc-in-a-makefile
+#
+# The problem with \ is that it tries to put it all on one line and parse more
+# words!
+
+_tmp/hello/app/__main__.py:
+	cat > $@ << EOF \
+	import sys \
+	import hello \
+	hello.main(sys.argv) \
+	EOF

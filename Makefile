@@ -44,9 +44,23 @@ _tmp/hello/Lib/%.pyc:
 	cp -v $(PY27)/Lib/$*.pyc _tmp/hello/Lib
 
 # Compile app files
-_tmp/hello/app/%.pyc: testdata/%.pyc
-	$(PY27)/python -S -c 'import runpy'
-	cp -v $(PY27)/Lib/runpy.pyc _tmp/app
+# TODO: You can rely on py_deps to do this?
+_tmp/hello/app/%.pyc: testdata/%.py
+	cd testdata && ../$(PY27)/python -S -c 'import $*'
+	cp -v testdata/$*.pyc _tmp/hello/app
+
+# Wow I didn't realize this was a bad idea.
+# http://stackoverflow.com/questions/5873025/heredoc-in-a-makefile
+#
+# The problem with \ is that it tries to put it all on one line and parse more
+# words!
+
+_tmp/hello/app/__main__.py:
+	echo TODO > $@
+
+# Hm this doesn't built itd!
+_tmp/hello/app/__main__.pyc: _tmp/hello/app/__main__.py
+	cd _tmp/hello/app && python -c 'import __main__'
 
 # NOTE: We could use src/dest paths pattern instead of _tmp/app?
 # TODO: Do we need a tool to merge Lib/ and app/?  I guess there will be no
