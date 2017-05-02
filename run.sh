@@ -461,4 +461,9 @@ count-python() {
   echo
 }
 
+oil-deps() {
+  ln -s -f $PWD/py_deps.py ~/git/oil/_tmp
+  PYTHONPATH=~/git/oil ~/git/oil/_tmp/py_deps.py bin.oil
+}
+
 "$@"
