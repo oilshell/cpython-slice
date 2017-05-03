@@ -130,27 +130,6 @@ zipimport zipimport.c
 # See http://www.gzip.org/zlib/
 zlib zlibmodule.c -I$(prefix)/include -L$(exec_prefix)/lib -lz
 
-# We probably want this, but not strictly necessary for OSH.
-# _json _json.c
-
-# For Oil file descriptor functions.
-fcntl fcntlmodule.c
-
-# For zipfile
-#_struct _struct.c
-# Complementary to struct.
-#array arraymodule.c	# array objects
-# Also for zipfile
-#time timemodule.c # -lm 
-# shutil uses this
-#_collections _collectionsmodule.c # Container types
-#operator operator.c	# operator.add() and similar goodies
-
-# We definitely use this.  Or should be use BytesIO?  Hm maybe.
-#cStringIO cStringIO.c
-# Parser uses this.  but we will replace with module
-#cPickle cPickle.c
-
 # The rest of the modules listed in this file are all commented out by
 # default.  Usually they can be detected and built as dynamically
 # loaded modules by the new setup.py script added in Python 2.1.  If
