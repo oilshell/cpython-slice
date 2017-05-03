@@ -16,7 +16,9 @@ print('hello _OVM_IS_BUNDLE', os.getenv('_OVM_IS_BUNDLE'))
 import lib
 
 #import zipfile 
+
 import zipimport
+
 if os.getenv('_OVM_IS_BUNDLE') == '1':
   if 0:
     print('ZIP')

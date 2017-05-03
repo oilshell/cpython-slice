@@ -461,6 +461,10 @@ count-python() {
   echo
 }
 
+py-deps() {
+  $PY27/python -S ~/git/oil/_tmp/py_deps.py "$@"
+}
+
 oil-deps() {
   ln -s -f $PWD/py_deps.py ~/git/oil/_tmp
   #PYTHONPATH=~/git/oil ~/git/oil/_tmp/py_deps.py bin.oil
@@ -477,7 +481,11 @@ oil-deps() {
 
   # Run  grep -F .so  for the native dependencies.  Have to add those
   # somewhere.
-  PYTHONPATH=~/git/oil $PY27/python -S ~/git/oil/_tmp/py_deps.py bin.oil
+  PYTHONPATH=~/git/oil py-deps bin.oil
+}
+
+hello-deps() {
+  PYTHONPATH=testdata py-deps hello
 }
 
 "$@"
