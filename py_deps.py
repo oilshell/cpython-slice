@@ -111,8 +111,8 @@ def main(argv):
 
   out = ModuleToRelativePath(modules, main_module)
   for file_type, input_path, archive_path in out:
-    if input_path.startswith(stdlib_dir):
-      continue
+    #if input_path.startswith(stdlib_dir):
+    #  continue
     print '%s %s' % (input_path, archive_path)
 
 

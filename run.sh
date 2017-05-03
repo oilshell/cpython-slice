@@ -464,6 +464,15 @@ count-python() {
 oil-deps() {
   ln -s -f $PWD/py_deps.py ~/git/oil/_tmp
   PYTHONPATH=~/git/oil ~/git/oil/_tmp/py_deps.py bin.oil
+
+  # This version gets the paths out of the repo.  But it requires that we
+  # build all of Python!
+  #
+  # OK yeah so there are a few steps to building minimal app bundles.
+  # 1. Build all of Python normally.  Normal -D options.
+  # 2. Then run a special build that is based on that.
+
+  #PYTHONPATH=~/git/oil $PY27/python ~/git/oil/_tmp/py_deps.py bin.oil
 }
 
 "$@"
