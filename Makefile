@@ -38,6 +38,12 @@ prepare-hello:
 
 .PHONY: prepare-hello
 
+
+# TODO: zip file depends on what?
+# py-deps hello will compile the .pyc files.  Don't need a separate action.
+# %.pyc : %py
+
+
 # Compile app dependencies
 _tmp/hello/Lib/%.pyc:
 	$(PY27)/python -S -c 'import $*'
@@ -65,7 +71,7 @@ _tmp/hello/app/__main__.pyc: _tmp/hello/app/__main__.py
 # NOTE: We could use src/dest paths pattern instead of _tmp/app?
 # TODO: Do we need a tool to merge Lib/ and app/?  I guess there will be no
 # conflicts because of the sys.modules cache.
-_tmp/hello/py.zip: $(HELLO_SRCS) _tmp/app/runpy.pyc
+_tmp/hello/bytecode.zip: $(HELLO_SRCS) _tmp/app/runpy.pyc
 	./run.sh build-hello-zip
 
 #.PHONY: _tmp/app/runpy.pyc
@@ -79,26 +85,26 @@ _tmp/hello/py-modules.txt: $(HELLO_SRCS)
 	echo TODO
 
 # This is now per-app
-_tmp/hello/module_init.c: $(PY27)/Modules/config.in.c
+_tmp/hello/module_init.c: $(PY27)/Modules/config.c.in
 	echo TODO
 
 # Release build.
 # This depends on the static modules
-_tmp/hello/ovm: _tmp/hello/config.c
+_tmp/hello/ovm: _tmp/hello/module_init.c
 	# TODO: Should run ./slice.sh build.  That should accept variations.
 	cp Python-2.7.13/ovm2 $@
 
 # Fast build, with symbols for debugging.
-_tmp/hello/ovm-dbg: _tmp/hello/config.c
+_tmp/hello/ovm-dbg: _tmp/hello/module_init.c
 	# TODO: Should run ./slice.sh build.  That should accept variations.
 	cp Python-2.7.13/ovm2 $@
 
 # Coverage, for paring down the files that we build.
-_tmp/hello/ovm-cov: _tmp/hello/config.c
+_tmp/hello/ovm-cov: _tmp/hello/module_init.c
 	# TODO: Should run ./slice.sh build.  That should accept variations.
 	cp Python-2.7.13/ovm2 $@
 
-_bin/hello.bundle: _tmp/hello/ovm _tmp/hello/py.zip
+_bin/hello.bundle: _tmp/hello/ovm _tmp/hello/bytecode.zip
 	cat $^ > $@
 	chmod +x $@
 
