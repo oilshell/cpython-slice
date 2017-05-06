@@ -96,7 +96,6 @@ OBJECT_OBJS='
 # NOTE: config.c is generated?  I think that is fine.  ./configure
 # --without-threads and then build the slice.
 MODULE_OBJS='
-		Modules/config.c
 		Modules/getpath.c
 		Modules/main.c
 		Modules/gcmodule.c
@@ -181,6 +180,10 @@ readonly pythonpath='""'
 # This is imp.init_builtin -- when does it get called?
 
 mod-setup() {
+  local out=${1:-$PY27/Modules/config.c}
+
+  local abs_out=$PWD/$out
+
   pushd $PY27
 	Modules/makesetup \
     -c Modules/config.c.in \
@@ -188,11 +191,10 @@ mod-setup() {
 		Modules/Setup.config \
 		Modules/Setup.local \
 		Modules/Setup
+  popd
 
   # Is this for atomic mv?
-  mv config.c Modules
-
-  popd
+  mv $PY27/config.c $abs_out
 }
 
 # Why is this bigger than python?
@@ -204,9 +206,11 @@ mod-setup() {
 # slower machines though.
 build() {
   local out=${1:-ovm2}
-  shift
+  local module_init=${2:-Modules/config.c}
+  shift 2
 
   local abs_out=$PWD/$out
+  local abs_module_init=$PWD/$module_init
 
   echo $OVM_LIBRARY_OBJS
   pushd $PY27
@@ -241,6 +245,7 @@ build() {
     -I . -I Include \
     -o $abs_out \
     $OVM_LIBRARY_OBJS \
+    $abs_module_init \
     Modules/ovm.c \
     -l dl -l util -l m -l z \
     "$@" \
@@ -259,7 +264,7 @@ build() {
 
 build-opt() {
   local out=$1
-  build $out -O3
+  build $out '' -O3
 }
 
 debug-ovm2() {

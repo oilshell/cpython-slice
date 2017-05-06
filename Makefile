@@ -86,24 +86,24 @@ _tmp/hello/py-modules.txt: $(HELLO_SRCS)
 
 # This is now per-app
 _tmp/hello/module_init.c: $(PY27)/Modules/config.c.in
-	echo TODO
+	./slice.sh mod-setup $@
 
 # Release build.
 # This depends on the static modules
 _tmp/hello/ovm: _tmp/hello/module_init.c
-	./slice.sh build $@
+	./slice.sh build $@ _tmp/hello/module_init.c -O3
 
 # Fast build, with symbols for debugging.
 _tmp/hello/ovm-dbg: _tmp/hello/module_init.c
-	# TODO: Should run ./slice.sh build.  That should accept variations.
-	cp Python-2.7.13/ovm2 $@
+	./slice.sh build $@ _tmp/hello/module_init.c
 
 # Coverage, for paring down the files that we build.
 _tmp/hello/ovm-cov: _tmp/hello/module_init.c
 	# TODO: Should run ./slice.sh build.  That should accept variations.
-	cp Python-2.7.13/ovm2 $@
+	cp Python-2.7.13/ovm2 $@ _tmp/hello/module_init.c
 
-_bin/hello.bundle: _tmp/hello/ovm _tmp/hello/bytecode.zip
+# NOTE: dbg for now
+_bin/hello.bundle: _tmp/hello/ovm-dbg _tmp/hello/bytecode.zip
 	cat $^ > $@
 	chmod +x $@
 

@@ -134,9 +134,6 @@ zipimport zipimport.c
 
 # ======================================================================
 
-# The Python symtable module depends on .h files that setup.py doesn't track
-_symtable symtablemodule.c
-
 # The SGI specific GL module:
 
 GLHACK=-Dclear=__GLclear
@@ -494,6 +491,3 @@ GLHACK=-Dclear=__GLclear
 
 # Example -- included for reference only:
 # xx xxmodule.c
-
-# Another example -- the 'xxsubtype' module shows C-level subtyping in action
-xxsubtype xxsubtype.c
