@@ -4,14 +4,14 @@ hello.py
 """
 from __future__ import print_function
 
-print('Hello from hello.py')
+import sys
+print('Hello from hello.py', file=sys.stderr)
 
 import os
-import sys
 
-print('sys.path:', sys.path)
-print('sys.argv:', sys.argv)
-print('hello _OVM_IS_BUNDLE', os.getenv('_OVM_IS_BUNDLE'))
+print('sys.path:', sys.path, file=sys.stderr)
+print('sys.argv:', sys.argv, file=sys.stderr)
+print('hello _OVM_IS_BUNDLE', os.getenv('_OVM_IS_BUNDLE'), file=sys.stderr)
 
 import lib
 

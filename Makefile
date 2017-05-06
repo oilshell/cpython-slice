@@ -63,6 +63,14 @@ _tmp/hello/app/__main__.py:
 _tmp/hello/app/__main__.pyc: _tmp/hello/app/__main__.py
 	cd _tmp/hello/app && python -c 'import __main__'
 
+# This is based on importing it
+_tmp/hello/c-modules.txt: $(HELLO_SRCS)
+	echo TODO
+
+# This is based on importing it
+_tmp/hello/py-modules.txt: $(HELLO_SRCS)
+	./actions.sh hello-deps > $@
+
 # NOTE: We could use src/dest paths pattern instead of _tmp/app?
 #
 # TODO:
@@ -70,18 +78,10 @@ _tmp/hello/app/__main__.pyc: _tmp/hello/app/__main__.py
 #   py-deps hello will compile the .pyc files.  Don't need a separate action.
 #   %.pyc : %py
 # - Also __main__ needs to be handled, not in run.sh?
-_tmp/hello/bytecode.zip: $(HELLO_SRCS) _tmp/app/runpy.pyc
-	./run.sh build-hello-zip $@
+_tmp/hello/bytecode.zip: _tmp/hello/py-modules.txt _tmp/py.default-modules.txt
+	./make_zip.py $@ $^
 
 #.PHONY: _tmp/app/runpy.pyc
-
-# This is based on importing it
-_tmp/hello/c-modules.txt: $(HELLO_SRCS)
-	echo TODO
-
-# This is based on importing it
-_tmp/hello/py-modules.txt: $(HELLO_SRCS)
-	echo TODO
 
 # This is now per-app
 _tmp/hello/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup

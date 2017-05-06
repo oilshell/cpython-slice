@@ -2,5 +2,8 @@
 """
 lib.py
 """
+from __future__ import print_function
 
-print 'Hello from lib.py'
+import sys
+
+print('Hello from lib.py', file=sys.stderr)
