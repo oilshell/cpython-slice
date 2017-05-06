@@ -78,8 +78,10 @@ _tmp/hello/py-modules.txt: $(HELLO_SRCS)
 #   py-deps hello will compile the .pyc files.  Don't need a separate action.
 #   %.pyc : %py
 # - Also __main__ needs to be handled, not in run.sh?
-_tmp/hello/bytecode.zip: _tmp/hello/py-modules.txt _tmp/py.default-modules.txt
-	./make_zip.py $@ $^
+_tmp/hello/bytecode.zip: $(HELLO_SRCS) \
+                         _tmp/hello/py-modules.txt \
+                         _tmp/py.default-modules.txt
+	./make_zip.py $@ _tmp/hello/py-modules.txt _tmp/py.default-modules.txt
 
 #.PHONY: _tmp/app/runpy.pyc
 

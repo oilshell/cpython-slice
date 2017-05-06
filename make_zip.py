@@ -19,7 +19,10 @@ def main(argv):
     with open(manifest) as f:
       for line in f:
         line = line.strip()
-        full_path, rel_path = line.split(None, 1)
+        try:
+          full_path, rel_path = line.split(None, 1)
+        except ValueError:
+          raise RuntimeError('Invalid line %r' % line)
         if rel_path in seen:
           expected = seen[rel_path]
           if expected != full_path:
