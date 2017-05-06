@@ -17,7 +17,7 @@ _tmp/c-module-manifest.txt:
 # - add the list in Modules/Setup.dist (pwd, _sre)
 # 
 _tmp/%.default-modules.txt: default_modules.py
-	./default_modules.py _tmp
+	./actions.sh default-modules _tmp
 
 # pyconfig.in.h: freeze it
 
@@ -37,11 +37,6 @@ prepare-hello:
 	mkdir -p _bin _release _tmp/hello/Lib _tmp/hello/app
 
 .PHONY: prepare-hello
-
-
-# TODO: zip file depends on what?
-# py-deps hello will compile the .pyc files.  Don't need a separate action.
-# %.pyc : %py
 
 
 # Compile app dependencies
@@ -71,7 +66,9 @@ _tmp/hello/app/__main__.pyc: _tmp/hello/app/__main__.py
 # NOTE: We could use src/dest paths pattern instead of _tmp/app?
 #
 # TODO:
-# - Deps need to be better.
+# - Deps need to be better.  Depend on .pyc and .py.    I guess
+#   py-deps hello will compile the .pyc files.  Don't need a separate action.
+#   %.pyc : %py
 # - Also __main__ needs to be handled, not in run.sh?
 _tmp/hello/bytecode.zip: $(HELLO_SRCS) _tmp/app/runpy.pyc
 	./run.sh build-hello-zip $@

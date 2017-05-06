@@ -33,7 +33,7 @@ source common.sh
 # For the modules that end with .so
 #
 # Build process:
-# py files: join {DEFAULT,hello}.py-stdlib.txt.  Compile .pyc and copy.
+
 # c files: join {DEFAULT,hello}.c-stdlib.txt.  Output a text file for slice.sh
 # to take as additional input.
 # - Also need to rewrite config.c.
@@ -92,10 +92,5 @@ source common.sh
 
 # TODO: Also need to run the Python stdlib tests for the subset of Python I
 # use?
-
-# This has Python paths, but no C paths!
-default-modules() {
-  $PY27/python -S ./default_modules.py 
-}
 
 "$@"

@@ -17,6 +17,11 @@ module-manifest() {
   popd
 }
 
+# This has Python paths, but no C paths!
+default-modules() {
+  $PY27/python -S ./default_modules.py "$@"
+}
+
 # To test building stdlib.
 clean-pyc() {
   find $PY27/Lib -name '*.pyc' | xargs --no-run-if-empty -- rm --verbose
