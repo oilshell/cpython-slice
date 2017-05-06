@@ -72,7 +72,7 @@ _tmp/hello/app/__main__.pyc: _tmp/hello/app/__main__.py
 # TODO: Do we need a tool to merge Lib/ and app/?  I guess there will be no
 # conflicts because of the sys.modules cache.
 _tmp/hello/bytecode.zip: $(HELLO_SRCS) _tmp/app/runpy.pyc
-	./run.sh build-hello-zip
+	./run.sh build-hello-zip $@
 
 #.PHONY: _tmp/app/runpy.pyc
 
@@ -123,7 +123,7 @@ _bin/hello.bundle: _tmp/hello/ovm _tmp/hello/bytecode.zip
 #     Python/
 #     Objects/  # Which ones?  Use coverage I guess?
 #     Include/  # Which ones? strace?
-_bin/hello.tar.xz: _tmp/hello/py.zip
+_bin/hello.tar.xz: _tmp/hello/bytecode.zip
 	echo TODO
 
 clean:

@@ -190,6 +190,8 @@ build-hello() {
 readonly RUNPY_DEPS=($PY27/Lib/{runpy,pkgutil,os,posixpath,stat,genericpath,warnings,linecache,types,UserDict,_abcoll,abc,_weakrefset,copy_reg}.pyc)
 
 build-hello-zip() {
+  local out=${1:-_tmp/hello.zip}
+
   build-hello
 
   mkdir -p _tmp/app
@@ -212,14 +214,15 @@ build-hello-zip() {
   #  $PY27/Lib/{zipfile,collections,struct}.pyc \
   #  _tmp/app/
 
-  rm _tmp/hello.zip
+  rm -f $out
+  local abs_out=$PWD/$out
 
   pushd _tmp/app
-  zip -r ../hello.zip .
+  zip -r $abs_out .
   popd
 
-  ls -l _tmp/hello.zip
-  unzip -l _tmp/hello.zip
+  ls -l $out
+  unzip -l $out
 }
 
 update-oil-zip() {
