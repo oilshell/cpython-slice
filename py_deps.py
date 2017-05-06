@@ -64,8 +64,6 @@ def ImportModules(modules, old_modules):
     # e.g. "gc", "marshal", "thread".  Doesn't matter for our purposes.
     if filename is None:
       continue
-    if filename.endswith('.pyc'):
-      filename = filename[:-1]
     yield name, filename
 
 
@@ -86,7 +84,16 @@ def ModuleToRelativePath(modules, main_module):
       for _ in xrange(num_parts):
         i = filename.rfind('/', 0, i)
       #print i, filename[i+1:]
-      yield file_type, filename, filename[i+1:]
+      rel_path = filename[i+1:]
+
+      # .pyc file
+      yield file_type, filename, rel_path
+
+      assert filename.endswith('.pyc'), filename
+
+      # .py file needed for tracebacks
+      yield file_type, filename[:-1], rel_path[:-1]
+
     else:
       yield 'f', filename, filename
 

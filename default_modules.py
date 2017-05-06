@@ -50,16 +50,19 @@ def main(argv):
         print '!!!'
 
       if full_path and full_path.endswith('.pyc'):
-        py_path = full_path[:-1]
+        pyc_path = full_path
         #print('F', full_path, stdlib_dir)
         if full_path.startswith(stdlib_dir):
-          rel_path = py_path[stdlib_dir_len:]
+          rel_path = pyc_path[stdlib_dir_len:]
           #print('REL', rel_path)
         else:
-          rel_path = py_path
+          rel_path = pyc_path
       
-        #print >>py_out, name, filename
-        print >>py_out, py_path, rel_path
+        # .pyc file
+        print >>py_out, pyc_path, rel_path
+        # .py file for tracebacks
+        print >>py_out, pyc_path[:-1], rel_path[:-1]
+
       else:
         print >>c_out, name
       #filename = getattr(mod, '__file__', None)
