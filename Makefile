@@ -39,30 +39,6 @@ prepare-hello:
 .PHONY: prepare-hello
 
 
-# Compile app dependencies
-_tmp/hello/Lib/%.pyc:
-	$(PY27)/python -S -c 'import $*'
-	cp -v $(PY27)/Lib/$*.pyc _tmp/hello/Lib
-
-# Compile app files
-# TODO: You can rely on py_deps to do this?
-_tmp/hello/app/%.pyc: testdata/%.py
-	cd testdata && ../$(PY27)/python -S -c 'import $*'
-	cp -v testdata/$*.pyc _tmp/hello/app
-
-# Wow I didn't realize this was a bad idea.
-# http://stackoverflow.com/questions/5873025/heredoc-in-a-makefile
-#
-# The problem with \ is that it tries to put it all on one line and parse more
-# words!
-
-_tmp/hello/app/__main__.py:
-	echo TODO > $@
-
-# Hm this doesn't built itd!
-_tmp/hello/app/__main__.pyc: _tmp/hello/app/__main__.py
-	cd _tmp/hello/app && python -c 'import __main__'
-
 # This is based on importing it
 _tmp/hello/c-modules.txt: $(HELLO_SRCS)
 	echo TODO
