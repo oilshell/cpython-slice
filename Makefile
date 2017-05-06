@@ -91,8 +91,7 @@ _tmp/hello/module_init.c: $(PY27)/Modules/config.c.in
 # Release build.
 # This depends on the static modules
 _tmp/hello/ovm: _tmp/hello/module_init.c
-	# TODO: Should run ./slice.sh build.  That should accept variations.
-	cp Python-2.7.13/ovm2 $@
+	./slice.sh build $@
 
 # Fast build, with symbols for debugging.
 _tmp/hello/ovm-dbg: _tmp/hello/module_init.c

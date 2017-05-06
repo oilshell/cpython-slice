@@ -203,6 +203,11 @@ mod-setup() {
 # 5.5 seconds to build.  Not too bad.  Will probabl take 10-15 seconds on
 # slower machines though.
 build() {
+  local out=${1:-ovm2}
+  shift
+
+  local abs_out=$PWD/$out
+
   echo $OVM_LIBRARY_OBJS
   pushd $PY27
   # Slower when done serially.
@@ -234,7 +239,7 @@ build() {
 		-D VPATH="$VPATH" \
     -D Py_BUILD_CORE \
     -I . -I Include \
-    -o ovm2 \
+    -o $abs_out \
     $OVM_LIBRARY_OBJS \
     Modules/ovm.c \
     -l dl -l util -l m -l z \
@@ -253,7 +258,8 @@ build() {
 # GCC -O2 is 1.35 MB.  21 seconds to compile.
 
 build-opt() {
-  build -O3
+  local out=$1
+  build $out -O3
 }
 
 debug-ovm2() {
