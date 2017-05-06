@@ -1,6 +1,6 @@
 #!/usr/bin/python -S
 """
-base_modules.py
+default_modules.py
 
 NOTE -S above
 """
@@ -21,6 +21,15 @@ def main(argv):
   py_out_path = path_prefix + '/py.default-modules.txt'
   c_out_path = path_prefix + '/c.default-modules.txt'
 
+  runpy_path = runpy.__file__
+  i = runpy_path.rfind('/')
+  assert i != -1, runpy_path
+  stdlib_dir = runpy_path[ : i+1]  # include trailing slash
+  stdlib_dir_len = len(stdlib_dir)
+
+  #print 'STDLIB', stdlib_dir
+  #return
+
   with open(py_out_path, 'w') as py_out, open(c_out_path, 'w') as c_out:
     for name in sorted(sys.modules):
       mod = sys.modules[name]
@@ -30,18 +39,27 @@ def main(argv):
       #if '(built-in)' in str(mod):
       #  continue
       try:
-        filename = mod.__file__
+        full_path = mod.__file__
       except AttributeError:
-        filename = None
+        full_path = None
       #if filename is None:
       #  continue
 
       # I think this is caught elsewhere
-      if filename and filename.endswith('.so'):
+      if full_path and full_path.endswith('.so'):
         print '!!!'
 
-      if filename and filename.endswith('.pyc'):
-        print >>py_out, name, filename
+      if full_path and full_path.endswith('.pyc'):
+        py_path = full_path[:-1]
+        #print('F', full_path, stdlib_dir)
+        if full_path.startswith(stdlib_dir):
+          rel_path = full_path[stdlib_dir_len:]
+          #print('REL', rel_path)
+        else:
+          rel_path = full_path
+      
+        #print >>py_out, name, filename
+        print >>py_out, py_path, rel_path
       else:
         print >>c_out, name
       #filename = getattr(mod, '__file__', None)
