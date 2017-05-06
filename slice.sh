@@ -194,7 +194,7 @@ mod-setup() {
   popd
 
   # Is this for atomic mv?
-  mv $PY27/config.c $abs_out
+  mv -v $PY27/config.c $abs_out
 }
 
 # Why is this bigger than python?
@@ -205,8 +205,8 @@ mod-setup() {
 # 5.5 seconds to build.  Not too bad.  Will probabl take 10-15 seconds on
 # slower machines though.
 build() {
-  local out=${1:-ovm2}
-  local module_init=${2:-Modules/config.c}
+  local out=${1:-$PY27/ovm2}
+  local module_init=${2:-$PY27/Modules/config.c}
   shift 2
 
   local abs_out=$PWD/$out

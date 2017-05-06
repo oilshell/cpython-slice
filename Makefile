@@ -85,7 +85,7 @@ _tmp/hello/py-modules.txt: $(HELLO_SRCS)
 	echo TODO
 
 # This is now per-app
-_tmp/hello/module_init.c: $(PY27)/Modules/config.c.in
+_tmp/hello/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup
 	./slice.sh mod-setup $@
 
 # Release build.
