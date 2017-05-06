@@ -185,6 +185,9 @@ mod-setup() {
   local abs_out=$PWD/$out
 
   pushd $PY27
+
+  cp -v ../ModulesSetup Modules/Setup
+
 	Modules/makesetup \
     -c Modules/config.c.in \
 		-s Modules \

@@ -29,7 +29,6 @@ config() {
   cd $PY27
   time ./configure --without-threads
 
-  # This isn't overwritten as far as I can tell
   cp -v ../ModulesSetup Modules/Setup
 }
 
