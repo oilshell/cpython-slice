@@ -69,8 +69,10 @@ _tmp/hello/app/__main__.pyc: _tmp/hello/app/__main__.py
 	cd _tmp/hello/app && python -c 'import __main__'
 
 # NOTE: We could use src/dest paths pattern instead of _tmp/app?
-# TODO: Do we need a tool to merge Lib/ and app/?  I guess there will be no
-# conflicts because of the sys.modules cache.
+#
+# TODO:
+# - Deps need to be better.
+# - Also __main__ needs to be handled, not in run.sh?
 _tmp/hello/bytecode.zip: $(HELLO_SRCS) _tmp/app/runpy.pyc
 	./run.sh build-hello-zip $@
 
@@ -99,8 +101,7 @@ _tmp/hello/ovm-dbg: _tmp/hello/module_init.c
 
 # Coverage, for paring down the files that we build.
 _tmp/hello/ovm-cov: _tmp/hello/module_init.c
-	# TODO: Should run ./slice.sh build.  That should accept variations.
-	cp Python-2.7.13/ovm2 $@ _tmp/hello/module_init.c
+	./slice.sh build $@ _tmp/hello/module_init.c  # TODO: cov flags
 
 # NOTE: dbg for now
 _bin/hello.bundle: _tmp/hello/ovm-dbg _tmp/hello/bytecode.zip
@@ -111,11 +112,7 @@ _bin/hello.bundle: _tmp/hello/ovm-dbg _tmp/hello/bytecode.zip
 # I guess it should look like the repo?
 # hello.tar/
 #   Makefile
-#   testdata/
-#     hello.py
-#     hello.pyc
-#     lib.py
-#     lib.pyc
+#   bytecode.zip  # So we don't have to have zip on the machine
 #   Python-2.7.13
 #     Lib/
 #     Modules/
