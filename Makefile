@@ -67,19 +67,20 @@ _tmp/hello/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup
 
 # Release build.
 # This depends on the static modules
-_tmp/hello/ovm: _tmp/hello/module_init.c
-	./slice.sh build $@ _tmp/hello/module_init.c -O3
+_tmp/%/ovm: _tmp/%/module_init.c
+	./slice.sh build $@ _tmp/$*/module_init.c -O3
 
 # Fast build, with symbols for debugging.
-_tmp/hello/ovm-dbg: _tmp/hello/module_init.c
-	./slice.sh build $@ _tmp/hello/module_init.c
+_tmp/%/ovm-dbg: _tmp/%/module_init.c
+	./slice.sh build $@ _tmp/$*/module_init.c
 
 # Coverage, for paring down the files that we build.
-_tmp/hello/ovm-cov: _tmp/hello/module_init.c
-	./slice.sh build $@ _tmp/hello/module_init.c  # TODO: cov flags
+_tmp/%/ovm-cov: _tmp/%/module_init.c
+	./slice.sh build $@ _tmp/$*/module_init.c  # TODO: cov flags
 
-# NOTE: dbg for now
-_bin/hello.bundle: _tmp/hello/ovm-dbg _tmp/hello/bytecode.zip
+# Pattern rule to make bundles.
+# NOTE: Using ovm-dbg for now.
+_bin/%.bundle: _tmp/%/ovm-dbg _tmp/%/bytecode.zip
 	cat $^ > $@
 	chmod +x $@
 
