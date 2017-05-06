@@ -1,5 +1,5 @@
 
-all: _bin/hello.bundle _bin/hello.tar.xz
+all: _bin/hello.bundle _release/hello.tar
 
 PY27 = Python-2.7.13
 
@@ -34,7 +34,7 @@ HELLO_PYC := TODO
 PY_SRCS := $(shell find $(PY27) -name '*.[ch]')
 
 prepare-hello:
-	mkdir -p _tmp/hello/Lib _tmp/hello/app
+	mkdir -p _bin _release _tmp/hello/Lib _tmp/hello/app
 
 .PHONY: prepare-hello
 
@@ -123,8 +123,8 @@ _bin/hello.bundle: _tmp/hello/ovm _tmp/hello/bytecode.zip
 #     Python/
 #     Objects/  # Which ones?  Use coverage I guess?
 #     Include/  # Which ones? strace?
-_bin/hello.tar.xz: _tmp/hello/bytecode.zip
-	echo TODO
+_release/hello.tar: _tmp/hello/bytecode.zip
+	tar --create --directory _tmp/hello bytecode.zip > $@
 
 clean:
 	rm -r -f _bin _tmp/hello
