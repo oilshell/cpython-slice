@@ -14,9 +14,12 @@ Instead, we prefer to set PYTHONPATH to point at uncompressed source tarballs
 for each library.
 """
 
-import os
-import optparse
 import sys
+OLD_MODULES = dict(sys.modules)  # Make a copy
+
+# TODO: Does this import mess it up?  Don't really need it.
+#import os
+#import optparse
 
 
 class Error(Exception):
@@ -78,7 +81,7 @@ def ModuleToRelativePath(modules, main_module):
       num_parts = module.count('.') + 1
       i = len(filename)
       # Do it once more in this case
-      if filename.endswith(os.sep + '__init__.py'):
+      if filename.endswith('/__init__.py'):
         i = filename.rfind('/', 0, i)
       for _ in xrange(num_parts):
         i = filename.rfind('/', 0, i)
@@ -97,17 +100,16 @@ def CreateOptionsParser():
 def main(argv):
   """Returns an exit code."""
 
-  (opts, argv) = CreateOptionsParser().parse_args(argv)
-  if not argv:
-    raise Error('No modules specified.')
+  #(opts, argv) = CreateOptionsParser().parse_args(argv)
+  #if not argv:
+  #  raise Error('No modules specified.')
 
   main_module = argv[0]
-  old_modules = dict(sys.modules)  # Make a copy
-  log('Before importing: %d modules', len(old_modules))
-  os_file = old_modules['os'].__file__
-  stdlib_dir = os.path.dirname(os_file) + '/'
+  log('Before importing: %d modules', len(OLD_MODULES))
+  #os_file = os.__file__
+  #stdlib_dir = os.path.dirname(os_file) + '/'
 
-  modules = ImportModules(argv, old_modules)
+  modules = ImportModules(argv, OLD_MODULES)
 
   out = ModuleToRelativePath(modules, main_module)
   for file_type, input_path, archive_path in out:
