@@ -80,4 +80,11 @@ zsh-size() {
   ls -l $(readlink -f /usr/bin/zsh)
 }
 
+# Wow Oil has 1.9 MB of uncompressed bytecode and source.
+bundle-size() {
+  ls -l _tmp/*/bytecode.zip _tmp/*/ovm
+  echo
+  ls -l _bin/*
+}
+
 "$@"
