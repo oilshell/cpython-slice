@@ -43,11 +43,11 @@ oil-deps() {
 
   # Run  grep -F .so  for the native dependencies.  Have to add those
   # somewhere.
-  PYTHONPATH=~/git/oil _py-deps bin.oil
+  PYTHONPATH=~/git/oil _py-deps bin.oil "$@"
 }
 
 hello-deps() {
-  PYTHONPATH=testdata _py-deps hello
+  PYTHONPATH=testdata _py-deps hello "$@"
 }
 
 # To test building stdlib.

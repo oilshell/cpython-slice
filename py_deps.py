@@ -32,18 +32,16 @@ def log(msg, *args):
   print >>sys.stderr, '\t', msg
 
 
-def ImportModules(modules, old_modules):
+def ImportMain(main_module, old_modules):
   """Yields (module name, absolute path) pairs."""
 
-  main_module = None
-  for i, module_name in enumerate(modules):
-    log('Importing %r', module_name)
-    try:
-      __import__(module_name)
-    except ImportError, e:
-      log('Error importing %r with sys.path %r', module_name, sys.path)
-      # TODO: print better error.
-      raise
+  log('Importing %r', main_module)
+  try:
+    __import__(main_module)
+  except ImportError, e:
+    log('Error importing %r with sys.path %r', main_module, sys.path)
+    # TODO: print better error.
+    raise
 
   new_modules = sys.modules
   log('After importing: %d modules', len(new_modules))
@@ -67,14 +65,10 @@ def ImportModules(modules, old_modules):
     yield name, filename
 
 
-def ModuleToRelativePath(modules, main_module):
+def ModuleToRelativePath(modules):
   """Yields (type, absolute input path, archive path) pairs."""
   for module, filename in modules:
     if module:
-      if module == main_module:
-        file_type = 'x'
-      else:
-        file_type = 'f'
       #print 'OLD', module, filename
       num_parts = module.count('.') + 1
       i = len(filename)
@@ -87,15 +81,15 @@ def ModuleToRelativePath(modules, main_module):
       rel_path = filename[i+1:]
 
       # .pyc file
-      yield file_type, filename, rel_path
+      yield filename, rel_path
 
-      assert filename.endswith('.pyc'), filename
-
-      # .py file needed for tracebacks
-      yield file_type, filename[:-1], rel_path[:-1]
+      if filename.endswith('.pyc'):
+        # .py file needed for tracebacks
+        yield filename[:-1], rel_path[:-1]
 
     else:
-      yield 'f', filename, filename
+      raise AssertionError('%r %r' % (module, filename))
+      #yield filename, filename
 
 
 # TODO: Get rid of this?
@@ -112,14 +106,15 @@ def main(argv):
   #  raise Error('No modules specified.')
 
   main_module = argv[0]
+  out_dir = argv[1]
   log('Before importing: %d modules', len(OLD_MODULES))
   #os_file = os.__file__
   #stdlib_dir = os.path.dirname(os_file) + '/'
 
-  modules = ImportModules(argv, OLD_MODULES)
+  modules = ImportMain(main_module, OLD_MODULES)
 
-  out = ModuleToRelativePath(modules, main_module)
-  for file_type, input_path, archive_path in out:
+  out = ModuleToRelativePath(modules)
+  for input_path, archive_path in out:
     #if input_path.startswith(stdlib_dir):
     #  continue
     print '%s %s' % (input_path, archive_path)

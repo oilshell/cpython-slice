@@ -3,7 +3,7 @@
 # Needed for rules with '> $@'.  Does this always work?
 .DELETE_ON_ERROR:
 
-all: _bin/hello.bundle _release/hello.tar
+all: _bin/hello.bundle _bin/oil.bundle _release/hello.tar
 
 PY27 = Python-2.7.13
 
@@ -49,8 +49,8 @@ _tmp/hello/c-modules.txt: $(HELLO_SRCS)
 	echo TODO
 
 # This is based on importing it
-_tmp/hello/py-modules.txt: $(HELLO_SRCS)
-	./actions.sh hello-deps > $@
+_tmp/hello/%-modules.txt: $(HELLO_SRCS)
+	./actions.sh hello-deps _tmp/hello
 
 # NOTE: We could use src/dest paths pattern instead of _tmp/app?
 #
