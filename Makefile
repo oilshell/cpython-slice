@@ -94,7 +94,7 @@ _tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
 
 # Regenerate dependencies
 _tmp/%/ovm.d: _tmp/%/discovered-c.txt
-	./actions.sh make-deps $^ > $@
+	./actions.sh make-deps $* $^ > $@
 
 _tmp/%/all-c-modules.txt: static-c-modules.txt _tmp/%/discovered-c.txt
 	./actions.sh join-modules $^ > $@
