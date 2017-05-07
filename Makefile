@@ -40,8 +40,6 @@ _tmp/runpy-%.txt: default_modules.py
 # Hello App.  Everything below here is app-specific.
 #
 
-# TODO: Could use $(shell find here.)
-
 HELLO_SRCS := testdata/hello.py testdata/lib.py 
 
 PY_SRCS := $(shell find $(PY27) -name '*.[ch]')
@@ -63,7 +61,6 @@ _tmp/hello/discovered-%.txt: $(HELLO_SRCS) py_deps.py
 # - Deps need to be better.  Depend on .pyc and .py.    I guess
 #   py-deps hello will compile the .pyc files.  Don't need a separate action.
 #   %.pyc : %py
-# - Also __main__ needs to be handled, not in run.sh?
 _tmp/hello/bytecode.zip: $(HELLO_SRCS) \
                          _tmp/hello/discovered-py.txt \
                          _tmp/runpy-py.txt
@@ -80,6 +77,7 @@ _tmp/oil/main_name.c:
 _tmp/oil/discovered-%.txt: py_deps.py
 	./actions.sh oil-deps _tmp/oil
 
+# TODO: Need $(OIL_SRCS) here?
 _tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
                        _tmp/runpy-py.txt
 	./make_zip.py $@ _tmp/oil/discovered-py.txt _tmp/runpy-py.txt
@@ -98,11 +96,11 @@ _tmp/%/module_init.c: $(PY27)/Modules/config.c.in _tmp/%/all-c-modules.txt
 # Release build.
 # This depends on the static modules
 _tmp/%/ovm: _tmp/%/module_init.c _tmp/%/main_name.c
-	./slice.sh build $@ _tmp/$*/module_init.c _tmp/$*/main_name.c -O3
+	./slice.sh build-opt $@ _tmp/$*/module_init.c _tmp/$*/main_name.c 
 
 # Fast build, with symbols for debugging.
 _tmp/%/ovm-dbg: _tmp/%/module_init.c _tmp/%/main_name.c
-	./slice.sh build $@ _tmp/$*/module_init.c _tmp/$*/main_name.c
+	./slice.sh build-dbg $@ _tmp/$*/module_init.c _tmp/$*/main_name.c
 
 # Coverage, for paring down the files that we build.
 _tmp/%/ovm-cov: _tmp/%/module_init.c _tmp/%/main_name.c

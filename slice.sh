@@ -257,13 +257,11 @@ build() {
 # GCC -O2 is 1.35 MB.  21 seconds to compile.
 
 build-dbg() {
-  local out=$1
-  build $out '' -O0
+  build "$@" -O0
 }
 
 build-opt() {
-  local out=$1
-  build $out '' -O3
+  build "$@" -O3
 }
 
 debug-ovm2() {
