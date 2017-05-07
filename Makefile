@@ -1,3 +1,7 @@
+# Build App Bundles.
+
+# Needed for rules with '> $@'.  Does this always work?
+.DELETE_ON_ERROR:
 
 all: _bin/hello.bundle _release/hello.tar
 
