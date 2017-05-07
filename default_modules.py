@@ -49,22 +49,29 @@ def main(argv):
       if full_path and full_path.endswith('.so'):
         print '!!!'
 
-      if full_path and full_path.endswith('.pyc'):
+      # If it's cached, it will be under .pyc; otherwise under .py.
+      if full_path and full_path.endswith('.py'):
+        py_path = full_path
+        pyc_path = full_path + 'c'
+      elif full_path and full_path.endswith('.pyc'):
         pyc_path = full_path
-        #print('F', full_path, stdlib_dir)
-        if full_path.startswith(stdlib_dir):
-          rel_path = pyc_path[stdlib_dir_len:]
-          #print('REL', rel_path)
-        else:
-          rel_path = pyc_path
-      
-        # .pyc file
-        print >>py_out, pyc_path, rel_path
-        # .py file for tracebacks
-        print >>py_out, pyc_path[:-1], rel_path[:-1]
-
+        py_path = full_path[:-1]
       else:
         print >>c_out, name, full_path
+
+      if py_path:
+        #print('F', full_path, stdlib_dir)
+        if py_path.startswith(stdlib_dir):
+          rel_py_path = py_path[stdlib_dir_len:]
+          #print('REL', rel_path)
+        else:
+          rel_py_path = py_path
+      
+        # .pyc file for execution
+        print >>py_out, py_path + 'c', rel_py_path + 'c'
+        # .py file for tracebacks
+        print >>py_out, py_path, rel_py_path
+
       #filename = getattr(mod, '__file__', None)
   print >>sys.stderr, '-- Wrote %s and %s' % (py_out_path, c_out_path)
 

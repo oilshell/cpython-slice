@@ -128,7 +128,7 @@ _release/hello.tar: _tmp/hello/bytecode.zip
 
 clean:
 	rm -r -f _bin _tmp/hello _tmp/oil
-	rm -f _tmp/*.runpy-modules.txt _tmp/c-module-manifest.txt
+	rm -f _tmp/runpy-*.txt _tmp/c-module-manifest.txt
 	./actions.sh clean-pyc
 
 # For debugging
