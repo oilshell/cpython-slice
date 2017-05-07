@@ -57,13 +57,6 @@ make-dotd() {
   echo "_tmp/$app_name/ovm-cov:"
 }
 
-# Make a list of filenames from the discovered file
-module-paths() {
-  local discovered=${2:-_tmp/hello/discovered-c.txt}
-
-  echo Modules/binascii.c
-}
-
 #
 # C Code generation.  The three functions below are adapted from
 # Modules/makesetup.

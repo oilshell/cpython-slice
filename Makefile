@@ -135,7 +135,7 @@ _tmp/%/ovm-cov: _tmp/%/module_init.c _tmp/%/main_name.c _tmp/%/module-paths.c
 
 # Pattern rule to make bundles.
 # NOTE: Using ovm-dbg for now.
-_bin/%.bundle: _tmp/%/ovm-dbg _tmp/%/bytecode.zip
+_bin/%.bundle: _tmp/%/ovm _tmp/%/bytecode.zip
 	cat $^ > $@
 	chmod +x $@
 

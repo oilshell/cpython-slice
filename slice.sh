@@ -223,12 +223,7 @@ build() {
   CC=$CLANG
   #CC=gcc
 
-  CFLAGS=
-  #CFLAGS=-m32
-
   time $CC \
-    -g \
-    $CFLAGS \
     -D OIL_MAIN \
 		-D PYTHONPATH="$pythonpath" \
 		-D PREFIX="$prefix" \
@@ -266,11 +261,13 @@ build() {
 # GCC -O2 is 1.35 MB.  21 seconds to compile.
 
 build-dbg() {
-  build "$@" -O0
+  build "$@" -O0 -g
 }
 
+# http://stackoverflow.com/questions/1349166/what-is-the-difference-between-gcc-s-and-a-strip-command
+# Generate a stripped binary rather than running strip separately.
 build-opt() {
-  build "$@" -O3
+  build "$@" -O3 -s
 }
 
 debug-ovm2() {
