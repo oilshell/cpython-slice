@@ -65,31 +65,27 @@ def ImportMain(main_module, old_modules):
     yield name, filename
 
 
-def ModuleToRelativePath(modules):
+def PrintManifest(modules, py_out, c_out):
   """Yields (type, absolute input path, archive path) pairs."""
   for module, filename in modules:
-    if module:
-      #print 'OLD', module, filename
-      num_parts = module.count('.') + 1
-      i = len(filename)
-      # Do it once more in this case
-      if filename.endswith('/__init__.py'):
-        i = filename.rfind('/', 0, i)
-      for _ in xrange(num_parts):
-        i = filename.rfind('/', 0, i)
-      #print i, filename[i+1:]
-      rel_path = filename[i+1:]
+    #print 'OLD', module, filename
+    num_parts = module.count('.') + 1
+    i = len(filename)
+    # Do it once more in this case
+    if filename.endswith('/__init__.pyc'):
+      i = filename.rfind('/', 0, i)
+    for _ in xrange(num_parts):
+      i = filename.rfind('/', 0, i)
+    #print i, filename[i+1:]
+    rel_path = filename[i+1:]
 
+    if filename.endswith('.pyc'):
       # .pyc file
-      yield filename, rel_path
-
-      if filename.endswith('.pyc'):
-        # .py file needed for tracebacks
-        yield filename[:-1], rel_path[:-1]
-
+      print >>py_out, filename, rel_path
+      print >>py_out, filename[:-1], rel_path[:-1]
     else:
-      raise AssertionError('%r %r' % (module, filename))
-      #yield filename, filename
+      # .so file
+      print >>c_out, filename, filename
 
 
 # TODO: Get rid of this?
@@ -108,16 +104,14 @@ def main(argv):
   main_module = argv[0]
   out_dir = argv[1]
   log('Before importing: %d modules', len(OLD_MODULES))
-  #os_file = os.__file__
-  #stdlib_dir = os.path.dirname(os_file) + '/'
+
+  py_out_path = out_dir + '/py-modules.txt'
+  c_out_path = out_dir + '/c-modules.txt'
 
   modules = ImportMain(main_module, OLD_MODULES)
 
-  out = ModuleToRelativePath(modules)
-  for input_path, archive_path in out:
-    #if input_path.startswith(stdlib_dir):
-    #  continue
-    print '%s %s' % (input_path, archive_path)
+  with open(py_out_path, 'w') as py_out, open(c_out_path, 'w') as c_out:
+    PrintManifest(modules, py_out, c_out)
 
 
 if __name__ == '__main__':
