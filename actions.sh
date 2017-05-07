@@ -71,22 +71,13 @@ module-paths() {
 
 extdecls() {
   for mod in "$@"; do
-    if test $mod = 'core.libc'; then
-      mod=libc
-    fi
     echo "extern void init$mod(void);"
   done
 }
 		
 initbits() {
 	for mod in "$@"; do
-    local func_suffix
-    if test $mod = 'core.libc'; then
-      func_suffix=libc
-    else
-      func_suffix=$mod
-    fi
-    echo "    {\"$mod\", init$func_suffix},"
+    echo "    {\"$mod\", init$mod},"
   done
 }
 

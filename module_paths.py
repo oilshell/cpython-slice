@@ -23,9 +23,9 @@ def main(argv):
       line = line.strip()
       mod_name, _ = line.split(None, 2)
 
-      if mod_name == 'core.libc':
+      if mod_name == 'libc':
         # Hard-coded special case for now
-        print '/home/andy/git/oil/core/libc.c'
+        print '/home/andy/git/oil/native/libc.c'
       elif mod_name == 'math':
         print 'Modules/mathmodule.c'
         print 'Modules/_math.c'
