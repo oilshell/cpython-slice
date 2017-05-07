@@ -97,17 +97,16 @@ gen-module-init() {
 
 join-modules() {
   local static=${1:-static-c-modules.txt}
-  local discovered=${2:-_tmp/oil/c-modules.txt}
+  local discovered=${2:-_tmp/oil/discovered-c.txt}
   local out=${3:-_tmp/oil/all-c-modules.txt}
 
-  awk '
-  /^[a-zA-Z_]+/ {
-    print $1
-  }
-  ' $static $discovered | sort | uniq > $out
+  # Filter out comments, print the first line.
+  #
+  # TODO: I don't want to depend on egrep and GNU flags on the target sytems?
+  # Ship this file I guess.
+  egrep --no-filename --only-matching '^[a-zA-Z_]+' $static $discovered \
+    | sort | uniq
 }
-
-
 
 # To test building stdlib.
 clean-pyc() {

@@ -86,7 +86,7 @@ _tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
 #
 
 _tmp/%/all-c-modules.txt: static-c-modules.txt _tmp/%/discovered-c.txt
-	./actions.sh join-modules $^ $@
+	./actions.sh join-modules $^ > $@
 
 # Per-app extension module initialization.
 _tmp/%/module_init.c: $(PY27)/Modules/config.c.in _tmp/%/all-c-modules.txt
