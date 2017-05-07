@@ -21,6 +21,18 @@ default-modules() {
   $PY27/python -S ./default_modules.py "$@"
 }
 
+# This version gets the paths out of the repo.  But it requires that we
+# build all of Python!
+#
+# OK yeah so there are a few steps to building minimal app bundles.
+# 1. Build all of Python normally.  Normal -D options.
+#    ./run.sh build-clang-default
+# 2. Then run a special build that is based on that.
+#
+# Only need a debug build.
+
+# Run  grep -F .so  for the native dependencies.  Have to add those
+# somewhere.
 _py-deps() {
   # I need the right relative path for Oil
   ln -s -f $PWD/py_deps.py ~/git/oil/_tmp
@@ -28,20 +40,6 @@ _py-deps() {
 }
 
 oil-deps() {
-  #PYTHONPATH=~/git/oil ~/git/oil/_tmp/py_deps.py bin.oil
-
-  # This version gets the paths out of the repo.  But it requires that we
-  # build all of Python!
-  #
-  # OK yeah so there are a few steps to building minimal app bundles.
-  # 1. Build all of Python normally.  Normal -D options.
-  #    ./run.sh build-clang-default
-  # 2. Then run a special build that is based on that.
-  #
-  # Only need a debug build.
-
-  # Run  grep -F .so  for the native dependencies.  Have to add those
-  # somewhere.
   PYTHONPATH=~/git/oil _py-deps bin.oil "$@"
 }
 
@@ -98,7 +96,6 @@ gen-module-init() {
 join-modules() {
   local static=${1:-static-c-modules.txt}
   local discovered=${2:-_tmp/oil/discovered-c.txt}
-  local out=${3:-_tmp/oil/all-c-modules.txt}
 
   # Filter out comments, print the first line.
   #
