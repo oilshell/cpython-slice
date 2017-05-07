@@ -3,6 +3,9 @@
 # Needed for rules with '> $@'.  Does this always work?
 .DELETE_ON_ERROR:
 
+# Intermediate targets aren't automatically deleted.
+.SECONDARY:
+
 all: _bin/hello.bundle _bin/oil.bundle _release/hello.tar
 
 dirs:
