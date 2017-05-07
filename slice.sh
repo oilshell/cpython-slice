@@ -210,10 +210,12 @@ mod-setup() {
 build() {
   local out=${1:-$PY27/ovm2}
   local module_init=${2:-$PY27/Modules/config.c}
-  shift 2
+  local main_name=${3:-_tmp/hello/main_name.c}
+  shift 3
 
   local abs_out=$PWD/$out
   local abs_module_init=$PWD/$module_init
+  local abs_main_name=$PWD/$main_name
 
   echo $OVM_LIBRARY_OBJS
   pushd $PY27
@@ -249,6 +251,7 @@ build() {
     -o $abs_out \
     $OVM_LIBRARY_OBJS \
     $abs_module_init \
+    $abs_main_name \
     Modules/ovm.c \
     -l dl -l util -l m -l z \
     "$@" \

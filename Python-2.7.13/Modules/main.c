@@ -31,12 +31,6 @@
     "Type \"help\", \"copyright\", \"credits\" or \"license\" " \
     "for more information."
 
-#ifdef OIL_MAIN
-#define MAIN_NAME "hello"
-#else
-#define MAIN_NAME "__main__"
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -208,6 +202,14 @@ static int RunModule(char *module, int set_argv0)
     Py_DECREF(result);
     return 0;
 }
+
+
+#ifdef OIL_MAIN
+extern char* MAIN_NAME;
+#else
+char* MAIN_NAME = "__main__";
+#endif
+
 
 static int RunMainFromImporter(char *filename)
 {

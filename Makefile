@@ -44,6 +44,9 @@ dirs:
 # Hello App
 #
 
+_tmp/hello/main_name.c:
+	echo 'char* MAIN_NAME = "hello";' > $@
+
 # This is based on importing it
 _tmp/hello/c-modules.txt: $(HELLO_SRCS)
 	echo TODO
@@ -80,7 +83,7 @@ _tmp/oil/c-modules.txt: $(HELLO_SRCS)
 
 # BUG: If it fails, it succeeds the next time with a partial file!
 _tmp/oil/py-modules.txt:
-	./actions.sh oil-deps > $@
+	./actions.sh oil-deps _tmp/oil
 
 _tmp/oil/bytecode.zip: $(HELLO_SRCS) \
                          _tmp/oil/py-modules.txt \
@@ -99,16 +102,17 @@ _tmp/oil/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup
 
 # Release build.
 # This depends on the static modules
-_tmp/%/ovm: _tmp/%/module_init.c
-	./slice.sh build $@ _tmp/$*/module_init.c -O3
+_tmp/%/ovm: _tmp/%/module_init.c _tmp/%/main_name.c
+	./slice.sh build $@ _tmp/$*/module_init.c _tmp/$*/main_name.c -O3
 
 # Fast build, with symbols for debugging.
-_tmp/%/ovm-dbg: _tmp/%/module_init.c
-	./slice.sh build $@ _tmp/$*/module_init.c
+_tmp/%/ovm-dbg: _tmp/%/module_init.c _tmp/%/main_name.c
+	./slice.sh build $@ _tmp/$*/module_init.c _tmp/$*/main_name.c
 
 # Coverage, for paring down the files that we build.
-_tmp/%/ovm-cov: _tmp/%/module_init.c
-	./slice.sh build $@ _tmp/$*/module_init.c  # TODO: cov flags
+_tmp/%/ovm-cov: _tmp/%/module_init.c _tmp/%/main_name.c
+	# TODO: cov flags
+	./slice.sh build $@ _tmp/$*/module_init.c _tmp/$*/main_name.c
 
 # Pattern rule to make bundles.
 # NOTE: Using ovm-dbg for now.
