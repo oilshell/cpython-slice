@@ -48,6 +48,9 @@ PY_SRCS := $(shell find $(PY27) -name '*.[ch]')
 # Hello App
 #
 
+# C module dependencies
+-include _tmp/hello/ovm.d
+
 _tmp/hello/main_name.c:
 	echo 'char* MAIN_NAME = "hello";' > $@
 
@@ -70,6 +73,9 @@ _tmp/hello/bytecode.zip: $(HELLO_SRCS) \
 # Oil
 #
 
+# C module dependencies
+-include _tmp/oil/ovm.d
+
 _tmp/oil/main_name.c:
 	echo 'char* MAIN_NAME = "bin.oil";' > $@
 
@@ -85,6 +91,10 @@ _tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
 #
 # Generic
 #
+
+# Regenerate dependencies
+_tmp/%/ovm.d: _tmp/%/discovered-c.txt
+	./actions.sh make-deps $^ > $@
 
 _tmp/%/all-c-modules.txt: static-c-modules.txt _tmp/%/discovered-c.txt
 	./actions.sh join-modules $^ > $@

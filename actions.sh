@@ -47,6 +47,17 @@ hello-deps() {
   PYTHONPATH=testdata _py-deps hello "$@"
 }
 
+make-deps() {
+  local discovered=${1:-_tmp/hello/discovered-c.txt}
+
+  # TODO: For each module, look it up in the manifest.
+  # I guess make a Python file.
+
+  echo "# TODO $discovered"
+  #cat $discovered
+  echo "# --"
+}
+
 #
 # C Code generation.  The three functions below are adapted from
 # Modules/makesetup.
