@@ -16,8 +16,8 @@ module-manifest() {
   ../module_manifest.py
 }
 
-# This has Python paths, but no C paths!
-default-modules() {
+# Modules needed to 'import runpy'.
+runpy-modules() {
   $PY27/python -S ./default_modules.py "$@"
 }
 

@@ -18,8 +18,8 @@ import runpy  # 34 modules
 def main(argv):
   path_prefix = argv[1]
 
-  py_out_path = path_prefix + '/py.default-modules.txt'
-  c_out_path = path_prefix + '/c.default-modules.txt'
+  py_out_path = path_prefix + '/runpy-py.txt'
+  c_out_path = path_prefix + '/runpy-c.txt'
 
   runpy_path = runpy.__file__
   i = runpy_path.rfind('/')

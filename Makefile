@@ -28,8 +28,8 @@ _tmp/c-module-manifest.txt: module_manifest.py
 # TODO:
 # - add the list in Modules/Setup.dist (pwd, _sre)
 # 
-_tmp/%.default-modules.txt: default_modules.py
-	./actions.sh default-modules _tmp
+_tmp/runpy-%.txt: default_modules.py
+	./actions.sh runpy-modules _tmp
 
 # pyconfig.in.h: freeze it
 
@@ -63,8 +63,8 @@ _tmp/hello/discovered-%.txt: $(HELLO_SRCS) py_deps.py
 # - Also __main__ needs to be handled, not in run.sh?
 _tmp/hello/bytecode.zip: $(HELLO_SRCS) \
                          _tmp/hello/discovered-py.txt \
-                         _tmp/py.default-modules.txt
-	./make_zip.py $@ _tmp/hello/discovered-py.txt _tmp/py.default-modules.txt
+                         _tmp/runpy-py.txt
+	./make_zip.py $@ _tmp/hello/discovered-py.txt _tmp/runpy-py.txt
 
 #
 # Oil
@@ -78,8 +78,8 @@ _tmp/oil/discovered-%.txt: py_deps.py
 	./actions.sh oil-deps _tmp/oil
 
 _tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
-                       _tmp/py.default-modules.txt
-	./make_zip.py $@ _tmp/oil/discovered-py.txt _tmp/py.default-modules.txt
+                       _tmp/runpy-py.txt
+	./make_zip.py $@ _tmp/oil/discovered-py.txt _tmp/runpy-py.txt
 
 #
 # Generic
@@ -128,7 +128,7 @@ _release/hello.tar: _tmp/hello/bytecode.zip
 
 clean:
 	rm -r -f _bin _tmp/hello _tmp/oil
-	rm -f _tmp/*.default-modules.txt _tmp/c-module-manifest.txt
+	rm -f _tmp/*.runpy-modules.txt _tmp/c-module-manifest.txt
 	./actions.sh clean-pyc
 
 # For debugging
