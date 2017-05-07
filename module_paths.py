@@ -22,8 +22,25 @@ def main(argv):
     for line in f:
       line = line.strip()
       mod_name, _ = line.split(None, 2)
-      # KeyError
-      print manifest[mod_name]
+
+      if mod_name == 'core.libc':
+        # Hard-coded special case for now
+        print '/home/andy/git/oil/core/libc.c'
+      elif mod_name == 'math':
+        print 'Modules/mathmodule.c'
+        print 'Modules/_math.c'
+      elif mod_name == '_io':
+        # This data is in setup.py and Modules/Setup.dist.
+        #_io -I$(srcdir)/Modules/_io _io/bufferedio.c _io/bytesio.c _io/fileio.c _io/iobase.c _io/_iomodule.c _io/stringio.c _io/textio.c
+        print 'Modules/_io/bufferedio.c'
+        print 'Modules/_io/bytesio.c'
+        print 'Modules/_io/fileio.c'
+        print 'Modules/_io/iobase.c'
+        print 'Modules/_io/_iomodule.c'
+        print 'Modules/_io/stringio.c'
+        print 'Modules/_io/textio.c'
+      else:
+        print manifest[mod_name]
 
 
 if __name__ == '__main__':

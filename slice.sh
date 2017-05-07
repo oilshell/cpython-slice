@@ -244,10 +244,16 @@ build() {
     $(cat $abs_module_paths) \
     $c_module_paths \
     Modules/ovm.c \
-    -l dl -l util -l m -l z \
+    -l dl -l util -l m \
+    -l z \
+    -l readline -l termcap \
+    -l crypto \
     "$@" \
     || true
   popd
+  # zlibmodule
+  # readline module
+  # hashlib: crypto
 }
 
 # build the optimized one.  Makefile uses -O3.
