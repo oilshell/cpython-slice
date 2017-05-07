@@ -48,10 +48,6 @@ _tmp/hello/main_name.c:
 	echo 'char* MAIN_NAME = "hello";' > $@
 
 # This is based on importing it
-_tmp/hello/c-modules.txt: $(HELLO_SRCS)
-	echo TODO
-
-# This is based on importing it
 _tmp/hello/%-modules.txt: $(HELLO_SRCS)
 	./actions.sh hello-deps _tmp/hello
 
@@ -76,13 +72,13 @@ _tmp/hello/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup
 #
 # Oil
 #
+#
+#
+_tmp/oil/main_name.c:
+	echo 'char* MAIN_NAME = "bin.oil";' > $@
 
 # This is based on importing it
-_tmp/oil/c-modules.txt: $(HELLO_SRCS)
-	echo TODO
-
-# BUG: If it fails, it succeeds the next time with a partial file!
-_tmp/oil/py-modules.txt:
+_tmp/oil/%-modules.txt:
 	./actions.sh oil-deps _tmp/oil
 
 _tmp/oil/bytecode.zip: $(HELLO_SRCS) \
