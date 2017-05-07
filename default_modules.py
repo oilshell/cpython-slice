@@ -64,7 +64,7 @@ def main(argv):
         print >>py_out, pyc_path[:-1], rel_path[:-1]
 
       else:
-        print >>c_out, name
+        print >>c_out, name, full_path
       #filename = getattr(mod, '__file__', None)
   print >>sys.stderr, '-- Wrote %s and %s' % (py_out_path, c_out_path)
 

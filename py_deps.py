@@ -50,7 +50,7 @@ def ImportMain(main_module, old_modules):
 
     module = new_modules[name]
 
-    filename = getattr(module, '__file__', None)
+    full_path = getattr(module, '__file__', None)
 
     # For some reason, there are entries like:
     # 'pan.core.os': None in sys.modules.  Here's a hack to get rid of them.
@@ -58,32 +58,32 @@ def ImportMain(main_module, old_modules):
       continue
     # Not sure why, but some stdlib modules don't have a __file__ attribute,
     # e.g. "gc", "marshal", "thread".  Doesn't matter for our purposes.
-    if filename is None:
+    if full_path is None:
       continue
-    yield name, filename
+    yield name, full_path
 
 
 def PrintManifest(modules, py_out, c_out):
   """Yields (type, absolute input path, archive path) pairs."""
-  for module, filename in modules:
-    #print 'OLD', module, filename
+  for module, full_path in modules:
+    #print 'OLD', module, full_path
     num_parts = module.count('.') + 1
-    i = len(filename)
+    i = len(full_path)
     # Do it once more in this case
-    if filename.endswith('/__init__.pyc'):
-      i = filename.rfind('/', 0, i)
+    if full_path.endswith('/__init__.pyc'):
+      i = full_path.rfind('/', 0, i)
     for _ in xrange(num_parts):
-      i = filename.rfind('/', 0, i)
-    #print i, filename[i+1:]
-    rel_path = filename[i+1:]
+      i = full_path.rfind('/', 0, i)
+    #print i, full_path[i+1:]
+    rel_path = full_path[i+1:]
 
-    if filename.endswith('.pyc'):
+    if full_path.endswith('.pyc'):
       # .pyc file
-      print >>py_out, filename, rel_path
-      print >>py_out, filename[:-1], rel_path[:-1]
+      print >>py_out, full_path, rel_path
+      print >>py_out, full_path[:-1], rel_path[:-1]
     else:
       # .so file
-      print >>c_out, module
+      print >>c_out, module, full_path
 
 
 # TODO: Get rid of this?
