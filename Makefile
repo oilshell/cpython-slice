@@ -96,8 +96,11 @@ _tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
 _tmp/%/ovm.d: _tmp/%/discovered-c.txt
 	./actions.sh make-dotd $* $^ > $@
 
-_tmp/%/module-paths.txt: _tmp/c-module-manifest.txt _tmp/%/discovered-c.txt 
-	./actions.sh module-paths $^ > $@
+_tmp/%/module-paths.txt: \
+	module_paths.py _tmp/c-module-manifest.txt _tmp/%/discovered-c.txt 
+	# A trick: remove the first dep to form the lists.  You can't just use $^
+	# because './module_paths.py' is rewritten to 'module_paths.py'.
+	./module_paths.py $(filter-out $<,$^) > $@
 
 _tmp/%/all-c-modules.txt: static-c-modules.txt _tmp/%/discovered-c.txt
 	./actions.sh join-modules $^ > $@
