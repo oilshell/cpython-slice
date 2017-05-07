@@ -93,8 +93,7 @@ OBJECT_OBJS='
     Objects/unicodectype.c
 '
 
-# NOTE: config.c is generated?  I think that is fine.  ./configure
-# --without-threads and then build the slice.
+# Non-standard lib stuff.
 MODULE_OBJS='
 		Modules/getpath.c
 		Modules/main.c
@@ -102,6 +101,8 @@ MODULE_OBJS='
 '
 
 # The stuff in Modules/Setup.dist, plus zlibmodule.c and signalmodule.c.
+# NOTE: In Pyhon, signalmodule.c is specified in Modules/Setup.config, which
+# comes from 'configure' output.
 MODOBJS='
 Modules/posixmodule.c
 Modules/errnomodule.c  
@@ -113,17 +114,6 @@ Modules/zipimport.c
 Modules/zlibmodule.c
 Modules/signalmodule.c
 '
-
-# For 'import zipfile', not complete.
-ZIPFILE_OBJS='
-Modules/_struct.c
-Modules/arraymodule.c
-Modules/timemodule.c
-
-Modules/_collectionsmodule.c
-Modules/operator.c
-'
-
 
 OVM_LIBRARY_OBJS="
 		Modules/getbuildinfo.c
@@ -213,7 +203,10 @@ build() {
   local abs_module_init=$PWD/$module_init
   local abs_main_name=$PWD/$main_name
 
-  echo $OVM_LIBRARY_OBJS
+  # $(cat $PWD/stdlib_modules.txt)
+  local c_module_paths=''
+
+  #echo $OVM_LIBRARY_OBJS
   pushd $PY27
   # Slower when done serially.
 
@@ -231,10 +224,8 @@ build() {
   CFLAGS=
   #CFLAGS=-m32
 
-  local opt=${1:-'-O0'}
-
   time $CC \
-    $opt -g \
+    -g \
     $CFLAGS \
     -D OIL_MAIN \
 		-D PYTHONPATH="$pythonpath" \
@@ -248,6 +239,7 @@ build() {
     $OVM_LIBRARY_OBJS \
     $abs_module_init \
     $abs_main_name \
+    $c_module_paths \
     Modules/ovm.c \
     -l dl -l util -l m -l z \
     "$@" \
@@ -263,6 +255,11 @@ build() {
 # -O3 is 1.40 MB.
 
 # GCC -O2 is 1.35 MB.  21 seconds to compile.
+
+build-dbg() {
+  local out=$1
+  build $out '' -O0
+}
 
 build-opt() {
   local out=$1

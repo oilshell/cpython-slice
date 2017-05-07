@@ -50,6 +50,47 @@ hello-deps() {
   PYTHONPATH=testdata _py-deps hello "$@"
 }
 
+# The three functinos below are adapted from Modules/makesetup.
+extdecls() {
+	for mod in "$@"; do
+		echo "extern void init$mod(void);"
+  done
+}
+		
+initbits() {
+	for mod in "$@"; do
+    echo "    {\"$mod\", init$mod},"
+	done
+}
+
+# Ported from sed to awk.  Awk is MUCH nicer (no $NL ugliness, -v flag, etc.)
+gen-module-init() {
+  local out=${1:-_tmp/module_init.c}
+  shift
+
+  local extdecls=$(extdecls "$@")
+  local initbits=$(initbits "$@")
+
+  local template=$PY27/Modules/config.c.in 
+
+	awk -v template=$template -v extdecls="$extdecls" -v initbits="$initbits" '
+		BEGIN {
+      print "/* Generated automatically from $template by makesetup. */"
+    }
+		/MARKER 1/ {
+      print extdecls
+      next
+    }
+		/MARKER 2/ {
+      print initbits
+      next
+    }
+    {
+      print $0
+    }
+		' $template >$out
+}
+
 # To test building stdlib.
 clean-pyc() {
   find $PY27/Lib -name '*.pyc' | xargs --no-run-if-empty -- rm --verbose
