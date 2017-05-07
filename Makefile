@@ -28,16 +28,17 @@ _tmp/%.default-modules.txt: default_modules.py
 # TODO: Could use $(shell find here.)
 
 HELLO_SRCS := testdata/hello.py testdata/lib.py 
-# Substitute?
-HELLO_PYC := TODO
 
 PY_SRCS := $(shell find $(PY27) -name '*.[ch]')
 
-prepare-hello:
-	mkdir -p _bin _release _tmp/hello/Lib _tmp/hello/app
+dirs:
+	mkdir -p _bin _release _tmp/hello _tmp/oil
 
-.PHONY: prepare-hello
+.PHONY: dirs
 
+#
+# Hello App
+#
 
 # This is based on importing it
 _tmp/hello/c-modules.txt: $(HELLO_SRCS)
@@ -61,9 +62,36 @@ _tmp/hello/bytecode.zip: $(HELLO_SRCS) \
 
 #.PHONY: _tmp/app/runpy.pyc
 
-# This is now per-app
+# This is now per-app TODO: Use c-modules.
 _tmp/hello/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup
 	./slice.sh mod-setup $@
+
+#
+# Oil
+#
+
+# This is based on importing it
+_tmp/oil/c-modules.txt: $(HELLO_SRCS)
+	echo TODO
+
+# BUG: If it fails, it succeeds the next time with a partial file!
+_tmp/oil/py-modules.txt:
+	./actions.sh oil-deps > $@
+
+_tmp/oil/bytecode.zip: $(HELLO_SRCS) \
+                         _tmp/oil/py-modules.txt \
+                         _tmp/py.default-modules.txt
+	./make_zip.py $@ _tmp/oil/py-modules.txt _tmp/py.default-modules.txt
+
+#.PHONY: _tmp/app/runpy.pyc
+
+# This is now per-app TODO: Use c-modules.
+_tmp/oil/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup
+	./slice.sh mod-setup $@
+
+#
+# Generic
+#
 
 # Release build.
 # This depends on the static modules
