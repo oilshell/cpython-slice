@@ -105,6 +105,10 @@ join-modules() {
     | sort | uniq
 }
 
+#
+# Misc
+#
+
 # To test building stdlib.
 clean-pyc() {
   find $PY27/Lib -name '*.pyc' | xargs --no-run-if-empty -- rm --verbose
