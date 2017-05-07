@@ -12,9 +12,8 @@ set -o errexit
 source common.sh
 
 module-manifest() {
-  pushd $PY27
+  cd $PY27
   ../module_manifest.py
-  popd
 }
 
 # This has Python paths, but no C paths!
@@ -50,7 +49,11 @@ hello-deps() {
   PYTHONPATH=testdata _py-deps hello "$@"
 }
 
-# The three functinos below are adapted from Modules/makesetup.
+#
+# C Code generation.  The three functions below are adapted from
+# Modules/makesetup.
+#
+
 extdecls() {
 	for mod in "$@"; do
 		echo "extern void init$mod(void);"
@@ -90,6 +93,24 @@ gen-module-init() {
     }
 		' $template >$out
 }
+
+#
+# C Modules
+#
+
+join-modules() {
+  local static=${1:-static-c-modules.txt}
+  local discovered=${2:-_tmp/oil/c-modules.txt}
+  local out=${3:-_tmp/oil/all-c-modules.txt}
+
+  awk '
+  /^[a-zA-Z_]+/ {
+    print $1
+  }
+  ' $static $discovered | sort | uniq > $out
+}
+
+
 
 # To test building stdlib.
 clean-pyc() {

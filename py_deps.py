@@ -2,16 +2,14 @@
 """
 py_deps.py
 
-Simple way of finding the transitive closure of Python imports.  The main module
-is imported and sys.modules is inspected before and after.  This way we use the
-exact logic that the Python interpreter does.
+Dynamically discover Python and C modules.  We import the main module 
+and inspect sys.modules before and after.  That is, we use the exact logic that
+the Python interpreter does.
 
 Usage:
-  PYTHONPATH=... py_imports.py <main module 1> <main module 2>
+  PYTHONPATH=... py_deps.py <main module>
 
-IMPORTANT: This script is run with -S so that system libraries aren't found.
-Instead, we prefer to set PYTHONPATH to point at uncompressed source tarballs
-for each library.
+IMPORTANT: Run this script with -S so that system libraries aren't found.
 """
 
 import sys
@@ -103,8 +101,8 @@ def main(argv):
   out_dir = argv[1]
   log('Before importing: %d modules', len(OLD_MODULES))
 
-  py_out_path = out_dir + '/py-modules.txt'
-  c_out_path = out_dir + '/c-modules.txt'
+  py_out_path = out_dir + '/discovered-py.txt'
+  c_out_path = out_dir + '/discovered-c.txt'
 
   modules = ImportMain(main_module, OLD_MODULES)
 

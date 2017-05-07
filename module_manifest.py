@@ -18,9 +18,9 @@ def main(argv):
   # module name -> list of paths to include
   module_paths = {}
 
-  for py_path in glob.glob('Lib/*.py'):
-    m = PY_RE.match(py_path)
-    print m.group(1), py_path
+  #for py_path in glob.glob('Lib/*.py'):
+  #  m = PY_RE.match(py_path)
+  #  print m.group(1), py_path
 
   for c_path in glob.glob('Modules/*.c'):
     m = PURE_C_RE.match(c_path)

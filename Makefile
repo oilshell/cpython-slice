@@ -51,7 +51,7 @@ _tmp/hello/main_name.c:
 	echo 'char* MAIN_NAME = "hello";' > $@
 
 # Dependencies calculated by importing main.
-_tmp/hello/%-modules.txt: $(HELLO_SRCS) py_deps.py
+_tmp/hello/discovered-%.txt: $(HELLO_SRCS) py_deps.py
 	./actions.sh hello-deps _tmp/hello
 
 # NOTE: We could use src/dest paths pattern instead of _tmp/app?
@@ -62,30 +62,29 @@ _tmp/hello/%-modules.txt: $(HELLO_SRCS) py_deps.py
 #   %.pyc : %py
 # - Also __main__ needs to be handled, not in run.sh?
 _tmp/hello/bytecode.zip: $(HELLO_SRCS) \
-                         _tmp/hello/py-modules.txt \
+                         _tmp/hello/discovered-py.txt \
                          _tmp/py.default-modules.txt
-	./make_zip.py $@ _tmp/hello/py-modules.txt _tmp/py.default-modules.txt
+	./make_zip.py $@ _tmp/hello/discovered-py.txt _tmp/py.default-modules.txt
 
 # Per-app extension module initialization.
 _tmp/hello/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup
+	./actions gen-module-init $@
 	./slice.sh mod-setup $@
 
 #
 # Oil
 #
-#
-#
+
 _tmp/oil/main_name.c:
 	echo 'char* MAIN_NAME = "bin.oil";' > $@
 
 # Dependencies calculated by importing main.
-_tmp/oil/%-modules.txt: py_deps.py
+_tmp/oil/discovered-%.txt: py_deps.py
 	./actions.sh oil-deps _tmp/oil
 
-_tmp/oil/bytecode.zip: $(HELLO_SRCS) \
-                         _tmp/oil/py-modules.txt \
-                         _tmp/py.default-modules.txt
-	./make_zip.py $@ _tmp/oil/py-modules.txt _tmp/py.default-modules.txt
+_tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
+                       _tmp/py.default-modules.txt
+	./make_zip.py $@ _tmp/oil/discovered-py.txt _tmp/py.default-modules.txt
 
 # Per-app extension module initialization.
 _tmp/oil/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup
@@ -94,6 +93,9 @@ _tmp/oil/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup
 #
 # Generic
 #
+
+_tmp/%/all-c-modules.txt: static-c-modules.txt _tmp/%/discovered-c.txt
+	./actions.sh join-modules $^ $@
 
 # Release build.
 # This depends on the static modules
