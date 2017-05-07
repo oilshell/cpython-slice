@@ -5,17 +5,25 @@
 
 all: _bin/hello.bundle _bin/oil.bundle _release/hello.tar
 
+dirs:
+	mkdir -p _bin _release _tmp/hello _tmp/oil
+
+.PHONY: dirs
+
 PY27 = Python-2.7.13
 
 # What files correspond to each C module.
-# TODO: How to express dependency on the file system or on a directory?
-#       This might not belong here at all?
-_tmp/c-module-manifest.txt:
-	./actions.sh  module-manifest > $@
+# TODO:
+# - How to express dependency on the file system or on a directory?
+#   This might not belong here at all?
+# - Where to put -l z?
 
-# C modules that should be statically linked in any binary.  This comes from
-# importing runpy.  NOTE: This is done with a pattern rule because of the
-# "multiple outputs" problem in Make.
+_tmp/c-module-manifest.txt:
+	./actions.sh module-manifest > $@
+
+# Python and C dependencies of runpy.
+# NOTE: This is done with a pattern rule because of the "multiple outputs"
+# problem in Make.
 #
 # TODO:
 # - add the list in Modules/Setup.dist (pwd, _sre)
@@ -35,11 +43,6 @@ HELLO_SRCS := testdata/hello.py testdata/lib.py
 
 PY_SRCS := $(shell find $(PY27) -name '*.[ch]')
 
-dirs:
-	mkdir -p _bin _release _tmp/hello _tmp/oil
-
-.PHONY: dirs
-
 #
 # Hello App
 #
@@ -47,7 +50,7 @@ dirs:
 _tmp/hello/main_name.c:
 	echo 'char* MAIN_NAME = "hello";' > $@
 
-# This is based on importing it
+# Dependencies calculated by importing main.
 _tmp/hello/%-modules.txt: $(HELLO_SRCS)
 	./actions.sh hello-deps _tmp/hello
 
@@ -63,9 +66,7 @@ _tmp/hello/bytecode.zip: $(HELLO_SRCS) \
                          _tmp/py.default-modules.txt
 	./make_zip.py $@ _tmp/hello/py-modules.txt _tmp/py.default-modules.txt
 
-#.PHONY: _tmp/app/runpy.pyc
-
-# This is now per-app TODO: Use c-modules.
+# Per-app extension module initialization.
 _tmp/hello/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup
 	./slice.sh mod-setup $@
 
@@ -77,7 +78,7 @@ _tmp/hello/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup
 _tmp/oil/main_name.c:
 	echo 'char* MAIN_NAME = "bin.oil";' > $@
 
-# This is based on importing it
+# Dependencies calculated by importing main.
 _tmp/oil/%-modules.txt:
 	./actions.sh oil-deps _tmp/oil
 
@@ -86,9 +87,7 @@ _tmp/oil/bytecode.zip: $(HELLO_SRCS) \
                          _tmp/py.default-modules.txt
 	./make_zip.py $@ _tmp/oil/py-modules.txt _tmp/py.default-modules.txt
 
-#.PHONY: _tmp/app/runpy.pyc
-
-# This is now per-app TODO: Use c-modules.
+# Per-app extension module initialization.
 _tmp/oil/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup
 	./slice.sh mod-setup $@
 
