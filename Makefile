@@ -66,11 +66,6 @@ _tmp/hello/bytecode.zip: $(HELLO_SRCS) \
                          _tmp/py.default-modules.txt
 	./make_zip.py $@ _tmp/hello/discovered-py.txt _tmp/py.default-modules.txt
 
-# Per-app extension module initialization.
-_tmp/hello/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup
-	./actions gen-module-init $@
-	./slice.sh mod-setup $@
-
 #
 # Oil
 #
@@ -86,16 +81,16 @@ _tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
                        _tmp/py.default-modules.txt
 	./make_zip.py $@ _tmp/oil/discovered-py.txt _tmp/py.default-modules.txt
 
-# Per-app extension module initialization.
-_tmp/oil/module_init.c: $(PY27)/Modules/config.c.in ModulesSetup
-	./slice.sh mod-setup $@
-
 #
 # Generic
 #
 
 _tmp/%/all-c-modules.txt: static-c-modules.txt _tmp/%/discovered-c.txt
 	./actions.sh join-modules $^ $@
+
+# Per-app extension module initialization.
+_tmp/%/module_init.c: $(PY27)/Modules/config.c.in _tmp/%/all-c-modules.txt
+	cat _tmp/$*/all-c-modules.txt | xargs ./actions.sh gen-module-init > $@
 
 # Release build.
 # This depends on the static modules

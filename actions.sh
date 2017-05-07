@@ -68,9 +68,6 @@ initbits() {
 
 # Ported from sed to awk.  Awk is MUCH nicer (no $NL ugliness, -v flag, etc.)
 gen-module-init() {
-  local out=${1:-_tmp/module_init.c}
-  shift
-
   local extdecls=$(extdecls "$@")
   local initbits=$(initbits "$@")
 
@@ -91,7 +88,7 @@ gen-module-init() {
     {
       print $0
     }
-		' $template >$out
+		' $template
 }
 
 #
