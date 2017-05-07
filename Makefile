@@ -18,7 +18,7 @@ PY27 = Python-2.7.13
 #   This might not belong here at all?
 # - Where to put -l z?
 
-_tmp/c-module-manifest.txt:
+_tmp/c-module-manifest.txt: module_manifest.py
 	./actions.sh module-manifest > $@
 
 # Python and C dependencies of runpy.
@@ -51,7 +51,7 @@ _tmp/hello/main_name.c:
 	echo 'char* MAIN_NAME = "hello";' > $@
 
 # Dependencies calculated by importing main.
-_tmp/hello/%-modules.txt: $(HELLO_SRCS)
+_tmp/hello/%-modules.txt: $(HELLO_SRCS) py_deps.py
 	./actions.sh hello-deps _tmp/hello
 
 # NOTE: We could use src/dest paths pattern instead of _tmp/app?
@@ -79,7 +79,7 @@ _tmp/oil/main_name.c:
 	echo 'char* MAIN_NAME = "bin.oil";' > $@
 
 # Dependencies calculated by importing main.
-_tmp/oil/%-modules.txt:
+_tmp/oil/%-modules.txt: py_deps.py
 	./actions.sh oil-deps _tmp/oil
 
 _tmp/oil/bytecode.zip: $(HELLO_SRCS) \

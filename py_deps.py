@@ -17,9 +17,7 @@ for each library.
 import sys
 OLD_MODULES = dict(sys.modules)  # Make a copy
 
-# TODO: Does this import mess it up?  Don't really need it.
-#import os
-#import optparse
+import os  # Do it here so we don't mess up analysis
 
 
 class Error(Exception):
@@ -85,7 +83,7 @@ def PrintManifest(modules, py_out, c_out):
       print >>py_out, filename[:-1], rel_path[:-1]
     else:
       # .so file
-      print >>c_out, filename, filename
+      print >>c_out, module
 
 
 # TODO: Get rid of this?
