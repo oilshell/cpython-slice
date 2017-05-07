@@ -13,6 +13,11 @@ print('sys.path:', sys.path, file=sys.stderr)
 print('sys.argv:', sys.argv, file=sys.stderr)
 print('hello _OVM_IS_BUNDLE', os.getenv('_OVM_IS_BUNDLE'), file=sys.stderr)
 
+# Default
+if not os.getenv('_OVM_DEPS'):
+  import inspect
+  print(inspect)
+
 import lib
 
 #import zipfile 

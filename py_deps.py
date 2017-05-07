@@ -101,6 +101,9 @@ def main(argv):
   #if not argv:
   #  raise Error('No modules specified.')
 
+  # Set an environment variable so dependencies in debug mode can be excluded.
+  os.environ['_OVM_DEPS'] = '1'
+
   main_module = argv[0]
   out_dir = argv[1]
   log('Before importing: %d modules', len(OLD_MODULES))

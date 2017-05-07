@@ -281,6 +281,7 @@ Ovm_Main(int argc, char **argv)
         Py_InitializeEx(0 /*install_sigs*/, argv[0] /*sys_path*/);
         PySys_SetArgv(argc, argv);
         setenv("_OVM_IS_BUNDLE", "1", 1);  // for .zip resources
+        setenv("_OVM_DEPS", "1", 1);  // for debug imports
         sts = RunMainFromImporter(argv[0]);
         fprintf(stderr, "sts: %d\n", sts);
     } else {
@@ -288,6 +289,7 @@ Ovm_Main(int argc, char **argv)
         Py_InitializeEx(0 /*install_sigs*/, filename /*sys_path*/);
         PySys_SetArgv(argc-1, argv+1);
         setenv("_OVM_IS_BUNDLE", "1", 1);  // for .zip resources
+        setenv("_OVM_DEPS", "1", 1);  // for debug imports
         sts = RunMainFromImporter(filename);
 
         fprintf(stderr, "sts after RunMainFromImporter: %d\n", sts);
