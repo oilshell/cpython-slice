@@ -56,7 +56,7 @@ _tmp/hello/main_name.c:
 
 # Dependencies calculated by importing main.
 _tmp/hello/discovered-%.txt: $(HELLO_SRCS) py_deps.py
-	./actions.sh hello-deps _tmp/hello
+	PYTHONPATH=testdata ./actions.sh py-deps hello _tmp/hello
 
 # NOTE: We could use src/dest paths pattern instead of _tmp/app?
 #
@@ -81,7 +81,7 @@ _tmp/oil/main_name.c:
 
 # Dependencies calculated by importing main.
 _tmp/oil/discovered-%.txt: py_deps.py
-	./actions.sh oil-deps _tmp/oil
+	PYTHONPATH=~/git/oil ./actions.sh py-deps bin.oil _tmp/oil
 
 # TODO: Need $(OIL_SRCS) here?
 _tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
@@ -96,7 +96,7 @@ _tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
 _tmp/%/ovm.d: _tmp/%/discovered-c.txt
 	./actions.sh make-dotd $* $^ > $@
 
-_tmp/%/module-paths.txt: _tmp/%/discovered-c.txt _tmp/c-module-manifest.txt
+_tmp/%/module-paths.txt: _tmp/c-module-manifest.txt _tmp/%/discovered-c.txt 
 	./actions.sh module-paths $^ > $@
 
 _tmp/%/all-c-modules.txt: static-c-modules.txt _tmp/%/discovered-c.txt
