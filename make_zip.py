@@ -23,6 +23,7 @@ def main(argv):
           full_path, rel_path = line.split(None, 1)
         except ValueError:
           raise RuntimeError('Invalid line %r' % line)
+
         if rel_path in seen:
           expected = seen[rel_path]
           if expected != full_path:
@@ -30,9 +31,8 @@ def main(argv):
                 full_path)
           continue
 
-        #log('%s -> %s', full_path, rel_path)
+        #print >>sys.stderr, '%s -> %s' % (full_path, rel_path)
         z.write(full_path, rel_path)
-        #input_files.append(filename)
         seen[rel_path] = full_path
 
   # TODO: Make summary

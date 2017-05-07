@@ -75,7 +75,11 @@ def PrintManifest(modules, py_out, c_out):
     #print i, full_path[i+1:]
     rel_path = full_path[i+1:]
 
-    if full_path.endswith('.pyc'):
+    # Depending on whether it's cached, we get '.py' or '.pyc'.
+    if full_path.endswith('.py'):
+      print >>py_out, full_path, rel_path
+      print >>py_out, full_path + 'c', rel_path + 'c'
+    elif full_path.endswith('.pyc'):
       # .pyc file
       print >>py_out, full_path, rel_path
       print >>py_out, full_path[:-1], rel_path[:-1]
