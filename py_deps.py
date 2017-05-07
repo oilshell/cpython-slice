@@ -62,13 +62,14 @@ def ImportMain(main_module, old_modules):
 
 
 def PrintManifest(modules, py_out, c_out):
-  """Yields (type, absolute input path, archive path) pairs."""
+  """Print Python and C modules."""
+
   for module, full_path in modules:
     #print 'OLD', module, full_path
     num_parts = module.count('.') + 1
     i = len(full_path)
     # Do it once more in this case
-    if full_path.endswith('/__init__.pyc'):
+    if full_path.endswith('/__init__.pyc') or full_path.endswith('__init__.py'):
       i = full_path.rfind('/', 0, i)
     for _ in xrange(num_parts):
       i = full_path.rfind('/', 0, i)
