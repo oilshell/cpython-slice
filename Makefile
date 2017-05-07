@@ -11,7 +11,12 @@ all: _bin/hello.bundle _bin/oil.bundle _release/hello.tar
 dirs:
 	mkdir -p _bin _release _tmp/hello _tmp/oil
 
-.PHONY: dirs
+clean:
+	rm -r -f _bin _tmp/hello _tmp/oil
+	rm -f _tmp/runpy-*.txt _tmp/c-module-manifest.txt
+	./actions.sh clean-pyc
+
+.PHONY: dirs clean
 
 PY27 = Python-2.7.13
 
@@ -54,9 +59,10 @@ PY_SRCS := $(shell find $(PY27) -name '*.[ch]')
 _tmp/hello/main_name.c:
 	echo 'char* MAIN_NAME = "hello";' > $@
 
-# Dependencies calculated by importing main.
+# Dependencies calculated by importing main.  The guard is because ovm.d
+# depends on it.  Is that correct?  We'll skip it before 'make dirs'.
 _tmp/hello/discovered-%.txt: $(HELLO_SRCS) py_deps.py
-	PYTHONPATH=testdata ./actions.sh py-deps hello _tmp/hello
+	test -d _tmp/hello && PYTHONPATH=testdata ./actions.sh py-deps hello _tmp/hello
 
 # NOTE: We could use src/dest paths pattern instead of _tmp/app?
 #
@@ -81,7 +87,7 @@ _tmp/oil/main_name.c:
 
 # Dependencies calculated by importing main.
 _tmp/oil/discovered-%.txt: py_deps.py
-	PYTHONPATH=~/git/oil ./actions.sh py-deps bin.oil _tmp/oil
+	test -d _tmp/hello && PYTHONPATH=~/git/oil ./actions.sh py-deps bin.oil _tmp/oil
 
 # TODO: Need $(OIL_SRCS) here?
 _tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
@@ -92,7 +98,7 @@ _tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
 # Generic
 #
 
-# Regenerate dependencies
+# Regenerate dependencies.  But only if we made the app dirs.
 _tmp/%/ovm.d: _tmp/%/discovered-c.txt
 	./actions.sh make-dotd $* $^ > $@
 
@@ -142,11 +148,6 @@ _bin/%.bundle: _tmp/%/ovm-dbg _tmp/%/bytecode.zip
 #     Include/  # Which ones? strace?
 _release/hello.tar: _tmp/hello/bytecode.zip
 	tar --create --directory _tmp/hello bytecode.zip > $@
-
-clean:
-	rm -r -f _bin _tmp/hello _tmp/oil
-	rm -f _tmp/runpy-*.txt _tmp/c-module-manifest.txt
-	./actions.sh clean-pyc
 
 # For debugging
 print-%:
