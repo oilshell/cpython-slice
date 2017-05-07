@@ -463,10 +463,5 @@ count-python() {
   echo
 }
 
-test-make-zip() {
-  local out=_tmp/make-zip-test.zip 
-  ./make_zip.py $out _tmp/py.default-modules.txt
-  unzip -l $out
-}
 
 "$@"

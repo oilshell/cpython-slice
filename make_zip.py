@@ -12,7 +12,12 @@ import zipfile
 def main(argv):
   # Write input files to a .zip
   out_path = argv[1]
-  z = zipfile.ZipFile(out_path, 'w', zipfile.ZIP_DEFLATED)
+
+  #mode = zipfile.ZIP_DEFLATED
+  # Increase size of bytecode, but don't need zlib.  And maybe faster startup.
+  mode = zipfile.ZIP_STORED
+
+  z = zipfile.ZipFile(out_path, 'w', mode)
 
   seen = {}
   for manifest in argv[2:]:
