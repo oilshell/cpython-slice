@@ -71,9 +71,11 @@ _tmp/hello/discovered-%.txt: $(HELLO_SRCS) py_deps.py
 #   py-deps hello will compile the .pyc files.  Don't need a separate action.
 #   %.pyc : %py
 _tmp/hello/bytecode.zip: $(HELLO_SRCS) \
+                         hello-manifest.txt \
                          _tmp/hello/discovered-py.txt \
                          _tmp/runpy-py.txt
-	./make_zip.py $@ _tmp/hello/discovered-py.txt _tmp/runpy-py.txt
+	./make_zip.py $@ \
+	  hello-manifest.txt _tmp/hello/discovered-py.txt _tmp/runpy-py.txt
 
 #
 # Oil
@@ -102,10 +104,10 @@ _tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
 _tmp/%/ovm.d: _tmp/%/discovered-c.txt
 	./actions.sh make-dotd $* $^ > $@
 
+# A trick: remove the first dep to form the lists.  You can't just use $^
+# because './module_paths.py' is rewritten to 'module_paths.py'.
 _tmp/%/module-paths.txt: \
 	module_paths.py _tmp/c-module-manifest.txt _tmp/%/discovered-c.txt 
-	# A trick: remove the first dep to form the lists.  You can't just use $^
-	# because './module_paths.py' is rewritten to 'module_paths.py'.
 	./module_paths.py $(filter-out $<,$^) > $@
 
 _tmp/%/all-c-modules.txt: static-c-modules.txt _tmp/%/discovered-c.txt

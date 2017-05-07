@@ -36,7 +36,7 @@ if os.getenv('_OVM_IS_BUNDLE') == '1':
     # None if we have the module, but no source.
     print('SOURCE', repr(z.get_source('runpy')))
     # TODO: Add a method to get a file?  I think it just imports zlib.
-    r = z.get_data('runpy.pyc')
+    r = z.get_data('hello-data.txt')
     print('FILE', repr(r))
 
 
