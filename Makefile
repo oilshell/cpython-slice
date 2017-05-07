@@ -92,9 +92,11 @@ _tmp/oil/discovered-%.txt: py_deps.py
 	test -d _tmp/hello && PYTHONPATH=~/git/oil ./actions.sh py-deps bin.oil _tmp/oil
 
 # TODO: Need $(OIL_SRCS) here?
-_tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
+_tmp/oil/bytecode.zip: oil-manifest.txt \
+	                     _tmp/oil/discovered-py.txt \
                        _tmp/runpy-py.txt
-	./make_zip.py $@ _tmp/oil/discovered-py.txt _tmp/runpy-py.txt
+	./make_zip.py $@ \
+		oil-manifest.txt _tmp/oil/discovered-py.txt _tmp/runpy-py.txt
 
 #
 # Generic
