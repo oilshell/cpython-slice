@@ -70,27 +70,38 @@ module-paths() {
 #
 
 extdecls() {
-	for mod in "$@"; do
-		echo "extern void init$mod(void);"
+  for mod in "$@"; do
+    if test $mod = 'core.libc'; then
+      mod=libc
+    fi
+    echo "extern void init$mod(void);"
   done
 }
 		
 initbits() {
 	for mod in "$@"; do
-    echo "    {\"$mod\", init$mod},"
-	done
+    local func_suffix
+    if test $mod = 'core.libc'; then
+      func_suffix=libc
+    else
+      func_suffix=$mod
+    fi
+    echo "    {\"$mod\", init$func_suffix},"
+  done
 }
 
 # Ported from sed to awk.  Awk is MUCH nicer (no $NL ugliness, -v flag, etc.)
 gen-module-init() {
-  local extdecls=$(extdecls "$@")
-  local initbits=$(initbits "$@")
+  local extdecls
+  extdecls=$(extdecls "$@")
+  local initbits
+  initbits=$(initbits "$@")
 
   local template=$PY27/Modules/config.c.in 
 
 	awk -v template=$template -v extdecls="$extdecls" -v initbits="$initbits" '
 		BEGIN {
-      print "/* Generated automatically from $template by makesetup. */"
+      print "/* Generated automatically from " template " */"
     }
 		/MARKER 1/ {
       print extdecls
@@ -118,7 +129,7 @@ join-modules() {
   #
   # TODO: I don't want to depend on egrep and GNU flags on the target sytems?
   # Ship this file I guess.
-  egrep --no-filename --only-matching '^[a-zA-Z_]+' $static $discovered \
+  egrep --no-filename --only-matching '^[a-zA-Z_\.]+' $static $discovered \
     | sort | uniq
 }
 
