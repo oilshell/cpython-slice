@@ -47,10 +47,10 @@ hello-deps() {
   PYTHONPATH=testdata _py-deps hello "$@"
 }
 
-make-deps() {
+# Make .d file
+make-dotd() {
   local app_name=${1:-hello}
   local discovered=${2:-_tmp/hello/discovered-c.txt}
-
 
   # TODO: For each module, look it up in the manifest.
   # I guess make a Python file.
@@ -63,6 +63,13 @@ make-deps() {
   echo "_tmp/$app_name/ovm:"
   echo "_tmp/$app_name/ovm-dbg:"
   echo "_tmp/$app_name/ovm-cov:"
+}
+
+# Make a list of filenames from the discovered file
+module-paths() {
+  local discovered=${2:-_tmp/hello/discovered-c.txt}
+
+  echo Modules/binascii.c
 }
 
 #

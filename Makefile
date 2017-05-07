@@ -94,7 +94,10 @@ _tmp/oil/bytecode.zip: _tmp/oil/discovered-py.txt \
 
 # Regenerate dependencies
 _tmp/%/ovm.d: _tmp/%/discovered-c.txt
-	./actions.sh make-deps $* $^ > $@
+	./actions.sh make-dotd $* $^ > $@
+
+_tmp/%/module-paths.txt: _tmp/%/discovered-c.txt _tmp/c-module-manifest.txt
+	./actions.sh module-paths $^ > $@
 
 _tmp/%/all-c-modules.txt: static-c-modules.txt _tmp/%/discovered-c.txt
 	./actions.sh join-modules $^ > $@
@@ -105,17 +108,17 @@ _tmp/%/module_init.c: $(PY27)/Modules/config.c.in _tmp/%/all-c-modules.txt
 
 # Release build.
 # This depends on the static modules
-_tmp/%/ovm: _tmp/%/module_init.c _tmp/%/main_name.c
-	./slice.sh build-opt $@ _tmp/$*/module_init.c _tmp/$*/main_name.c 
+_tmp/%/ovm: _tmp/%/module_init.c _tmp/%/main_name.c _tmp/%/module-paths.txt
+	./slice.sh build-opt $@ $^
 
 # Fast build, with symbols for debugging.
-_tmp/%/ovm-dbg: _tmp/%/module_init.c _tmp/%/main_name.c
-	./slice.sh build-dbg $@ _tmp/$*/module_init.c _tmp/$*/main_name.c
+_tmp/%/ovm-dbg: _tmp/%/module_init.c _tmp/%/main_name.c _tmp/%/module-paths.txt
+	./slice.sh build-dbg $@ $^
 
 # Coverage, for paring down the files that we build.
-_tmp/%/ovm-cov: _tmp/%/module_init.c _tmp/%/main_name.c
+_tmp/%/ovm-cov: _tmp/%/module_init.c _tmp/%/main_name.c _tmp/%/module-paths.c
 	# TODO: cov flags
-	./slice.sh build $@ _tmp/$*/module_init.c _tmp/$*/main_name.c
+	./slice.sh build $@ $^
 
 # Pattern rule to make bundles.
 # NOTE: Using ovm-dbg for now.

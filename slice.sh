@@ -197,11 +197,13 @@ build() {
   local out=${1:-$PY27/ovm2}
   local module_init=${2:-$PY27/Modules/config.c}
   local main_name=${3:-_tmp/hello/main_name.c}
-  shift 3
+  local module_paths=${4:-_tmp/hello/module-paths.txt}
+  shift 4
 
   local abs_out=$PWD/$out
   local abs_module_init=$PWD/$module_init
   local abs_main_name=$PWD/$main_name
+  local abs_module_paths=$PWD/$module_paths
 
   # $(cat $PWD/stdlib_modules.txt)
   local c_module_paths=''
@@ -239,6 +241,7 @@ build() {
     $OVM_LIBRARY_OBJS \
     $abs_module_init \
     $abs_main_name \
+    $(cat $abs_module_paths) \
     $c_module_paths \
     Modules/ovm.c \
     -l dl -l util -l m -l z \
