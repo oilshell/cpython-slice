@@ -47,7 +47,8 @@ _build/hello/main_name.c:
 # Dependencies calculated by importing main.  The guard is because ovm.d
 # depends on it.  Is that correct?  We'll skip it before 'make dirs'.
 _build/hello/discovered-%.txt: $(HELLO_SRCS) build/py_deps.py
-	test -d _build/hello && PYTHONPATH=testdata build/actions.sh py-deps hello _build/hello
+	test -d _build/hello && \
+		PYTHONPATH=build/testdata build/actions.sh py-deps hello _build/hello
 
 # NOTE: We could use src/dest paths pattern instead of _build/app?
 #
