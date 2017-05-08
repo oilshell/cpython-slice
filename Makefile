@@ -24,7 +24,7 @@ PY27 = Python-2.7.13
 # What files correspond to each C module.
 # TODO:
 # - Where to put -l z?  (Done in Modules/Setup.dist)
-_tmp/c-module-manifest.txt: module_manifest.py
+_tmp/c-module-manifest.txt: build/module_manifest.py
 	build/actions.sh module-manifest > $@
 
 # Python and C dependencies of runpy.

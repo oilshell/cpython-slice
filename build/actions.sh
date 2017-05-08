@@ -13,7 +13,7 @@ source build/common.sh
 
 module-manifest() {
   cd $PY27
-  ../module_manifest.py
+  ../build/module_manifest.py
 }
 
 # Modules needed to 'import runpy'.
