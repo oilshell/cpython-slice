@@ -100,12 +100,12 @@ _build/%/module-srcs.txt: \
 	build/module_srcs.py _build/c-module-toc.txt _build/%/app-deps-c.txt 
 	build/module_srcs.py $(filter-out $<,$^) > $@
 
-_build/%/all-c-modules.txt: static-c-modules.txt _build/%/app-deps-c.txt
+_build/%/all-deps-c.txt: static-c-modules.txt _build/%/app-deps-c.txt
 	build/actions.sh join-modules $^ > $@
 
 # Per-app extension module initialization.
-_build/%/module_init.c: $(PY27)/Modules/config.c.in _build/%/all-c-modules.txt
-	cat _build/$*/all-c-modules.txt | xargs build/actions.sh gen-module-init > $@
+_build/%/module_init.c: $(PY27)/Modules/config.c.in _build/%/all-deps-c.txt
+	cat _build/$*/all-deps-c.txt | xargs build/actions.sh gen-module-init > $@
 
 # Release build.
 # This depends on the static modules

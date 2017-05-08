@@ -29,4 +29,8 @@ five() {
   sed -i 's/-deps-deps/-deps/g' Makefile build/*.{py,sh}
 }
 
+six() {
+  sed -i 's/all-c-modules/all-deps-c/g' Makefile build/*.{py,sh}
+}
+
 "$@"
