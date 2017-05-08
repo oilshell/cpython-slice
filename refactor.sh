@@ -38,5 +38,9 @@ seven() {
   sed -i 's/module-srcs/c_module-srcs/g' Makefile build/*.{py,sh}
 }
 
+eight() {
+  sed -i 's/c_module-srcs/c-module-srcs/g' Makefile build/*.{py,sh}
+}
+
 
 "$@"

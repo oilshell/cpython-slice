@@ -149,7 +149,7 @@ build() {
   local out=${1:-$PY27/ovm2}
   local module_init=${2:-$PY27/Modules/config.c}
   local main_name=${3:-_tmp/hello/main_name.c}
-  local c_module_srcs=${4:-_tmp/hello/c_module-srcs.txt}
+  local c_module_srcs=${4:-_tmp/hello/c-module-srcs.txt}
   shift 4
 
   local abs_out=$PWD/$out
@@ -234,7 +234,7 @@ python-sources() {
 }
 
 _headers() {
-  local c_module_srcs=${1:-_tmp/hello/c_module-srcs.txt}
+  local c_module_srcs=${1:-_tmp/hello/c-module-srcs.txt}
   local abs_c_module_srcs=$PWD/$c_module_srcs
 
   # -MM: no system headers
@@ -267,11 +267,11 @@ make-tar() {
   # compile.sh is for the command line
   # actions.sh for concatenation
   #
-  # NOTE: Need intermediate c_module-srcs.txt file so we can use the same
+  # NOTE: Need intermediate c-module-srcs.txt file so we can use the same
   # Makefile?  But if we didn't we might not need it?  It's really part of the
   # command line.
 
-  local c_module_srcs=_build/$app_name/c_module-srcs.txt
+  local c_module_srcs=_build/$app_name/c-module-srcs.txt
 
   tar --create --file $out \
     Makefile \

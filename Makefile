@@ -96,7 +96,7 @@ _build/%/ovm.d: _build/%/app-deps-c.txt
 
 # A trick: remove the first dep to form the lists.  You can't just use $^
 # because './c_module_srcs.py' is rewritten to 'c_module_srcs.py'.
-_build/%/c_module-srcs.txt: \
+_build/%/c-module-srcs.txt: \
 	build/c_module_srcs.py _build/c-module-toc.txt _build/%/app-deps-c.txt 
 	build/c_module_srcs.py $(filter-out $<,$^) > $@
 
@@ -109,16 +109,16 @@ _build/%/module_init.c: $(PY27)/Modules/config.c.in _build/%/all-deps-c.txt
 
 # Release build.
 # This depends on the static modules
-_build/%/ovm: _build/%/module_init.c _build/%/main_name.c _build/%/c_module-srcs.txt
+_build/%/ovm: _build/%/module_init.c _build/%/main_name.c _build/%/c-module-srcs.txt
 	build/compile.sh build-opt $@ $^
 
 # Fast build, with symbols for debugging.
-_build/%/ovm-dbg: _build/%/module_init.c _build/%/main_name.c _build/%/c_module-srcs.txt
+_build/%/ovm-dbg: _build/%/module_init.c _build/%/main_name.c _build/%/c-module-srcs.txt
 	build/compile.sh build-dbg $@ $^
 
 # Coverage, for paring down the files that we build.
 # TODO: Hook this up.
-_build/%/ovm-cov: _build/%/module_init.c _build/%/main_name.c _build/%/c_module-srcs.c
+_build/%/ovm-cov: _build/%/module_init.c _build/%/main_name.c _build/%/c-module-srcs.c
 	# TODO: cov flags
 	build/compile.sh build $@ $^
 
