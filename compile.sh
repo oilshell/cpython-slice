@@ -218,6 +218,34 @@ build-opt() {
   build "$@" -O3 -s
 }
 
+#
+# Source Release (uses same files
+#
+
+python-sources() {
+  echo "$OVM_LIBRARY_OBJS" | xargs -I {} -- echo $PY27/{}
+}
+
+make-tar() {
+  local out=${1:-_tmp/hello.tar}
+
+  # compile.sh is for the command line
+  # actions.sh for concatenation
+
+  tar --create --file $out \
+    Makefile \
+    compile.sh \
+    actions.sh \
+    common.sh \
+    _tmp/hello/bytecode.zip \
+    _tmp/hello/module-paths.txt \
+    _tmp/hello/*.c \
+    $PY27/Modules/ovm.c \
+    $(python-sources)
+
+  ls -l $out
+}
+
 # 123K lines.
 # Excluding MODOBJS, it's 104K lines.
 #

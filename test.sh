@@ -19,4 +19,15 @@ oil-bundle() {
   _bin/osh -c 'echo hi from osh'
 }
 
+tarball() {
+  local tmp=_tmp/tar-test
+  rm -r -f $tmp
+  mkdir -p $tmp
+  cd $tmp
+  tar --extract < ../hello.tar
+  make
+}
+
+
+
 "$@"

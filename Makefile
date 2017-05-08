@@ -146,7 +146,7 @@ _bin/%.bundle: _tmp/%/ovm-dbg _tmp/%/bytecode.zip
 #     - bytecode.zip
 #     - module_init.c, main_name.c
 _release/hello.tar: _tmp/hello/bytecode.zip Makefile
-	tar --create --file $@ Makefile _tmp/hello/bytecode.zip
+	./compile.sh make-tar
 
 # For debugging
 print-%:
