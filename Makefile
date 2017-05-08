@@ -59,7 +59,7 @@ _tmp/hello/bytecode.zip: $(HELLO_SRCS) \
                          hello-manifest.txt \
                          _tmp/hello/discovered-py.txt \
                          _tmp/runpy-py.txt
-	./make_zip.py $@ \
+	build/make_zip.py $@ \
 	  hello-manifest.txt _tmp/hello/discovered-py.txt _tmp/runpy-py.txt
 
 #
@@ -80,7 +80,7 @@ _tmp/oil/discovered-%.txt: py_deps.py
 _tmp/oil/bytecode.zip: oil-manifest.txt \
 	                     _tmp/oil/discovered-py.txt \
                        _tmp/runpy-py.txt
-	./make_zip.py $@ \
+	build/make_zip.py $@ \
 		oil-manifest.txt _tmp/oil/discovered-py.txt _tmp/runpy-py.txt
 
 #
