@@ -138,14 +138,8 @@ _bin/%.bundle: _tmp/%/ovm-dbg _tmp/%/bytecode.zip
 
 # TODO:
 # - compile.sh cpython-manifest.
-# - We probably want intermediate files in here too.
-#   - _tmp/oil/
-#     - ovm.d
-#     - discovered-c
-#     - discovered-py
-#     - bytecode.zip
-#     - module_init.c, main_name.c
-_release/hello.tar: _tmp/hello/bytecode.zip Makefile
+# - We want intermediate files in here too.
+_release/hello.tar: _tmp/hello/bytecode.zip 
 	./compile.sh make-tar
 
 # For debugging

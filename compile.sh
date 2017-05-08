@@ -145,10 +145,8 @@ build() {
   local abs_main_name=$PWD/$main_name
   local abs_module_paths=$PWD/$module_paths
 
-  # $(cat $PWD/stdlib_modules.txt)
-  local c_module_paths=''
-
   #echo $OVM_LIBRARY_OBJS
+
   pushd $PY27
   # Slower when done serially.
 
@@ -177,7 +175,6 @@ build() {
     $abs_module_init \
     $abs_main_name \
     $(cat $abs_module_paths) \
-    $c_module_paths \
     Modules/ovm.c \
     -l dl \
     -l util \
