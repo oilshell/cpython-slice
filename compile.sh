@@ -277,9 +277,9 @@ make-tar() {
     actions.sh \
     common.sh \
     _tmp/$app_name/bytecode.zip \
-    _tmp/$app_name/module-paths.txt \
     _tmp/$app_name/*.c \
     $PY27/Modules/ovm.c \
+    $(cat _tmp/$app_name/module-paths.txt | add-py27) \
     $(python-headers) \
     $(python-sources) \
 
