@@ -133,6 +133,16 @@ readonly VERSION='"2.7"'
 readonly VPATH='""'
 readonly pythonpath='""'
 
+readonly PREPROC_FLAGS=(
+    -D OIL_MAIN \
+		-D PYTHONPATH="$pythonpath" \
+		-D PREFIX="$prefix" \
+		-D EXEC_PREFIX="$exec_prefix" \
+		-D VERSION="$VERSION" \
+		-D VPATH="$VPATH" \
+    -D Py_BUILD_CORE
+)
+
 build() {
   local out=${1:-$PY27/ovm2}
   local module_init=${2:-$PY27/Modules/config.c}
@@ -162,13 +172,7 @@ build() {
   #CC=gcc
 
   time $CC \
-    -D OIL_MAIN \
-		-D PYTHONPATH="$pythonpath" \
-		-D PREFIX="$prefix" \
-		-D EXEC_PREFIX="$exec_prefix" \
-		-D VERSION="$VERSION" \
-		-D VPATH="$VPATH" \
-    -D Py_BUILD_CORE \
+    "${PREPROC_FLAGS[@]}"
     -I . -I Include \
     -o $abs_out \
     $OVM_LIBRARY_OBJS \
@@ -213,6 +217,32 @@ build-dbg() {
 # Generate a stripped binary rather than running strip separately.
 build-opt() {
   build "$@" -O3 -s
+}
+
+_headers() {
+  local module_paths=${1:-_tmp/hello/module-paths.txt}
+  local abs_module_paths=$PWD/$module_paths
+
+  # -MM: no system headers
+  cd $PY27
+  gcc \
+    -I . -I Include \
+    ${PREPROC_FLAGS[@]} \
+    -MM $OVM_LIBRARY_OBJS \
+    Modules/ovm.c \
+    $(cat $abs_module_paths) 
+}
+
+# NOTE: 91 headers in Include, but only 81 referenced here.  So it's worth it.
+# These are probably for the parser.
+#
+# NOTE: We also should get rid of asdl.h and so forth.
+
+list-headers() {
+  # Get rid of Python/../Objects.  These are mentioned elsewhere anyway.
+  _headers | egrep --only-matching '[^ ]+\.h' \
+    | grep -F -v 'Python/..' \
+    | sort | uniq
 }
 
 #
