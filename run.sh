@@ -23,13 +23,13 @@ build-libpython() {
   # {errno,pwd,_sre,_codecs,_weakrefzipimport,symtable,xxsubtype}module
 }
 
-# We're always doing it without threads for now.  Not sure about signal module
-# just yet.  Have to implement "trap"?
+# we're always doing it without threads for now.  not sure about signal module
+# just yet.  have to implement "trap"?
 config() {
-  cd $PY27
+  cd $py27
   time ./configure --without-threads
 
-  cp -v ../ModulesSetup Modules/Setup
+  cp -v ../modulessetup modules/setup
 }
 
 build-default() {
@@ -88,13 +88,6 @@ build-m32() {
   cd $PY27
   make clean
   time make -j 7 CFLAGS=-m32 libpython2.7.a || true
-}
-
-# This one can run an app bundle.  It needs the zlib module.
-build-clang-default() {
-  cd $PY27
-  make clean
-  time make -j 7 CC=$CLANG CFLAGS='-O0'
 }
 
 # hm the Makefile defines CC and CXX as {gcc,g++} -pthread

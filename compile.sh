@@ -7,7 +7,7 @@ set -o nounset
 set -o pipefail
 set -o errexit
 
-source common.sh
+source build/common.sh
 
 readonly OVM_PARSER_OBJS='Parser/myreadline.c'
 

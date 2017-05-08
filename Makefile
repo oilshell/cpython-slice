@@ -6,7 +6,8 @@
 # Intermediate targets aren't automatically deleted.
 .SECONDARY:
 
-all: _bin/hello.bundle _bin/oil.bundle _release/hello.tar _release/oil.tar
+# _release/oil.tar
+all: _bin/hello.bundle _bin/oil.bundle _release/hello.tar
 
 dirs:
 	mkdir -p _bin _release _tmp/hello _tmp/oil
@@ -137,9 +138,10 @@ _bin/%.bundle: _tmp/%/ovm-dbg _tmp/%/bytecode.zip
 #     Include/  # Which ones? strace?
 
 # TODO:
-# - compile.sh cpython-manifest.
-# - We want intermediate files in here too.
-_release/%.tar: _tmp/%/bytecode.zip 
+# - Why does putting module_paths.txt here mess it up?
+_release/%.tar: _tmp/%/bytecode.zip \
+	              _tmp/%/module_init.c \
+								_tmp/%/main_name.c
 	./compile.sh make-tar $* $@
 
 # For debugging

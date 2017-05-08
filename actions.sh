@@ -9,7 +9,7 @@ set -o nounset
 set -o pipefail
 set -o errexit
 
-source common.sh
+source build/common.sh
 
 module-manifest() {
   cd $PY27
