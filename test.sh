@@ -24,7 +24,7 @@ tarball() {
   rm -r -f $tmp
   mkdir -p $tmp
   cd $tmp
-  tar --extract < ../hello.tar
+  tar --extract < ../../_release/hello.tar
   make
 }
 

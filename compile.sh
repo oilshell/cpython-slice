@@ -143,6 +143,8 @@ readonly PREPROC_FLAGS=(
     -D Py_BUILD_CORE
 )
 
+readonly INCLUDE_PATHS=(-I . -I Include)
+
 build() {
   local out=${1:-$PY27/ovm2}
   local module_init=${2:-$PY27/Modules/config.c}
@@ -172,8 +174,8 @@ build() {
   #CC=gcc
 
   time $CC \
-    "${PREPROC_FLAGS[@]}"
-    -I . -I Include \
+    "${INCLUDE_PATHS[@]}" \
+    "${PREPROC_FLAGS[@]}" \
     -o $abs_out \
     $OVM_LIBRARY_OBJS \
     $abs_module_init \
@@ -226,8 +228,8 @@ _headers() {
   # -MM: no system headers
   cd $PY27
   gcc \
-    -I . -I Include \
-    ${PREPROC_FLAGS[@]} \
+    "${INCLUDE_PATHS[@]}" \
+    "${PREPROC_FLAGS[@]}" \
     -MM $OVM_LIBRARY_OBJS \
     Modules/ovm.c \
     $(cat $abs_module_paths) 
@@ -249,12 +251,21 @@ list-headers() {
 # Source Release (uses same files
 #
 
+add-py27() {
+  xargs -I {} -- echo $PY27/{}
+}
+
 python-sources() {
-  echo "$OVM_LIBRARY_OBJS" | xargs -I {} -- echo $PY27/{}
+  echo "$OVM_LIBRARY_OBJS" | add-py27
+}
+
+# NOET: This invokes GCC
+python-headers() {
+  list-headers | add-py27
 }
 
 make-tar() {
-  local out=${1:-_tmp/hello.tar}
+  local out=${1:-_release/hello.tar}
 
   # compile.sh is for the command line
   # actions.sh for concatenation
@@ -268,7 +279,8 @@ make-tar() {
     _tmp/hello/module-paths.txt \
     _tmp/hello/*.c \
     $PY27/Modules/ovm.c \
-    $(python-sources)
+    $(python-headers) \
+    $(python-sources) \
 
   ls -l $out
 }

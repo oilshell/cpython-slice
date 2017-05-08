@@ -140,7 +140,7 @@ _bin/%.bundle: _tmp/%/ovm-dbg _tmp/%/bytecode.zip
 # - compile.sh cpython-manifest.
 # - We want intermediate files in here too.
 _release/hello.tar: _tmp/hello/bytecode.zip 
-	./compile.sh make-tar
+	./compile.sh make-tar $@
 
 # For debugging
 print-%:
