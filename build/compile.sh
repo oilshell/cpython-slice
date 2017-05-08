@@ -270,6 +270,10 @@ make-tar() {
 
   # compile.sh is for the command line
   # actions.sh for concatenation
+  #
+  # NOTE: Need intermediate module-paths.txt file so we can use the same
+  # Makefile?  But if we didn't we might not need it?  It's really part of the
+  # command line.
 
   tar --create --file $out \
     Makefile \
@@ -279,6 +283,7 @@ make-tar() {
     _build/$app_name/bytecode.zip \
     _build/$app_name/*.c \
     $PY27/Modules/ovm.c \
+    _build/$app_name/module-paths.txt \
     $(cat _build/$app_name/module-paths.txt | add-py27) \
     $(python-headers) \
     $(python-sources) \
