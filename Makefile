@@ -6,18 +6,19 @@
 # Intermediate targets aren't automatically deleted.
 .SECONDARY:
 
+# Do this before every build.  There should be a nicer way of handling
+# directories but I don't know it.
+$(shell mkdir -p _bin _release _build/hello _build/oil)
+
 # _release/oil.tar
 all: _bin/hello.bundle _bin/oil.bundle _release/hello.tar
-
-dirs:
-	mkdir -p _bin _release _build/hello _build/oil
 
 clean:
 	rm -r -f _bin _build/hello _build/oil
 	rm -f _build/runpy-*.txt _build/c-module-manifest.txt
 	build/actions.sh clean-pyc
 
-.PHONY: all dirs clean
+.PHONY: all clean
 
 PY27 = Python-2.7.13
 
