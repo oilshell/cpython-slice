@@ -410,7 +410,16 @@ mod-stats() {
 }
 
 diff-orig() {
-  git diff f36f034614583c1487f1431ab3ad02db603e3a10..
+  git diff f36f034614583c1487f1431ab3ad02db603e3a10.. $PY27/Python
+
+  git diff f36f034614583c1487f1431ab3ad02db603e3a10.. $PY27/Modules
+
+  # one diff for __ change
+  git diff f36f034614583c1487f1431ab3ad02db603e3a10.. $PY27/Objects
+}
+
+count-patches() {
+  find $PY27 -name '*.c' | xargs grep OIL_MAIN
 }
 
 "$@"
