@@ -18,6 +18,5 @@ main(int argc, char **argv)
 	fedisableexcept(FE_OVERFLOW);
 #endif
 
-  printf("Oil!\n");
 	return Ovm_Main(argc, argv);
 }

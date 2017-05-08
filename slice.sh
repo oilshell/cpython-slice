@@ -239,16 +239,24 @@ build() {
     $(cat $abs_module_paths) \
     $c_module_paths \
     Modules/ovm.c \
-    -l dl -l util -l m \
+    -l dl \
+    -l util \
+    -l m \
     -l z \
     -l readline -l termcap \
-    -l crypto \
     "$@" \
     || true
   popd
+
+  # NOTE: 
   # zlibmodule
   # readline module
-  # hashlib: crypto
+  # hashlib: -l crypto -- if you use hashlib; we're not using it now
+
+  # Notes on removing:
+  # -l dl -- only used for dynload_shlib.c.  Keeping it because we might want
+  # extension modules in the future, and bash links against it.
+  # -l util -- only for posix_forkpty in posixmodule.c.  Don't need it.
 }
 
 # build the optimized one.  Makefile uses -O3.
