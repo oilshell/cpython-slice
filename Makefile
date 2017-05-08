@@ -122,20 +122,20 @@ _tmp/%/module_init.c: $(PY27)/Modules/config.c.in _tmp/%/all-c-modules.txt
 # Release build.
 # This depends on the static modules
 _tmp/%/ovm: _tmp/%/module_init.c _tmp/%/main_name.c _tmp/%/module-paths.txt
-	./slice.sh build-opt $@ $^
+	./compile.sh build-opt $@ $^
 
 # Fast build, with symbols for debugging.
 _tmp/%/ovm-dbg: _tmp/%/module_init.c _tmp/%/main_name.c _tmp/%/module-paths.txt
-	./slice.sh build-dbg $@ $^
+	./compile.sh build-dbg $@ $^
 
 # Coverage, for paring down the files that we build.
 _tmp/%/ovm-cov: _tmp/%/module_init.c _tmp/%/main_name.c _tmp/%/module-paths.c
 	# TODO: cov flags
-	./slice.sh build $@ $^
+	./compile.sh build $@ $^
 
 # Pattern rule to make bundles.
 # NOTE: Using ovm-dbg for now.
-_bin/%.bundle: _tmp/%/ovm _tmp/%/bytecode.zip
+_bin/%.bundle: _tmp/%/ovm-dbg _tmp/%/bytecode.zip
 	cat $^ > $@
 	chmod +x $@
 
