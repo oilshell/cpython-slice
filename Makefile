@@ -16,7 +16,7 @@ clean:
 	rm -f _tmp/runpy-*.txt _tmp/c-module-manifest.txt
 	./actions.sh clean-pyc
 
-.PHONY: dirs clean
+.PHONY: all dirs clean
 
 PY27 = Python-2.7.13
 

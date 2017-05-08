@@ -1,0 +1,14 @@
+# Dummy release Makefile.
+
+# ./configure && ./build && ./install is preferred.
+
+.PHONY: build install
+
+default: build
+
+build:
+	./build
+
+install:
+	./install
+
