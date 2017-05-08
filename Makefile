@@ -94,8 +94,8 @@ _tmp/%/ovm.d: _tmp/%/discovered-c.txt
 # A trick: remove the first dep to form the lists.  You can't just use $^
 # because './module_paths.py' is rewritten to 'module_paths.py'.
 _tmp/%/module-paths.txt: \
-	module_paths.py _tmp/c-module-manifest.txt _tmp/%/discovered-c.txt 
-	./module_paths.py $(filter-out $<,$^) > $@
+	build/module_paths.py _tmp/c-module-manifest.txt _tmp/%/discovered-c.txt 
+	build/module_paths.py $(filter-out $<,$^) > $@
 
 _tmp/%/all-c-modules.txt: static-c-modules.txt _tmp/%/discovered-c.txt
 	build/actions.sh join-modules $^ > $@
