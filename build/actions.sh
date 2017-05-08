@@ -11,9 +11,9 @@ set -o errexit
 
 source build/common.sh
 
-module-manifest() {
+c-module-toc() {
   cd $PY27
-  ../build/module_manifest.py
+  ../build/c_module_toc.py
 }
 
 # Modules needed to 'import runpy'.

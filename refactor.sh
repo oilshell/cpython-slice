@@ -17,8 +17,8 @@ two() {
 }
 
 three() {
-  sed -i 's/module_manifest/module_toc/g' Makefile build/*.{py,sh}
-  sed -i 's/module-manifest/module-toc/g' Makefile build/*.{py,sh}
+  sed -i 's/module_manifest/c_module_toc/g' Makefile build/*.{py,sh}
+  sed -i 's/module-manifest/c-module-toc/g' Makefile build/*.{py,sh}
 }
 
 "$@"

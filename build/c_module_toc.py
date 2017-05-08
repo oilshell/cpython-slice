@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-module_manifest.py
+c_module_toc.py
 """
 
 import glob
