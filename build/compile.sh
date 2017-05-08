@@ -149,13 +149,13 @@ build() {
   local out=${1:-$PY27/ovm2}
   local module_init=${2:-$PY27/Modules/config.c}
   local main_name=${3:-_tmp/hello/main_name.c}
-  local module_srcs=${4:-_tmp/hello/module-srcs.txt}
+  local c_module_srcs=${4:-_tmp/hello/c_module-srcs.txt}
   shift 4
 
   local abs_out=$PWD/$out
   local abs_module_init=$PWD/$module_init
   local abs_main_name=$PWD/$main_name
-  local abs_module_srcs=$PWD/$module_srcs
+  local abs_c_module_srcs=$PWD/$c_module_srcs
 
   #echo $OVM_LIBRARY_OBJS
 
@@ -180,7 +180,7 @@ build() {
     $OVM_LIBRARY_OBJS \
     $abs_module_init \
     $abs_main_name \
-    $(cat $abs_module_srcs) \
+    $(cat $abs_c_module_srcs) \
     Modules/ovm.c \
     -l dl \
     -l util \
@@ -234,8 +234,8 @@ python-sources() {
 }
 
 _headers() {
-  local module_srcs=${1:-_tmp/hello/module-srcs.txt}
-  local abs_module_srcs=$PWD/$module_srcs
+  local c_module_srcs=${1:-_tmp/hello/c_module-srcs.txt}
+  local abs_c_module_srcs=$PWD/$c_module_srcs
 
   # -MM: no system headers
   cd $PY27
@@ -244,7 +244,7 @@ _headers() {
     "${PREPROC_FLAGS[@]}" \
     -MM $OVM_LIBRARY_OBJS \
     Modules/ovm.c \
-    $(cat $abs_module_srcs) 
+    $(cat $abs_c_module_srcs) 
 }
 
 # NOTE: 91 headers in Include, but only 81 referenced here.  So it's worth it.
@@ -253,9 +253,9 @@ _headers() {
 # NOTE: We also should get rid of asdl.h and so forth.
 
 python-headers() {
-  local module_srcs=$1
+  local c_module_srcs=$1
   # remove Python/.. -- it causes problems with tar.
-  _headers $module_srcs | egrep --only-matching '[^ ]+\.h' \
+  _headers $c_module_srcs | egrep --only-matching '[^ ]+\.h' \
     | sed 's|^Python/../||' \
     | sort | uniq | add-py27
 }
@@ -267,11 +267,11 @@ make-tar() {
   # compile.sh is for the command line
   # actions.sh for concatenation
   #
-  # NOTE: Need intermediate module-srcs.txt file so we can use the same
+  # NOTE: Need intermediate c_module-srcs.txt file so we can use the same
   # Makefile?  But if we didn't we might not need it?  It's really part of the
   # command line.
 
-  local module_srcs=_build/$app_name/module-srcs.txt
+  local c_module_srcs=_build/$app_name/c_module-srcs.txt
 
   tar --create --file $out \
     Makefile \
@@ -281,9 +281,9 @@ make-tar() {
     _build/$app_name/bytecode.zip \
     _build/$app_name/*.c \
     $PY27/Modules/ovm.c \
-    $module_srcs \
-    $(cat $module_srcs | add-py27) \
-    $(python-headers $module_srcs) \
+    $c_module_srcs \
+    $(cat $c_module_srcs | add-py27) \
+    $(python-headers $c_module_srcs) \
     $(python-sources)
 
   ls -l $out

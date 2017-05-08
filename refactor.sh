@@ -33,4 +33,10 @@ six() {
   sed -i 's/all-c-modules/all-deps-c/g' Makefile build/*.{py,sh}
 }
 
+seven() {
+  sed -i 's/module_srcs/c_module_srcs/g' Makefile build/*.{py,sh}
+  sed -i 's/module-srcs/c_module-srcs/g' Makefile build/*.{py,sh}
+}
+
+
 "$@"

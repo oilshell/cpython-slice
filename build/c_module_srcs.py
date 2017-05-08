@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-module_srcs.py
+c_module_srcs.py
 """
 
 import sys
