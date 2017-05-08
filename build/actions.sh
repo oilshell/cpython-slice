@@ -17,8 +17,8 @@ module-manifest() {
 }
 
 # Modules needed to 'import runpy'.
-runpy-modules() {
-  $PY27/python -S build/runpy_modules.py "$@"
+runpy-deps() {
+  $PY27/python -S build/runpy_deps.py "$@"
 }
 
 # This version gets the paths out of the repo.  But it requires that we
@@ -33,10 +33,10 @@ runpy-modules() {
 
 # Run  grep -F .so  for the native dependencies.  Have to add those
 # somewhere.
-py-deps() {
+app-deps() {
   # I need the right relative path for Oil
-  ln -s -f $PWD/build/py_deps.py ~/git/oil/_tmp
-  $PY27/python -S ~/git/oil/_tmp/py_deps.py "$@"
+  ln -s -f $PWD/build/app_deps.py ~/git/oil/_tmp
+  $PY27/python -S ~/git/oil/_tmp/app_deps.py "$@"
 }
 
 # Make .d file

@@ -1,18 +1,15 @@
 #!/usr/bin/python -S
 """
-py_deps_test.py: Tests for py_deps.py
+app_deps_test.py: Tests for app_deps.py
 """
-
-__author__ = 'Andy Chu'
-
 
 import sys
 import unittest
 
-import py_deps  # module under test
+import app_deps  # module under test
 
 
-class PyDepsTest(unittest.TestCase):
+class AppDepsTest(unittest.TestCase):
 
   def testModules(self):
     pairs = [ ( 'poly.util',
@@ -22,7 +19,7 @@ class PyDepsTest(unittest.TestCase):
               ( 'simplejson', 
                 '/home/andy/dev/simplejson-2.1.5/simplejson/__init__.py')
               ]
-    py_deps.PrintManifest(pairs, sys.stdout, sys.stdout)
+    app_deps.PrintManifest(pairs, sys.stdout, sys.stdout)
 
 
 if __name__ == '__main__':

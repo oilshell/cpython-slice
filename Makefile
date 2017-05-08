@@ -30,8 +30,8 @@ _build/c-module-manifest.txt: build/module_manifest.py
 # Python and C dependencies of runpy.
 # NOTE: This is done with a pattern rule because of the "multiple outputs"
 # problem in Make.
-_build/runpy-%.txt: build/runpy_modules.py
-	build/actions.sh runpy-modules _build
+_build/runpy-%.txt: build/runpy_deps.py
+	build/actions.sh runpy-deps _build
 
 #
 # Hello App.  Everything below here is app-specific.
@@ -46,15 +46,15 @@ _build/hello/main_name.c:
 
 # Dependencies calculated by importing main.  The guard is because ovm.d
 # depends on it.  Is that correct?  We'll skip it before 'make dirs'.
-_build/hello/discovered-%.txt: $(HELLO_SRCS) build/py_deps.py
+_build/hello/discovered-%.txt: $(HELLO_SRCS) build/app_deps.py
 	test -d _build/hello && \
-		PYTHONPATH=build/testdata build/actions.sh py-deps hello _build/hello
+		PYTHONPATH=build/testdata build/actions.sh app-deps hello _build/hello
 
 # NOTE: We could use src/dest paths pattern instead of _build/app?
 #
 # TODO:
 # - Deps need to be better.  Depend on .pyc and .py.    I guess
-#   py-deps hello will compile the .pyc files.  Don't need a separate action.
+#   app-deps hello will compile the .pyc files.  Don't need a separate action.
 #   %.pyc : %py
 _build/hello/bytecode.zip: $(HELLO_SRCS) \
                            build/hello-manifest.txt \
@@ -74,8 +74,9 @@ _build/oil/main_name.c:
 	echo 'char* MAIN_NAME = "bin.oil";' > $@
 
 # Dependencies calculated by importing main.
-_build/oil/discovered-%.txt: build/py_deps.py
-	test -d _build/hello && PYTHONPATH=~/git/oil build/actions.sh py-deps bin.oil _build/oil
+_build/oil/discovered-%.txt: build/app_deps.py
+	test -d _build/hello && \
+		PYTHONPATH=~/git/oil build/actions.sh app-deps bin.oil _build/oil
 
 # TODO: Need $(OIL_SRCS) here?
 _build/oil/bytecode.zip: build/oil-manifest.txt \
