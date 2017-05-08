@@ -221,6 +221,18 @@ build-opt() {
   build "$@" -O3 -s
 }
 
+#
+# Source Release (uses same files
+#
+
+add-py27() {
+  xargs -I {} -- echo $PY27/{}
+}
+
+python-sources() {
+  echo "$OVM_LIBRARY_OBJS" | add-py27
+}
+
 _headers() {
   local module_paths=${1:-_tmp/hello/module-paths.txt}
   local abs_module_paths=$PWD/$module_paths
@@ -240,28 +252,12 @@ _headers() {
 #
 # NOTE: We also should get rid of asdl.h and so forth.
 
-list-headers() {
-  # remove Python/.. -- it causes problems with tar.
-  _headers | egrep --only-matching '[^ ]+\.h' \
-    | sed 's|^Python/../||' \
-    | sort | uniq
-}
-
-#
-# Source Release (uses same files
-#
-
-add-py27() {
-  xargs -I {} -- echo $PY27/{}
-}
-
-python-sources() {
-  echo "$OVM_LIBRARY_OBJS" | add-py27
-}
-
-# NOET: This invokes GCC
 python-headers() {
-  list-headers | add-py27
+  local module_paths=$1
+  # remove Python/.. -- it causes problems with tar.
+  _headers $module_paths | egrep --only-matching '[^ ]+\.h' \
+    | sed 's|^Python/../||' \
+    | sort | uniq | add-py27
 }
 
 make-tar() {
@@ -275,6 +271,8 @@ make-tar() {
   # Makefile?  But if we didn't we might not need it?  It's really part of the
   # command line.
 
+  local module_paths=_build/$app_name/module-paths.txt
+
   tar --create --file $out \
     Makefile \
     build/compile.sh \
@@ -283,10 +281,10 @@ make-tar() {
     _build/$app_name/bytecode.zip \
     _build/$app_name/*.c \
     $PY27/Modules/ovm.c \
-    _build/$app_name/module-paths.txt \
-    $(cat _build/$app_name/module-paths.txt | add-py27) \
-    $(python-headers) \
-    $(python-sources) \
+    $module_paths \
+    $(cat $module_paths | add-py27) \
+    $(python-headers $module_paths) \
+    $(python-sources)
 
   ls -l $out
 }
