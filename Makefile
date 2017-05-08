@@ -56,11 +56,11 @@ _build/hello/discovered-%.txt: $(HELLO_SRCS) build/py_deps.py
 #   py-deps hello will compile the .pyc files.  Don't need a separate action.
 #   %.pyc : %py
 _build/hello/bytecode.zip: $(HELLO_SRCS) \
-                         hello-manifest.txt \
-                         _build/hello/discovered-py.txt \
-                         _build/runpy-py.txt
+                           build/hello-manifest.txt \
+                           _build/hello/discovered-py.txt \
+                           _build/runpy-py.txt
 	build/make_zip.py $@ \
-	  hello-manifest.txt _build/hello/discovered-py.txt _build/runpy-py.txt
+	  build/hello-manifest.txt _build/hello/discovered-py.txt _build/runpy-py.txt
 
 #
 # Oil
@@ -77,11 +77,11 @@ _build/oil/discovered-%.txt: build/py_deps.py
 	test -d _build/hello && PYTHONPATH=~/git/oil build/actions.sh py-deps bin.oil _build/oil
 
 # TODO: Need $(OIL_SRCS) here?
-_build/oil/bytecode.zip: oil-manifest.txt \
-	                     _build/oil/discovered-py.txt \
-                       _build/runpy-py.txt
+_build/oil/bytecode.zip: build/oil-manifest.txt \
+  	                     _build/oil/discovered-py.txt \
+                         _build/runpy-py.txt
 	build/make_zip.py $@ \
-		oil-manifest.txt _build/oil/discovered-py.txt _build/runpy-py.txt
+		build/oil-manifest.txt _build/oil/discovered-py.txt _build/runpy-py.txt
 
 #
 # App-Independent Pattern Rules.
