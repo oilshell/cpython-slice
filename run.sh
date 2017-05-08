@@ -427,7 +427,7 @@ count-build() {
 
   # 9K lines of code!
   echo SOURCE CODE
-  wc -l setup.py Makefile.pre.in configure.ac Modules/makesetup Doc/Makefile
+  wc -l setup.py Makefile.pre.in configure.ac Modules/makesetup #Doc/Makefile
   echo
 
   echo MODULES
@@ -463,5 +463,9 @@ count-python() {
   echo
 }
 
+# 144K shipped for hello.tar.  Will be more for OVM.
+count-tar-lines() {
+  find _tmp/tar-test -name '*.[ch]' | xargs wc -l | sort -n
+}
 
 "$@"
