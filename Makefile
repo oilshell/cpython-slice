@@ -15,7 +15,7 @@ all: _bin/hello.bundle _bin/oil.bundle _release/hello.tar
 
 clean:
 	rm -r -f _bin _build/hello _build/oil
-	rm -f _build/runpy-*.txt _build/c-module-manifest.txt
+	rm -f _build/runpy-*.txt _build/module-manifest.txt
 	build/actions.sh clean-pyc
 
 .PHONY: all clean
@@ -25,7 +25,7 @@ PY27 = Python-2.7.13
 # What files correspond to each C module.
 # TODO:
 # - Where to put -l z?  (Done in Modules/Setup.dist)
-_build/c-module-manifest.txt: build/module_manifest.py
+_build/module-manifest.txt: build/module_manifest.py
 	build/actions.sh module-manifest > $@
 
 # Python and C dependencies of runpy.
@@ -97,7 +97,7 @@ _build/%/ovm.d: _build/%/app-deps-c.txt
 # A trick: remove the first dep to form the lists.  You can't just use $^
 # because './module_srcs.py' is rewritten to 'module_srcs.py'.
 _build/%/module-srcs.txt: \
-	build/module_srcs.py _build/c-module-manifest.txt _build/%/app-deps-c.txt 
+	build/module_srcs.py _build/module-manifest.txt _build/%/app-deps-c.txt 
 	build/module_srcs.py $(filter-out $<,$^) > $@
 
 _build/%/all-c-modules.txt: static-c-modules.txt _build/%/app-deps-c.txt
