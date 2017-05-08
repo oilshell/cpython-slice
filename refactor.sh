@@ -21,4 +21,12 @@ three() {
   sed -i 's/module-manifest/c-module-toc/g' Makefile build/*.{py,sh}
 }
 
+four() {
+  sed -i 's/runpy-/runpy-deps-/g' Makefile build/*.{py,sh}
+}
+
+five() {
+  sed -i 's/-deps-deps/-deps/g' Makefile build/*.{py,sh}
+}
+
 "$@"

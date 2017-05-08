@@ -15,7 +15,7 @@ all: _bin/hello.bundle _bin/oil.bundle _release/hello.tar
 
 clean:
 	rm -r -f _bin _build/hello _build/oil
-	rm -f _build/runpy-*.txt _build/c-module-toc.txt
+	rm -f _build/runpy-deps-*.txt _build/c-module-toc.txt
 	build/actions.sh clean-pyc
 
 .PHONY: all clean
@@ -31,7 +31,7 @@ _build/c-module-toc.txt: build/c_module_toc.py
 # Python and C dependencies of runpy.
 # NOTE: This is done with a pattern rule because of the "multiple outputs"
 # problem in Make.
-_build/runpy-%.txt: build/runpy_deps.py
+_build/runpy-deps-%.txt: build/runpy_deps.py
 	build/actions.sh runpy-deps _build
 
 #
@@ -60,9 +60,9 @@ _build/hello/app-deps-%.txt: $(HELLO_SRCS) build/app_deps.py
 _build/hello/bytecode.zip: $(HELLO_SRCS) \
                            build/hello-manifest.txt \
                            _build/hello/app-deps-py.txt \
-                           _build/runpy-py.txt
+                           _build/runpy-deps-py.txt
 	build/make_zip.py $@ \
-	  build/hello-manifest.txt _build/hello/app-deps-py.txt _build/runpy-py.txt
+	  build/hello-manifest.txt _build/hello/app-deps-py.txt _build/runpy-deps-py.txt
 
 #
 # Oil
@@ -82,9 +82,9 @@ _build/oil/app-deps-%.txt: build/app_deps.py
 # TODO: Need $(OIL_SRCS) here?
 _build/oil/bytecode.zip: build/oil-manifest.txt \
   	                     _build/oil/app-deps-py.txt \
-                         _build/runpy-py.txt
+                         _build/runpy-deps-py.txt
 	build/make_zip.py $@ \
-		build/oil-manifest.txt _build/oil/app-deps-py.txt _build/runpy-py.txt
+		build/oil-manifest.txt _build/oil/app-deps-py.txt _build/runpy-deps-py.txt
 
 #
 # App-Independent Pattern Rules.
