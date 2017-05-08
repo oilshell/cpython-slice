@@ -35,7 +35,7 @@ runpy-modules() {
 # somewhere.
 py-deps() {
   # I need the right relative path for Oil
-  ln -s -f $PWD/py_deps.py ~/git/oil/_tmp
+  ln -s -f $PWD/build/py_deps.py ~/git/oil/_tmp
   $PY27/python -S ~/git/oil/_tmp/py_deps.py "$@"
 }
 

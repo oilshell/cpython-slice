@@ -2,3 +2,7 @@
 *.o
 *.gcda
 *.gcno
+_build
+_bin
+_release
+_tmp

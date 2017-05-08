@@ -46,7 +46,7 @@ _build/hello/main_name.c:
 
 # Dependencies calculated by importing main.  The guard is because ovm.d
 # depends on it.  Is that correct?  We'll skip it before 'make dirs'.
-_build/hello/discovered-%.txt: $(HELLO_SRCS) py_deps.py
+_build/hello/discovered-%.txt: $(HELLO_SRCS) build/py_deps.py
 	test -d _build/hello && PYTHONPATH=testdata build/actions.sh py-deps hello _build/hello
 
 # NOTE: We could use src/dest paths pattern instead of _build/app?
@@ -73,7 +73,7 @@ _build/oil/main_name.c:
 	echo 'char* MAIN_NAME = "bin.oil";' > $@
 
 # Dependencies calculated by importing main.
-_build/oil/discovered-%.txt: py_deps.py
+_build/oil/discovered-%.txt: build/py_deps.py
 	test -d _build/hello && PYTHONPATH=~/git/oil build/actions.sh py-deps bin.oil _build/oil
 
 # TODO: Need $(OIL_SRCS) here?
