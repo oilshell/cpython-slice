@@ -25,7 +25,8 @@ tarball() {
   mkdir -p $tmp
   cd $tmp
   tar --extract < ../../_release/hello.tar
-  make
+  make dirs
+  make _bin/hello.bundle
 }
 
 

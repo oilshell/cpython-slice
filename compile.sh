@@ -241,9 +241,9 @@ _headers() {
 # NOTE: We also should get rid of asdl.h and so forth.
 
 list-headers() {
-  # Get rid of Python/../Objects.  These are mentioned elsewhere anyway.
+  # remove Python/.. -- it causes problems with tar.
   _headers | egrep --only-matching '[^ ]+\.h' \
-    | grep -F -v 'Python/..' \
+    | sed 's|^Python/../||' \
     | sort | uniq
 }
 
