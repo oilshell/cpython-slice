@@ -106,11 +106,11 @@ def main(argv):
   os.environ['_OVM_DEPS'] = '1'
 
   main_module = argv[0]
-  out_dir = argv[1]
+  prefix = argv[1]
   log('Before importing: %d modules', len(OLD_MODULES))
 
-  py_out_path = out_dir + '/discovered-py.txt'
-  c_out_path = out_dir + '/discovered-c.txt'
+  py_out_path = prefix + '-py.txt'
+  c_out_path = prefix + '-c.txt'
 
   modules = ImportMain(main_module, OLD_MODULES)
 

@@ -46,9 +46,9 @@ _build/hello/main_name.c:
 
 # Dependencies calculated by importing main.  The guard is because ovm.d
 # depends on it.  Is that correct?  We'll skip it before 'make dirs'.
-_build/hello/discovered-%.txt: $(HELLO_SRCS) build/app_deps.py
+_build/hello/app-deps-%.txt: $(HELLO_SRCS) build/app_deps.py
 	test -d _build/hello && \
-		PYTHONPATH=build/testdata build/actions.sh app-deps hello _build/hello
+		build/actions.sh app-deps hello build/testdata hello
 
 # NOTE: We could use src/dest paths pattern instead of _build/app?
 #
@@ -58,10 +58,10 @@ _build/hello/discovered-%.txt: $(HELLO_SRCS) build/app_deps.py
 #   %.pyc : %py
 _build/hello/bytecode.zip: $(HELLO_SRCS) \
                            build/hello-manifest.txt \
-                           _build/hello/discovered-py.txt \
+                           _build/hello/app-deps-py.txt \
                            _build/runpy-py.txt
 	build/make_zip.py $@ \
-	  build/hello-manifest.txt _build/hello/discovered-py.txt _build/runpy-py.txt
+	  build/hello-manifest.txt _build/hello/app-deps-py.txt _build/runpy-py.txt
 
 #
 # Oil
@@ -74,32 +74,32 @@ _build/oil/main_name.c:
 	echo 'char* MAIN_NAME = "bin.oil";' > $@
 
 # Dependencies calculated by importing main.
-_build/oil/discovered-%.txt: build/app_deps.py
+_build/oil/app-deps-%.txt: build/app_deps.py
 	test -d _build/hello && \
-		PYTHONPATH=~/git/oil build/actions.sh app-deps bin.oil _build/oil
+		build/actions.sh app-deps oil ~/git/oil bin.oil
 
 # TODO: Need $(OIL_SRCS) here?
 _build/oil/bytecode.zip: build/oil-manifest.txt \
-  	                     _build/oil/discovered-py.txt \
+  	                     _build/oil/app-deps-py.txt \
                          _build/runpy-py.txt
 	build/make_zip.py $@ \
-		build/oil-manifest.txt _build/oil/discovered-py.txt _build/runpy-py.txt
+		build/oil-manifest.txt _build/oil/app-deps-py.txt _build/runpy-py.txt
 
 #
 # App-Independent Pattern Rules.
 #
 
 # Regenerate dependencies.  But only if we made the app dirs.
-_build/%/ovm.d: _build/%/discovered-c.txt
+_build/%/ovm.d: _build/%/app-deps-c.txt
 	build/actions.sh make-dotd $* $^ > $@
 
 # A trick: remove the first dep to form the lists.  You can't just use $^
 # because './module_paths.py' is rewritten to 'module_paths.py'.
 _build/%/module-paths.txt: \
-	build/module_paths.py _build/c-module-manifest.txt _build/%/discovered-c.txt 
+	build/module_paths.py _build/c-module-manifest.txt _build/%/app-deps-c.txt 
 	build/module_paths.py $(filter-out $<,$^) > $@
 
-_build/%/all-c-modules.txt: static-c-modules.txt _build/%/discovered-c.txt
+_build/%/all-c-modules.txt: static-c-modules.txt _build/%/app-deps-c.txt
 	build/actions.sh join-modules $^ > $@
 
 # Per-app extension module initialization.

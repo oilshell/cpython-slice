@@ -34,9 +34,16 @@ runpy-deps() {
 # Run  grep -F .so  for the native dependencies.  Have to add those
 # somewhere.
 app-deps() {
+  local app_name=${1:-hello}
+  local pythonpath=${2:-build/testdata}
+  local main_module=${3:-hello}
+
+  local prefix=_build/$app_name/app-deps
+
   # I need the right relative path for Oil
   ln -s -f $PWD/build/app_deps.py ~/git/oil/_tmp
-  $PY27/python -S ~/git/oil/_tmp/app_deps.py "$@"
+  PYTHONPATH=$pythonpath \
+    $PY27/python -S ~/git/oil/_tmp/app_deps.py $main_module $prefix
 }
 
 # Make .d file
