@@ -14,7 +14,7 @@ HELPER_C_RE = re.compile(r'.*/(.*)\.c$')
 
 def main(argv):
   # module name -> list of paths to include
-  module_paths = {}
+  module_srcs = {}
 
   for c_path in glob.glob('Modules/*.c') + glob.glob('Modules/_io/*.c'):
     m = PURE_C_RE.match(c_path)

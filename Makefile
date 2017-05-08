@@ -95,10 +95,10 @@ _build/%/ovm.d: _build/%/app-deps-c.txt
 	build/actions.sh make-dotd $* $^ > $@
 
 # A trick: remove the first dep to form the lists.  You can't just use $^
-# because './module_paths.py' is rewritten to 'module_paths.py'.
-_build/%/module-paths.txt: \
-	build/module_paths.py _build/c-module-manifest.txt _build/%/app-deps-c.txt 
-	build/module_paths.py $(filter-out $<,$^) > $@
+# because './module_srcs.py' is rewritten to 'module_srcs.py'.
+_build/%/module-srcs.txt: \
+	build/module_srcs.py _build/c-module-manifest.txt _build/%/app-deps-c.txt 
+	build/module_srcs.py $(filter-out $<,$^) > $@
 
 _build/%/all-c-modules.txt: static-c-modules.txt _build/%/app-deps-c.txt
 	build/actions.sh join-modules $^ > $@
@@ -109,16 +109,16 @@ _build/%/module_init.c: $(PY27)/Modules/config.c.in _build/%/all-c-modules.txt
 
 # Release build.
 # This depends on the static modules
-_build/%/ovm: _build/%/module_init.c _build/%/main_name.c _build/%/module-paths.txt
+_build/%/ovm: _build/%/module_init.c _build/%/main_name.c _build/%/module-srcs.txt
 	build/compile.sh build-opt $@ $^
 
 # Fast build, with symbols for debugging.
-_build/%/ovm-dbg: _build/%/module_init.c _build/%/main_name.c _build/%/module-paths.txt
+_build/%/ovm-dbg: _build/%/module_init.c _build/%/main_name.c _build/%/module-srcs.txt
 	build/compile.sh build-dbg $@ $^
 
 # Coverage, for paring down the files that we build.
 # TODO: Hook this up.
-_build/%/ovm-cov: _build/%/module_init.c _build/%/main_name.c _build/%/module-paths.c
+_build/%/ovm-cov: _build/%/module_init.c _build/%/main_name.c _build/%/module-srcs.c
 	# TODO: cov flags
 	build/compile.sh build $@ $^
 
@@ -141,7 +141,7 @@ _bin/%.bundle: _build/%/ovm-dbg _build/%/bytecode.zip
 #     Include/  # Which ones? strace?
 
 # TODO:
-# - Why does putting module_paths.txt here mess it up?
+# - Why does putting module_srcs.txt here mess it up?
 _release/%.tar: _build/%/bytecode.zip \
 	              _build/%/module_init.c \
 								_build/%/main_name.c
