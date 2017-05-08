@@ -22,40 +22,24 @@ PY27 = Python-2.7.13
 
 # What files correspond to each C module.
 # TODO:
-# - How to express dependency on the file system or on a directory?
-#   This might not belong here at all?
-# - Where to put -l z?
-
+# - Where to put -l z?  (Done in Modules/Setup.dist)
 _tmp/c-module-manifest.txt: module_manifest.py
 	./actions.sh module-manifest > $@
 
 # Python and C dependencies of runpy.
 # NOTE: This is done with a pattern rule because of the "multiple outputs"
 # problem in Make.
-#
-# TODO:
-# - add the list in Modules/Setup.dist (pwd, _sre)
-# 
 _tmp/runpy-%.txt: default_modules.py
 	./actions.sh runpy-modules _tmp
-
-# pyconfig.in.h: freeze it
 
 #
 # Hello App.  Everything below here is app-specific.
 #
 
-HELLO_SRCS := testdata/hello.py testdata/lib.py 
-
-PY_SRCS := $(shell find $(PY27) -name '*.[ch]')
-
-#
-# Hello App
-#
-
 # C module dependencies
 -include _tmp/hello/ovm.d
 
+# What Python module to run.
 _tmp/hello/main_name.c:
 	echo 'char* MAIN_NAME = "hello";' > $@
 
@@ -99,7 +83,7 @@ _tmp/oil/bytecode.zip: oil-manifest.txt \
 		oil-manifest.txt _tmp/oil/discovered-py.txt _tmp/runpy-py.txt
 
 #
-# Generic
+# App-Independent Pattern Rules.
 #
 
 # Regenerate dependencies.  But only if we made the app dirs.
@@ -129,6 +113,7 @@ _tmp/%/ovm-dbg: _tmp/%/module_init.c _tmp/%/main_name.c _tmp/%/module-paths.txt
 	./compile.sh build-dbg $@ $^
 
 # Coverage, for paring down the files that we build.
+# TODO: Hook this up.
 _tmp/%/ovm-cov: _tmp/%/module_init.c _tmp/%/main_name.c _tmp/%/module-paths.c
 	# TODO: cov flags
 	./compile.sh build $@ $^
@@ -150,8 +135,12 @@ _bin/%.bundle: _tmp/%/ovm-dbg _tmp/%/bytecode.zip
 #     Python/
 #     Objects/  # Which ones?  Use coverage I guess?
 #     Include/  # Which ones? strace?
-_release/hello.tar: _tmp/hello/bytecode.zip
+
+# TODO:
+# - compile.sh cpython-manifest.
+_release/hello.tar: _tmp/hello/bytecode.zip Makefile
 	tar --create --directory _tmp/hello bytecode.zip > $@
+	tar --append --file $@ Makefile 
 
 # For debugging
 print-%:
