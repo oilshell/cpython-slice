@@ -30,7 +30,7 @@ _tmp/c-module-manifest.txt: build/module_manifest.py
 # Python and C dependencies of runpy.
 # NOTE: This is done with a pattern rule because of the "multiple outputs"
 # problem in Make.
-_tmp/runpy-%.txt: default_modules.py
+_tmp/runpy-%.txt: build/runpy_modules.py
 	build/actions.sh runpy-modules _tmp
 
 #

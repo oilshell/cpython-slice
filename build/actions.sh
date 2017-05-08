@@ -18,7 +18,7 @@ module-manifest() {
 
 # Modules needed to 'import runpy'.
 runpy-modules() {
-  $PY27/python -S ./default_modules.py "$@"
+  $PY27/python -S build/runpy_modules.py "$@"
 }
 
 # This version gets the paths out of the repo.  But it requires that we
