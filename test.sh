@@ -19,14 +19,24 @@ oil-bundle() {
   _bin/osh -c 'echo hi from osh'
 }
 
-tarball() {
+_tarball() {
+  local name=${1:-hello}
   local tmp=_tmp/tar-test
   rm -r -f $tmp
   mkdir -p $tmp
   cd $tmp
-  tar --extract < ../../_release/hello.tar
+  tar --extract < ../../_release/$name.tar
   make dirs
-  make _bin/hello.bundle
+  make _bin/$name.bundle
+  _bin/$name.bundle
+}
+
+hello-tar() {
+  _tarball hello
+}
+
+oil-tar() {
+  _tarball oil
 }
 
 

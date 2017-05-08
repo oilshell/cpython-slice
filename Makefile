@@ -6,7 +6,7 @@
 # Intermediate targets aren't automatically deleted.
 .SECONDARY:
 
-all: _bin/hello.bundle _bin/oil.bundle _release/hello.tar
+all: _bin/hello.bundle _bin/oil.bundle _release/hello.tar _release/oil.tar
 
 dirs:
 	mkdir -p _bin _release _tmp/hello _tmp/oil
@@ -139,8 +139,8 @@ _bin/%.bundle: _tmp/%/ovm-dbg _tmp/%/bytecode.zip
 # TODO:
 # - compile.sh cpython-manifest.
 # - We want intermediate files in here too.
-_release/hello.tar: _tmp/hello/bytecode.zip 
-	./compile.sh make-tar $@
+_release/%.tar: _tmp/%/bytecode.zip 
+	./compile.sh make-tar $* $@
 
 # For debugging
 print-%:

@@ -265,7 +265,8 @@ python-headers() {
 }
 
 make-tar() {
-  local out=${1:-_release/hello.tar}
+  local app_name=${1:-hello}
+  local out=${2:-_release/hello.tar}
 
   # compile.sh is for the command line
   # actions.sh for concatenation
@@ -275,9 +276,9 @@ make-tar() {
     compile.sh \
     actions.sh \
     common.sh \
-    _tmp/hello/bytecode.zip \
-    _tmp/hello/module-paths.txt \
-    _tmp/hello/*.c \
+    _tmp/$app_name/bytecode.zip \
+    _tmp/$app_name/module-paths.txt \
+    _tmp/$app_name/*.c \
     $PY27/Modules/ovm.c \
     $(python-headers) \
     $(python-sources) \
