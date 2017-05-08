@@ -204,7 +204,7 @@ static int RunModule(char *module, int set_argv0)
 }
 
 
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
 extern char* MAIN_NAME;
 #else
 char* MAIN_NAME = "__main__";
@@ -243,7 +243,7 @@ static int RunMainFromImporter(char *filename)
 
 /* Main program */
 
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
 int
 Ovm_Main(int argc, char **argv)
 {
@@ -461,7 +461,7 @@ Py_Main(int argc, char **argv)
             break;
 
         case 't':
-#ifndef OIL_MAIN
+#ifndef OVM_MAIN
             /* defined in Parser/parsetok.c, odd */
             Py_TabcheckFlag++;
 #endif
@@ -524,7 +524,7 @@ Py_Main(int argc, char **argv)
         return 0;
     }
 
-#ifndef OIL_MAIN
+#ifndef OVM_MAIN
     if (Py_Py3kWarningFlag && !Py_TabcheckFlag)
         /* -3 implies -t (but not -tt) */
         Py_TabcheckFlag = 1;
@@ -762,7 +762,7 @@ Py_Main(int argc, char **argv)
 
     return sts;
 }
-#endif /* OIL_MAIN */
+#endif /* OVM_MAIN */
 
 /* this is gonna seem *real weird*, but if you put some other code between
    Py_Main() and Py_GetArgcArgv() you will need to adjust the test in the

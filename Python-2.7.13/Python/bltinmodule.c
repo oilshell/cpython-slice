@@ -480,7 +480,7 @@ builtin_compile(PyObject *self, PyObject *args, PyObject *kwds)
                              "dont_inherit", NULL};
     int start[] = {Py_file_input, Py_eval_input, Py_single_input};
 
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
     fprintf(stderr, "builtin_compile: no AST");
     return NULL;
 #endif
@@ -2744,7 +2744,7 @@ _PyBuiltin_Init(void)
 #ifdef Py_USING_UNICODE
     SETBUILTIN("unicode",               &PyUnicode_Type);
 #endif
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
     debug = PyBool_FromLong(0);
 #else
     debug = PyBool_FromLong(Py_OptimizeFlag == 0);

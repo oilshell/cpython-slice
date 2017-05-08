@@ -133,8 +133,11 @@ readonly VERSION='"2.7"'
 readonly VPATH='""'
 readonly pythonpath='""'
 
+# TODO:
+# -D OVM_DISABLE_DLOPEN
+
 readonly PREPROC_FLAGS=(
-    -D OIL_MAIN \
+    -D OVM_MAIN \
 		-D PYTHONPATH="$pythonpath" \
 		-D PREFIX="$prefix" \
 		-D EXEC_PREFIX="$exec_prefix" \
@@ -163,9 +166,6 @@ build() {
   # Slower when done serially.
 
   # PREFIX, EXEC_PREFIX, VERSION, VPATH, etc. are from Modules/getpath.o
-
-  # Not using this for now because of libc.so
-    #-D OIL_DISABLE_DLOPEN \
 
   # So the OVM is ~600K smaller now.  1.97 MB for ./run.sh build-default.  1.65
   # MB for ./run.sh build-clang-small.

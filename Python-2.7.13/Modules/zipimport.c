@@ -1308,7 +1308,7 @@ initzipimport(void)
     zip_searchorder[0].suffix[0] = SEP;
     zip_searchorder[1].suffix[0] = SEP;
     zip_searchorder[2].suffix[0] = SEP;
-#ifndef OIL_MAIN
+#ifndef OVM_MAIN
     if (Py_OptimizeFlag) {
         /* Reverse *.pyc and *.pyo */
         struct st_zip_searchorder tmp;

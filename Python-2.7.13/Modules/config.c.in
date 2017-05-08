@@ -41,7 +41,7 @@ struct _inittab _PyImport_Inittab[] = {
     {"imp", initimp},
 
     /* This lives in Python/Python-ast.c */
-#ifndef OIL_MAIN
+#ifndef OVM_MAIN
     {"_ast", init_ast},
 #endif
 

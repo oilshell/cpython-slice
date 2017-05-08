@@ -7,6 +7,8 @@ set -o nounset
 set -o pipefail
 set -o errexit
 
+source build/common.sh
+
 one() {
   sed -i 's/module_paths/module_srcs/g' Makefile build/*.{py,sh}
   sed -i 's/module-paths/module-srcs/g' Makefile build/*.{py,sh}
@@ -40,6 +42,11 @@ seven() {
 
 eight() {
   sed -i 's/c_module-srcs/c-module-srcs/g' Makefile build/*.{py,sh}
+}
+
+nine() {
+  find $PY27 -name '*.[ch]' | xargs sed -i 's/OIL_MAIN/OVM_MAIN/g' 
+  find $PY27 -name '*.[ch]' | xargs sed -i 's/OIL_DISABLE_DLOPEN/OVM_DISABLE_DLOPEN/g' 
 }
 
 

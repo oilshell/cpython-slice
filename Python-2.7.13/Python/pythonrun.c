@@ -182,7 +182,7 @@ Py_InitializeEx(int install_sigs, char* sys_path)
         Py_DebugFlag = add_flag(Py_DebugFlag, p);
     if ((p = Py_GETENV("PYTHONVERBOSE")) && *p != '\0')
         Py_VerboseFlag = add_flag(Py_VerboseFlag, p);
-#ifndef OIL_MAIN
+#ifndef OVM_MAIN
     if ((p = Py_GETENV("PYTHONOPTIMIZE")) && *p != '\0')
         Py_OptimizeFlag = add_flag(Py_OptimizeFlag, p);
 #endif
@@ -546,7 +546,7 @@ Py_Finalize(void)
        - whatever various modules and libraries allocate
     */
 
-#ifndef OIL_MAIN
+#ifndef OVM_MAIN
     PyGrammar_RemoveAccelerators(&_PyParser_Grammar);
 #endif
 
@@ -947,14 +947,14 @@ PyRun_SimpleFileExFlags(FILE *fp, const char *filename, int closeit,
             fprintf(stderr, "python: Can't reopen .pyc file\n");
             goto done;
         }
-#ifndef OIL_MAIN
+#ifndef OVM_MAIN
         /* Turn on optimization if a .pyo file is given */
         if (strcmp(ext, ".pyo") == 0)
             Py_OptimizeFlag = 1;
 #endif
         v = run_pyc_file(fp, filename, d, d, flags);
     } else {
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
         fprintf(stderr, "Oil: expected .pyc file\n");
         return -1;
 #else
@@ -1382,7 +1382,7 @@ static PyObject *
 run_mod(mod_ty mod, const char *filename, PyObject *globals, PyObject *locals,
          PyCompilerFlags *flags, PyArena *arena)
 {
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
     fprintf(stderr, "run_mod: Oil has no AST\n");
     return NULL;
 #else
@@ -1433,7 +1433,7 @@ PyObject *
 Py_CompileStringFlags(const char *str, const char *filename, int start,
                       PyCompilerFlags *flags)
 {
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
     fprintf(stderr, "run_mod: no AST");
     return NULL;
 #else
@@ -1462,7 +1462,7 @@ Py_CompileStringFlags(const char *str, const char *filename, int start,
 struct symtable *
 Py_SymtableString(const char *str, const char *filename, int start)
 {
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
     fprintf(stderr, "Py_SymtableString: no AST");
     return NULL;
 #else
@@ -1496,7 +1496,7 @@ PyParser_ASTFromString(const char *s, const char *filename, int start,
     perrdetail err;
     int iflags = PARSER_FLAGS(flags);
 
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
     fprintf(stderr, "PyParser_ASTFromString: OVM has no parser");
     return NULL;
 #else
@@ -1530,7 +1530,7 @@ PyParser_ASTFromFile(FILE *fp, const char *filename, int start, char *ps1,
     perrdetail err;
     int iflags = PARSER_FLAGS(flags);
 
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
     fprintf(stderr, "PyParser_ASTFromFile: OVM has no parser");
     return NULL;
 #else
@@ -1560,7 +1560,7 @@ PyParser_ASTFromFile(FILE *fp, const char *filename, int start, char *ps1,
 node *
 PyParser_SimpleParseFileFlags(FILE *fp, const char *filename, int start, int flags)
 {
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
     fprintf(stderr, "PyParser_SimpleParseFileFlags: OVM has no parser");
     return NULL;
 #else
@@ -1579,7 +1579,7 @@ PyParser_SimpleParseFileFlags(FILE *fp, const char *filename, int start, int fla
 node *
 PyParser_SimpleParseStringFlags(const char *str, int start, int flags)
 {
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
     fprintf(stderr, "PyParser_SimpleParseStringFlags: OVM has no parser");
     return NULL;
 #else
@@ -1596,7 +1596,7 @@ node *
 PyParser_SimpleParseStringFlagsFilename(const char *str, const char *filename,
                                         int start, int flags)
 {
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
     fprintf(stderr, "PyParser_SimpleParseStringFlagsFilename: OVM has no parser");
     return NULL;
 #else

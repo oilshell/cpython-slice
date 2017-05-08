@@ -1260,14 +1260,14 @@ make_flags(void)
     SetFlag(_Py_QnewFlag);
     SetFlag(Py_InspectFlag);
     SetFlag(Py_InteractiveFlag);
-#ifndef OIL_MAIN
+#ifndef OVM_MAIN
     SetFlag(Py_OptimizeFlag);
 #endif
     SetFlag(Py_DontWriteBytecodeFlag);
     SetFlag(Py_NoUserSiteDirectory);
     SetFlag(Py_NoSiteFlag);
     SetFlag(Py_IgnoreEnvironmentFlag);
-#ifndef OIL_MAIN
+#ifndef OVM_MAIN
     SetFlag(Py_TabcheckFlag);
 #endif
     SetFlag(Py_VerboseFlag);

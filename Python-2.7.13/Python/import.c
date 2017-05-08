@@ -175,7 +175,7 @@ _PyImport_Init(void)
 
     _PyImport_Filetab = filetab;
 
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
     if (0) {
 #else
     if (Py_OptimizeFlag) {
@@ -773,7 +773,7 @@ make_compiled_pathname(char *pathname, char *buf, size_t buflen)
         --len;          /* pretend 'w' isn't there */
 #endif
     memcpy(buf, pathname, len);
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
     buf[len] = 'c';
 #else
     buf[len] = Py_OptimizeFlag ? 'o' : 'c';
@@ -876,7 +876,7 @@ load_compiled_module(char *name, char *cpathname, FILE *fp)
 static PyCodeObject *
 parse_source_module(const char *pathname, FILE *fp)
 {
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
     fprintf(stderr, "parse_source_module: no AST\n");
     return NULL;
 #else
@@ -1863,7 +1863,7 @@ find_init_module(char *buf)
         }
     }
     i += strlen(pname);
-#ifdef OIL_MAIN
+#ifdef OVM_MAIN
     strcpy(buf+i, "c");
 #else
     strcpy(buf+i, Py_OptimizeFlag ? "o" : "c");
