@@ -274,7 +274,7 @@ make-tar() {
   tar --create --file $out \
     Makefile \
     build/compile.sh \
-    actions.sh \
+    build/actions.sh \
     build/common.sh \
     _tmp/$app_name/bytecode.zip \
     _tmp/$app_name/*.c \

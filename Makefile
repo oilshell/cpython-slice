@@ -15,7 +15,7 @@ dirs:
 clean:
 	rm -r -f _bin _tmp/hello _tmp/oil
 	rm -f _tmp/runpy-*.txt _tmp/c-module-manifest.txt
-	./actions.sh clean-pyc
+	build/actions.sh clean-pyc
 
 .PHONY: all dirs clean
 
@@ -25,13 +25,13 @@ PY27 = Python-2.7.13
 # TODO:
 # - Where to put -l z?  (Done in Modules/Setup.dist)
 _tmp/c-module-manifest.txt: module_manifest.py
-	./actions.sh module-manifest > $@
+	build/actions.sh module-manifest > $@
 
 # Python and C dependencies of runpy.
 # NOTE: This is done with a pattern rule because of the "multiple outputs"
 # problem in Make.
 _tmp/runpy-%.txt: default_modules.py
-	./actions.sh runpy-modules _tmp
+	build/actions.sh runpy-modules _tmp
 
 #
 # Hello App.  Everything below here is app-specific.
@@ -47,7 +47,7 @@ _tmp/hello/main_name.c:
 # Dependencies calculated by importing main.  The guard is because ovm.d
 # depends on it.  Is that correct?  We'll skip it before 'make dirs'.
 _tmp/hello/discovered-%.txt: $(HELLO_SRCS) py_deps.py
-	test -d _tmp/hello && PYTHONPATH=testdata ./actions.sh py-deps hello _tmp/hello
+	test -d _tmp/hello && PYTHONPATH=testdata build/actions.sh py-deps hello _tmp/hello
 
 # NOTE: We could use src/dest paths pattern instead of _tmp/app?
 #
@@ -74,7 +74,7 @@ _tmp/oil/main_name.c:
 
 # Dependencies calculated by importing main.
 _tmp/oil/discovered-%.txt: py_deps.py
-	test -d _tmp/hello && PYTHONPATH=~/git/oil ./actions.sh py-deps bin.oil _tmp/oil
+	test -d _tmp/hello && PYTHONPATH=~/git/oil build/actions.sh py-deps bin.oil _tmp/oil
 
 # TODO: Need $(OIL_SRCS) here?
 _tmp/oil/bytecode.zip: oil-manifest.txt \
@@ -89,7 +89,7 @@ _tmp/oil/bytecode.zip: oil-manifest.txt \
 
 # Regenerate dependencies.  But only if we made the app dirs.
 _tmp/%/ovm.d: _tmp/%/discovered-c.txt
-	./actions.sh make-dotd $* $^ > $@
+	build/actions.sh make-dotd $* $^ > $@
 
 # A trick: remove the first dep to form the lists.  You can't just use $^
 # because './module_paths.py' is rewritten to 'module_paths.py'.
@@ -98,11 +98,11 @@ _tmp/%/module-paths.txt: \
 	./module_paths.py $(filter-out $<,$^) > $@
 
 _tmp/%/all-c-modules.txt: static-c-modules.txt _tmp/%/discovered-c.txt
-	./actions.sh join-modules $^ > $@
+	build/actions.sh join-modules $^ > $@
 
 # Per-app extension module initialization.
 _tmp/%/module_init.c: $(PY27)/Modules/config.c.in _tmp/%/all-c-modules.txt
-	cat _tmp/$*/all-c-modules.txt | xargs ./actions.sh gen-module-init > $@
+	cat _tmp/$*/all-c-modules.txt | xargs build/actions.sh gen-module-init > $@
 
 # Release build.
 # This depends on the static modules
