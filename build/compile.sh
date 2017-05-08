@@ -273,9 +273,9 @@ make-tar() {
 
   tar --create --file $out \
     Makefile \
-    compile.sh \
+    build/compile.sh \
     actions.sh \
-    common.sh \
+    build/common.sh \
     _tmp/$app_name/bytecode.zip \
     _tmp/$app_name/*.c \
     $PY27/Modules/ovm.c \
