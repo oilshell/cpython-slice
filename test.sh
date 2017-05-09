@@ -13,6 +13,17 @@ make-zip() {
   unzip -l $out
 }
 
+hello-bundle() {
+  set +o errexit
+  _bin/hello.bundle 
+  if test $? = 1; then
+    echo OK
+  else
+    echo 'FAIL: expected exit code 1'
+    exit 1
+  fi
+}
+
 oil-bundle() {
   _bin/oil.bundle osh -c 'echo hi'
   ln -s oil.bundle _bin/osh
