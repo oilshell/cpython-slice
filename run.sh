@@ -419,7 +419,18 @@ diff-orig() {
 }
 
 count-patches() {
-  find $PY27 -name '*.c' | xargs grep OIL_MAIN
+  find $PY27 -name '*.c' | xargs grep OVM_MAIN
+}
+
+files-changed() {
+  find $PY27 -name '*.c' | xargs grep -l OVM_MAIN
+}
+
+# Also Include/pythonrun.h, Modules/config.c.in
+copy() {
+  for f in $(files-changed); do
+    cp -v $f ~/git/oil/$f
+  done
 }
 
 "$@"
