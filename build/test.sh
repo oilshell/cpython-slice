@@ -9,7 +9,7 @@ set -o errexit
 
 make-zip() {
   local out=_tmp/make-zip-test.zip 
-  ./make_zip.py $out _tmp/py.default-modules.txt
+  build/make_zip.py $out _build/runpy-deps-py.txt
   unzip -l $out
 }
 
