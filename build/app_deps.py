@@ -2,9 +2,9 @@
 """
 py_deps.py
 
-Dynamically discover Python and C modules.  We import the main module 
-and inspect sys.modules before and after.  That is, we use the exact logic that
-the Python interpreter does.
+Dynamically discover Python and C modules.  We import the main module and
+inspect sys.modules before and after.  That is, we use the exact logic that the
+Python interpreter does.
 
 Usage:
   PYTHONPATH=... py_deps.py <main module>
@@ -69,12 +69,13 @@ def PrintManifest(modules, py_out, c_out):
     num_parts = module.count('.') + 1
     i = len(full_path)
     # Do it once more in this case
-    if full_path.endswith('/__init__.pyc') or full_path.endswith('__init__.py'):
+    if full_path.endswith('/__init__.pyc') or \
+       full_path.endswith('__init__.py'):
       i = full_path.rfind('/', 0, i)
     for _ in xrange(num_parts):
       i = full_path.rfind('/', 0, i)
     #print i, full_path[i+1:]
-    rel_path = full_path[i+1:]
+    rel_path = full_path[i + 1:]
 
     # Depending on whether it's cached, we get '.py' or '.pyc'.
     if full_path.endswith('.py'):

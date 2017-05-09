@@ -24,7 +24,7 @@ def main(argv):
   runpy_path = runpy.__file__
   i = runpy_path.rfind('/')
   assert i != -1, runpy_path
-  stdlib_dir = runpy_path[ : i+1]  # include trailing slash
+  stdlib_dir = runpy_path[: i + 1]  # include trailing slash
   stdlib_dir_len = len(stdlib_dir)
 
   #print 'STDLIB', stdlib_dir
@@ -66,7 +66,7 @@ def main(argv):
           #print('REL', rel_path)
         else:
           rel_py_path = py_path
-      
+
         # .pyc file for execution
         print >>py_out, py_path + 'c', rel_py_path + 'c'
         # .py file for tracebacks

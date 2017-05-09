@@ -31,7 +31,9 @@ def main(argv):
         print 'Modules/_math.c'
       elif mod_name == '_io':
         # This data is in setup.py and Modules/Setup.dist.
-        #_io -I$(srcdir)/Modules/_io _io/bufferedio.c _io/bytesio.c _io/fileio.c _io/iobase.c _io/_iomodule.c _io/stringio.c _io/textio.c
+        #_io -I$(srcdir)/Modules/_io _io/bufferedio.c _io/bytesio.c
+        #    _io/fileio.c _io/iobase.c _io/_iomodule.c _io/stringio.c
+        #    _io/textio.c
         print 'Modules/_io/bufferedio.c'
         print 'Modules/_io/bytesio.c'
         print 'Modules/_io/fileio.c'
