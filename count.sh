@@ -55,9 +55,4 @@ python-source() {
   echo
 }
 
-# 144K shipped for hello.tar.  Will be more for OVM.
-tar-lines() {
-  find _tmp/tar-test -name '*.[ch]' | xargs wc -l | sort -n
-}
-
 "$@"
