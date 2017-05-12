@@ -74,27 +74,6 @@ debug-ovm2() {
   gdb --tui --args $PY27/ovm2 "$@"
 }
 
-test-ovm2() {
-  echo ---
-  echo 'Running nothing'
-  echo ---
-
-  _OVM_RUN_SELF=0 $PY27/ovm2 || true
-
-  echo ---
-  echo 'Running lib.pyc'
-  echo ---
-
-  _OVM_RUN_SELF=0 $PY27/ovm2 testdata/lib.pyc
-
-  echo ---
-  echo 'Running hello.zip'
-  echo ---
-
-  _OVM_RUN_SELF=0 $PY27/ovm2 _tmp/hello.zip
-
-}
-
 test-oil() {
   _OVM_RUN_SELF=0 $PY27/ovm2 ~/git/oil/opy/_tmp/oil.zip
 }
