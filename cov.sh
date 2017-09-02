@@ -172,7 +172,7 @@ slots-demo() {
   mkdir -p $out_dir
 
   for class in Point PointSlots; do
-    for n in 0 100 10000 1000000; do
+    for n in 0 100 1000 10000 100000 1000000; do
       local out=$out_dir/${class}-${n}.txt
       echo
       echo "--- $class --- $n ---"
