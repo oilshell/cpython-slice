@@ -137,4 +137,23 @@ show-dict-counts() {
   grep ':lookdict' "$PY27/Objects#dictobject.c.gcov"
 }
 
+one-dict-count() {
+  local func=$1
+  rm-gcda
+
+  # Cumulative job
+  $func
+
+  gcov2
+  show-dict-counts
+}
+
+one-hello() {
+  _f() {
+    run-cov-dict
+    #run-cov-dict
+  }
+  one-dict-count _f
+}
+
 "$@"
