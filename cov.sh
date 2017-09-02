@@ -130,7 +130,11 @@ gcov1() {
 }
 
 gcov2() {
-  gcov-report Objects/typeobject.c
+  gcov-report Objects/typeobject.c Objects/dictobject.c
+}
+
+show-dict-counts() {
+  grep ':lookdict' "$PY27/Objects#dictobject.c.gcov"
 }
 
 "$@"
