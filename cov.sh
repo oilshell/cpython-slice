@@ -87,12 +87,8 @@ for i in xrange(n):
 EOF
 }
 
-run-cov-slots() {
-  run-cov <<EOF
-class Point(object):
-  __slots__ = ("x", "y")
-print Point
-EOF
+run-cov-slots-demo() {
+  run-cov ~/git/blog-code/py-slots/demo.py "$@"
 }
 
 # OH .gcno geneated at COMPILE TIME
@@ -116,8 +112,8 @@ rm-gcda() {
 # This gcc tool gives you text.
 # NOTE: copied from 
 gcov-report() {
-  mkdir -p _gcov
-  rm --verbose -f _gcov/*
+  #mkdir -p _gcov
+  #rm --verbose -f _gcov/*
 
   # After running tests with bwk-cov, .gcno and .gcda files are in
   # obj/bwk-cov, next to the objects.
@@ -126,11 +122,12 @@ gcov-report() {
   #gcov --object-directory $PY27/Python $PY27/Python/*.c
   #mv --verbose *.gcov _gcov
 
-  pushd $PY27
+  pushd $PY27 >/dev/null
   # creates Python#pythonrun.c.gcov.  Dumb!
   gcov --preserve-paths "$@"
-  find . -name '*.gcov'
-  popd
+  #find . -name '*.gcov'
+  popd >/dev/null
+
   #gcov \
   #  --source-prefix $PY27/Python \
   #  --object-directory $PY27/Python $PY27/Python/pythonrun.c
@@ -169,15 +166,26 @@ one-dict-count() {
 
 # TODO: Plot ratio of n to dictobject lookups.
 
-one-hello() {
-  local out=_gcov/out.txt
-  for n in 10 1000 10000; do
-    echo
-    echo "--- $n ---"
-    echo
-    one-dict-count $out run-cov-n $n
-    cat $out
+slots-demo() {
+  local out_dir=_gcov/slots-demo
+  rm -f $out_dir/*
+  mkdir -p $out_dir
+
+  for class in Point PointSlots; do
+    for n in 0 100 10000 1000000; do
+      local out=$out_dir/${class}-${n}.txt
+      echo
+      echo "--- $class --- $n ---"
+      echo
+      #one-dict-count $out run-cov-n $n
+      one-dict-count $out run-cov-slots-demo $class $n
+      cat $out
+    done
   done
+}
+
+slots-demo-report() {
+  head _gcov/slots-demo/*
 }
 
 "$@"
