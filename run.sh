@@ -313,8 +313,9 @@ run-osh() {
   run-cov ~/git/oil/bin/oil.py osh -c 'echo "hi"; ls /'
 }
 
-run-cov-hello() {
-  run-cov -c 'print "hi"'
+# dict lookup
+run-cov-dict() {
+  run-cov -c 'd = {True: "hi"}; print d[True]'
 }
 
 # OH .gcno geneated at COMPILE TIME
