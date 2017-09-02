@@ -10,7 +10,8 @@ readonly CLANG=$CLANG_DIR/bin/clang
 readonly CLANG_COV_FLAGS='-fprofile-instr-generate -fcoverage-mapping'
 readonly CLANG_LINK_FLAGS=''
 
-readonly PY27=Python-2.7.13
+#readonly PY27=Python-2.7.13
+readonly PY27=Python-2.7.13-pristine  # new pristine copy, not a slice
 
 bin-stats() {
   local bin=$1

@@ -26,10 +26,10 @@ build-libpython() {
 # we're always doing it without threads for now.  not sure about signal module
 # just yet.  have to implement "trap"?
 config() {
-  cd $py27
+  cd $PY27
   time ./configure --without-threads
 
-  cp -v ../modulessetup modules/setup
+  #cp -v ../modulessetup modules/setup
 }
 
 build-default() {
@@ -250,6 +250,16 @@ test-hello() {
   #gdb --tui --args $bin testdata/hello.pyc
 }
 
+
+#
+# Coverage Steps
+#
+# build-coverage (gcc version, not Clang)
+# run-cov-hello
+# install-lcov
+# lcov-report
+
+
 # HTML reporter
 install-lcov() {
   sudo apt-get install lcov
@@ -301,6 +311,10 @@ run-cov() {
 
 run-osh() {
   run-cov ~/git/oil/bin/oil.py osh -c 'echo "hi"; ls /'
+}
+
+run-cov-hello() {
+  run-cov -c 'print "hi"'
 }
 
 # OH .gcno geneated at COMPILE TIME
