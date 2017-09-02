@@ -117,12 +117,20 @@ gcov-report() {
 
   pushd $PY27
   # creates Python#pythonrun.c.gcov.  Dumb!
-  gcov --preserve-paths Python/pythonrun.c
+  gcov --preserve-paths "$@"
   find . -name '*.gcov'
   popd
   #gcov \
   #  --source-prefix $PY27/Python \
   #  --object-directory $PY27/Python $PY27/Python/pythonrun.c
+}
+
+gcov1() {
+  gcov-report Python/pythonrun.c
+}
+
+gcov2() {
+  gcov-report Objects/typeobject.c
 }
 
 "$@"
