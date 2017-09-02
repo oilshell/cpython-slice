@@ -76,6 +76,17 @@ run-cov-dict() {
   run-cov -c 'd = {True: "hi"}; print d[True]'
 }
 
+run-cov-n() {
+  local count=$1
+  run-cov - $count <<EOF
+import sys
+n = int(sys.argv[1])
+d = {}
+for i in xrange(n):
+  unused = d.get(str(i))
+EOF
+}
+
 run-cov-slots() {
   run-cov <<EOF
 class Point(object):
@@ -134,26 +145,39 @@ gcov2() {
 }
 
 show-dict-counts() {
-  grep ':lookdict' "$PY27/Objects#dictobject.c.gcov"
+  # Get the exact lines
+  grep -E '320:lookdict|408:lookdict_string' "$PY27/Objects#dictobject.c.gcov"
 }
 
 one-dict-count() {
-  local func=$1
-  rm-gcda
+  local out=$1
+  shift
+
+  rm-gcda > /dev/null
 
   # Cumulative job
-  $func
+  "$@"
 
   gcov2
-  show-dict-counts
+  show-dict-counts > $out
 }
 
+# TODO: Iterate over n and Class in demo.py.
+# Put them in output files
+#
+# I guess I should make a Berstein chaining function?
+
+# TODO: Plot ratio of n to dictobject lookups.
+
 one-hello() {
-  _f() {
-    run-cov-dict
-    #run-cov-dict
-  }
-  one-dict-count _f
+  local out=_gcov/out.txt
+  for n in 10 1000 10000; do
+    echo
+    echo "--- $n ---"
+    echo
+    one-dict-count $out run-cov-n $n
+    cat $out
+  done
 }
 
 "$@"
