@@ -11,11 +11,16 @@ source common.sh
 
 # Coverage Usage:
 #
-# build-coverage (gcc version, not Clang)
+# build-coverage (gcc version, not Clang).  Takes about 40 seconds.
 # run-cov-hello
 # install-lcov
-# lcov-report (HTML, 3-4 seconds)
-# gcov-report
+# lcov-report (HTML, 3-4 seconds)  This is built into Python's Makefile.
+#   /home/andy/git/cpython-slice/Python-2.7.13-pristine/lcov-report/index.html
+
+# gcov-report (text)
+#   gcov1
+#   gcov2 output here: Python-2.7.13-pristine/Objects#dictobject.c.gcov
+#
 # rm-gcda -- to run another one
 
 # HTML reporter
@@ -183,6 +188,13 @@ slots-demo() {
     done
   done
 }
+
+# TODO:
+# - Make a table / plots for this output
+# - Run a sampling profiler in C, to see why the two loops take the same amount
+# of time?
+#   - perf or something else?  You just need symbols?  Make sure you use an
+#   optimized binary.
 
 slots-demo-report() {
   head _gcov/slots-demo/*
